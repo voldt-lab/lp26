@@ -1,0 +1,317 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+/* theme colors */
+:root{
+  --accent:           #d86d1a;  /* normal */
+  --accent-disabled:  #685546;  /* disabled highlight */
+  --track:            #9a9a9a;
+  --fs:14px; /*font size*/
+  --panel-w:200px;
+}
+
+
+html, body, .toolbar, input, select, button, .modal, #status { 
+  font-family: "Space Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: var(--fs);
+}
+
+/* viewer container + blur while solving */
+#viewport { 
+  position: fixed;
+  top:0;
+  right: 0;
+  bottom: 0;
+  left: var(--panel-w);
+}
+
+#viewport.loading {
+  filter: blur(3px) saturate(0.7);
+  transition: filter .18s ease;
+  pointer-events: none; /* block clicks while solving */
+}
+
+body{
+    margin:0;
+    background:#0b0d10;
+    color:#e6e6e6;
+    font-family:ui-sans-serif,system-ui
+}
+
+
+/* ---------- left panel ---------- */
+.toolbar{
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  width: var(--panel-w);
+  z-index: 10;
+  padding: 20px 18px;
+  background: linear-gradient(45deg, #1e2022 0%, #2a2d31 100%);
+  border-right: 1px solid rgba(255,255,255,.08);
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+  /* simple stack – each .field is self-contained */
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+#ctrlpanel.toolbar{
+  border: 0; 
+  margin: 0; 
+  min-inline-size: 0;
+}
+#ctrlpanel{
+  position: fixed;      /* stay docked left */
+  top: 0; left: 0; bottom: 0;
+  width: var(--panel-w);
+  display: flex;        /* stack controls vertically */
+  flex-direction: column;
+  overflow: auto;       /* scroll *inside* panel if contents ever exceed height */
+}
+/* ---- Panel button (lower-left inside the left toolbar) ---- */
+.btn-panel{
+  position: static;               /* <-- no absolute positioning */
+  align-self: flex-start;         /* keep it left-aligned */
+  margin: 0 0 14px 14px;          /* left & bottom spacing */
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.16);
+  color: #dfe5ec;
+  cursor: pointer;
+}
+.btn-panel.active{
+  background: rgba(110,200,255,0.18);
+  border-color: rgba(110,200,255,.35);
+}
+#gridToggle{
+  margin-top: auto;
+}
+
+/* heading */
+.toolbar::before{
+  content: "Start with a product";
+  margin: 0 0 8px;
+  font-style: italic;
+  letter-spacing: .02em;
+  color: #b8bdc3;
+  opacity: .5;
+}
+
+/* thin divider under the product dropdown */
+.divider{
+  height: 1px;
+  background: rgba(255,255,255,.08);
+  margin: 6px 0;
+}
+
+/* each control group */
+.field{
+  display: grid;
+  grid-template-columns: 1fr auto;   /* label | value */
+  grid-auto-rows: min-content;
+  gap: 6px 10px;
+}
+.field .badge{ grid-column: 1; line-height: 1.1; }
+.field .value{ grid-column: 2; justify-self: end; line-height: 1.1; }
+.field .ctrl{  grid-column: 1 / -1; }
+
+
+/* labels + numeric chips */
+.badge{ 
+  font-size: 13px; 
+  color:#d5d9de; 
+  opacity:.9; 
+}
+.value{
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+  color: #e8eaed;
+  opacity: .85;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 3) Sliders: custom track + orange thumb, no filled-left highlight */
+.slider{
+  /* kill native accent-fill & give us full control */
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  background: transparent;   /* we draw track below */
+  height: 22px;              /* provides vertical room for thumb */
+  margin: 0;
+}
+/* WebKit/Blink track */
+.slider::-webkit-slider-runnable-track{
+  height: 4px;
+  background: var(--track);
+  border-radius: 2px;
+}
+/* WebKit/Blink thumb */
+.slider::-webkit-slider-thumb{
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  border: 0;
+  background: var(--accent);
+  box-shadow: 0 1px 0 rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.25);
+  /* vertically center thumb over 4px track */
+  margin-top: -6px; /* = (thumb 16 / 2) - (track 4 / 2) */
+}
+/* Firefox track */
+.slider::-moz-range-track{
+  height: 4px;
+  background: var(--track);
+  border-radius: 2px;
+}
+/* Firefox thumb */
+.slider::-moz-range-thumb{
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  border: 0;
+  background: var(--accent);
+  box-shadow: 0 1px 0 rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.25);
+}
+/* focus/hover niceties (optional) */
+.slider:focus-visible::-webkit-slider-runnable-track,
+.slider:focus-visible::-moz-range-track{
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(216,109,26,.18);
+}
+
+/* product + type dropdowns expand full width */
+.dropdown{ width: 100%; }
+/* bigger, comfy dropdown with custom chevron */
+.dropdown{
+  color-scheme: dark;
+  appearance: none;
+  font-size: 15px;
+  line-height: 1.2;
+  padding: 12px 40px 12px 14px;
+  color: #e6e8eb;
+  background:
+    linear-gradient(#2a2e34, #242527) padding-box,
+    linear-gradient(180deg,#3a4047,#2b2f35) border-box;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 12px;
+  box-shadow: 0 1px 0 rgba(255,255,255,.05) inset;
+
+  /* chevron */
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23d8dde3' d='M1.41.59 6 5.17 10.59.59 12 2 6 8 0 2z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+}
+.dropdown:focus{
+  outline: none;
+  border-color: rgba(255,255,255,.25);
+  box-shadow: 0 0 0 3px rgba(255,255,255,.06);
+}
+.dropdown option{
+  color: #2a2d31;
+}
+.dropdown option:hover{
+  color: #2a2d31;
+  background: #a45516;
+}
+.dropdown option:highlight{
+  color: #2a2d31;
+  background: #a45516;
+}
+
+
+/* busy state (your JS toggles .toolbar.busy) */
+.toolbar.busy .slider,
+.toolbar.busy select{
+  pointer-events: none;
+  cursor: progress;
+  opacity: .9;
+}
+/* Fade slider to disabled accent while solving or when disabled */
+.toolbar.busy .slider::-webkit-slider-thumb,
+.slider:disabled::-webkit-slider-thumb{
+  background: var(--accent-disabled);
+  box-shadow: 0 1px 0 rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.25);
+}
+
+.toolbar.busy .slider::-moz-range-thumb,
+.slider:disabled::-moz-range-thumb{
+  background: var(--accent-disabled);
+  box-shadow: 0 1px 0 rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.25);
+}
+
+
+/* status chip stays at panel corner */
+#status{
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;          /* above viewer & panel */
+  opacity: .6;            /* keep your existing look */
+  pointer-events: none;   /* won’t block interactions */
+}
+/* ---- Floating "About us" button (top-right of viewport) ---- */
+.btn-float{
+  position: fixed;
+  top: 14px; right: 16px;
+  z-index: 1400;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.18);
+  color: #e7ecf2;
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+}
+.btn-float:hover{ background: rgba(255,255,255,0.14); }
+
+/* ---- Modal scaffold ---- */
+.modal{ 
+  position: fixed; 
+  inset: 0;
+  display: none;
+  z-index: 1500; 
+  }
+.modal.is-open{ display: block; }
+.modal__backdrop{
+  position: absolute; inset: 0; background: rgba(0,0,0,.48);
+}
+.modal__panel{
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(680px, calc(100vw - 40px));
+  max-height: min(80vh, 680px);
+  overflow: auto;
+  padding: 20px 18px 18px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #2c2f33 0%, #2a2d31 100%);
+  border: 1px solid rgba(255,255,255,.1);
+  box-shadow: 0 20px 80px rgba(0,0,0,.55);
+  color: #e9edf3;
+}
+.modal__close{
+  position: absolute;
+  right: 10px; 
+  top: 8px;
+  width: 28px; 
+  height: 28px; 
+  border-radius: 50%;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.18);
+  cursor: pointer;
+   /* icon (inline SVG) */
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23E9EDF3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M6 6L18 18M18 6L6 18'/></svg>");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 14px 14px;   /* tweak icon size here */
+}
+.modal__close:hover{ background-color: rgba(255,255,255,.16); }
+.modal__close:focus-visible{
+  outline: 2px solid rgba(255,255,255,.35);
+  outline-offset: 2px;
+}
+
+/* Optional: compact on small screens */
+@media (max-width: 520px){
+  .toolbar{ gap: 8px 12px; }
+}

@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>VOLDT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles.css" />
+
+    <!-- ES modules for three / rhino3dm / rhinocompute -->
+    <script async src="https://unpkg.com/es-module-shims@1.10.0/dist/es-module-shims.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+          "three/examples/jsm/controls/OrbitControls.js": "https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js",
+          "rhino3dm": "https://unpkg.com/rhino3dm@8.17.0/rhino3dm.module.min.js",
+          "rhinocompute": "https://unpkg.com/compute-rhino3d@0.13.0-beta/compute.rhino3d.module.js",
+          "three/examples/jsm/postprocessing/UnrealBloomPass.js": "https://unpkg.com/three@0.160.0/examples/jsm/postprocessing/UnrealBloomPass.js",
+          "three/examples/jsm/postprocessing/RenderPass.js": "https://unpkg.com/three@0.160.0/examples/jsm/postprocessing/RenderPass.js",
+          "three/examples/jsm/postprocessing/EffectComposer.js": "https://unpkg.com/three@0.160.0/examples/jsm/postprocessing/EffectComposer.js",
+          "three/examples/jsm/loaders/RGBELoader.js": "https://unpkg.com/three@0.160.0/examples/jsm/loaders/RGBELoader.js",
+          "three/examples/jsm/environments/RoomEnvironment.js": "https://unpkg.com/three@0.160.0/examples/jsm/environments/RoomEnvironment.js",
+          "three/examples/jsm/utils/BufferGeometryUtils.js":"https://unpkg.com/three@0.165.0/examples/jsm/utils/BufferGeometryUtils.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <!-- Floating "About us" button (top-right) -->
+    <button id="aboutBtn" class="btn-float">About Us</button>
+
+    <!-- Info modal (hidden by default) -->
+    <div id="aboutModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
+      <div class="modal__backdrop" id="aboutBackdrop"></div>
+      <div class="modal__panel" role="document">
+        <button id="aboutClose" class="modal__close" aria-label="Close"></button>
+        <h2>Glad you're here!</h2>
+        <p>We create custom architectural hardware that blends design innovation with advanced digital fabrication. Our work bridges the gap between craft and computation — bringing ideas to life through precision, creativity, and technology.</p>
+        <p>In addition, you are always welcome to come visit us at www.voldtlab.com, and see other things we've made.</p>
+      </div>
+    </div>
+
+
+    <!-- status texts -->
+    <span id="status" class="badge"></span>
+
+
+    <fieldset class="toolbar" id="ctrlpanel">
+      <!-- Product select in header -->
+      <select class="dropdown" id="prodtype">
+        <option value="0">Venturi</option>
+        <option value="1">Heat Wave</option>
+        <option value="2">Lake Shore</option>
+      </select>
+      <div class="divider"></div>
+
+      <!-- venturi Type -->
+      <div class="field" id="field-vtype">
+        <span class="badge">Type</span>
+        <!-- no value chip for Type -->
+        <select class="dropdown ctrl" id="vtype">
+          <option value="0">Bar</option>
+          <option value="1">Knob</option>
+        </select>
+      </div>
+      <!-- venturi + lakeshore + heatwave length -->
+      <div class="field" id="field-height">
+        <span class="badge">Length</span>
+        <span id="hVal" class="value">3.75"</span>
+        <input id="height" class="slider ctrl" type="range" min="0" max="5" step="1" value="0" />
+      </div>
+      <!-- Venturi + lake shore twist -->
+      <div class="field" id="field-rot">
+        <span class="badge">Twist</span>
+        <span id="rotVal" class="value">45°</span>
+        <input id="rot" class="slider ctrl" type="range" min="0" max="3" step="1" value="2" />
+      </div>
+      <!-- venturi Radius -->
+      <div class="field" id="field-rad">
+        <span class="badge">Radius</span>
+        <span id="radVal" class="value">6</span>
+        <input id="rad" class="slider ctrl" type="range" min="4" max="10" step="2" value="6" />
+      </div>
+
+      <!-- lake shape picker-->
+      <div class="field" id="field-lstype">
+        <span class="badge">Shape</span>
+        <!-- no value chip for Type -->
+        <select class="dropdown ctrl" id="lstype">
+          <option value="0">Simple</option>
+          <option value="1">Free Form</option>
+        </select>
+      </div>
+      <!-- lake form Factor -->
+      <div class="field" id="field-ff">
+        <span class="badge">Form Factor</span>
+        <span id="val" class="value">0.50</span>
+        <input id="prm" class="slider ctrl" type="range" min="0" max="4" step="1" value="1"/>
+      </div>
+
+
+      <!-- heat wave picker -->
+      <div class="field" id="field-lstype">
+        <span class="badge">Texture</span>
+        <!-- no value chip for Type -->
+        <select class="dropdown ctrl" id="hwtxtr">
+          <option value="0">Gyroid</option>
+          <option value="1">Voronoi</option>
+        </select>
+      </div>
+      <!-- heat wave density-->
+      <div class="field" id="field-dens">
+        <span class="badge">Density</span>
+        <span id="val" class="value">1</span>
+        <input id="prm" class="slider ctrl" type="range" min="0" max="2" step="1" value="1"/>
+      </div>
+
+      <!-- Docked helper toggle (lower-left of the left panel) -->
+      <button id="gridToggle" class="btn-panel" type="button">Grid &amp; Axis: On</button>
+
+    </fieldset>
+
+
+    <div id="viewport" class="viewer"></div>
+
+    <!-- App entry -->
+    <script type="module" src="main.js"></script>
+  </body>
+</html>
