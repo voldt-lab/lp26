@@ -73,20 +73,20 @@
         </select>
       </div>
       <!-- heat wave picker -->
-      <div class="field" id="field-lstype">
+      <div class="field" id="field-hwtype">
         <span class="badge">Texture</span>
         <!-- no value chip for Type -->
-        <select class="dropdown ctrl" id="hwtxtr">
+        <select class="dropdown ctrl" id="hwtype">
           <option value="0">Gyroid</option>
           <option value="1">Voronoi</option>
         </select>
       </div>
 
       <!-- venturi + lakeshore + heatwave length -->
-      <div class="field" id="field-height">
+      <div class="field" id="field-len">
         <span class="badge">Length</span>
-        <span id="hVal" class="value">3.75"</span>
-        <input id="height" class="slider ctrl" type="range" min="0" max="5" step="1" value="0" />
+        <span id="lenVal" class="value">3-3/4"</span>
+        <input id="len" class="slider ctrl" type="range" min="0" max="5" step="1" value="0" />
       </div>
       <!-- Venturi + lake shore twist -->
       <div class="field" id="field-rot">
@@ -104,15 +104,15 @@
       <!-- lake form Factor -->
       <div class="field" id="field-ff">
         <span class="badge">Form Factor</span>
-        <span id="val" class="value">0.50</span>
-        <input id="prm" class="slider ctrl" type="range" min="0" max="4" step="1" value="1"/>
+        <span id="ffVal" class="value">0.50</span>
+        <input id="ff" class="slider ctrl" type="range" min="0" max="4" step="1" value="1"/>
       </div>
 
       <!-- heat wave density-->
       <div class="field" id="field-dens">
         <span class="badge">Density</span>
-        <span id="val" class="value">1</span>
-        <input id="prm" class="slider ctrl" type="range" min="0" max="2" step="1" value="1"/>
+        <span id="densVal" class="value">1</span>
+        <input id="dens" class="slider ctrl" type="range" min="0" max="2" step="1" value="1"/>
       </div>
 
       <!-- Docked helper toggle (lower-left of the left panel) -->

@@ -13,33 +13,34 @@ const vTypeSelect = document.getElementById('vtype');
 const fieldVType  = document.getElementById('field-vtype');
 const fieldRad    = document.getElementById('field-rad');
 const fieldRot    = document.getElementById('field-rot');
-const fieldLen    = document.getElementById('field-height');
+const fieldLen    = document.getElementById('field-len');
 
 // Lake Shore controls
 const lsTypeSelect = document.getElementById('lstype');
-const fieldLsType  = findFieldThatContains(lsTypeSelect);
+const fieldLsType  = document.getElementById('field-lstype');
 const fieldFF      = document.getElementById('field-ff');
 
 // Heat Wave controls
-const hwTxtrSelect = document.getElementById('hwtxtr');
-const fieldHwTxtr  = findFieldThatContains(hwTxtrSelect);
+const hwTxtrSelect = document.getElementById('hwtype');
+const fieldHwTxtr  = document.getElementById('field-hwtype');
 const fieldDens    = document.getElementById('field-dens');
 
-// Sliders + their value chips (NOTE: HTML has duplicate ids for prm/val, so we scope inside fields)
-const lenSlider = fieldLen.querySelector('input[type="range"]');
-const lenValue  = document.getElementById('hVal');      // unique in your HTML
+// Sliders + their value chips (simplified now that IDs are unique)
+const lenSlider = document.getElementById('len');
+const lenValue  = document.getElementById('lenVal');
 
-const rotSlider = fieldRot.querySelector('input[type="range"]');
-const rotValue  = document.getElementById('rotVal');    // unique
+const rotSlider = document.getElementById('rot');
+const rotValue  = document.getElementById('rotVal');
 
-const radSlider = fieldRad.querySelector('input[type="range"]');
-const radValue  = document.getElementById('radVal');    // unique
+const radSlider = document.getElementById('rad');
+const radValue  = document.getElementById('radVal');
 
-const ffSlider  = fieldFF.querySelector('input[type="range"]');
-const ffValue   = fieldFF.querySelector('.value');
+const ffSlider  = document.getElementById('ff');
+const ffValue   = document.getElementById('ffVal');
 
-const densSlider = fieldDens.querySelector('input[type="range"]');
-const densValue  = fieldDens.querySelector('.value');
+const densSlider = document.getElementById('dens');
+const densValue  = document.getElementById('densVal');
+
 
 // Viewer (keep your old look)
 const viewer = createViewer(root, {
@@ -51,7 +52,7 @@ const viewer = createViewer(root, {
 
 // ----- model path strategy -----
 // IMPORTANT: This is the *only* place you should need to edit to match your actual filenames.
-const MODEL_BASE = './gltf';   // e.g. ./gltf/venturi/bar/len0_tw2.glb
+const MODEL_BASE = '.';   // root folder
 const MODEL_EXT  = '.glb';     // change to '.gltf' if needed
 
 function resolveModelUrl(state) {
@@ -73,16 +74,16 @@ function resolveModelUrl(state) {
     const lstype = state.lakeType; // 'simple' | 'freeform'
     if (lstype === 'freeform') {
       // freeform uses form factor only
-      return `${MODEL_BASE}/lake-shore/free-form/ff${state.ff}${MODEL_EXT}`;
+      return `${MODEL_BASE}/lake_shore/free_form/ff${state.ff}${MODEL_EXT}`;
     }
     // simple uses length + twist
-    return `${MODEL_BASE}/lake-shore/simple/len${state.len}_tw${state.tw}${MODEL_EXT}`;
+    return `${MODEL_BASE}/lake_shore/simple/len${state.len}_tw${state.tw}${MODEL_EXT}`;
   }
 
   if (product === 'heatwave') {
     const tx = state.hwTexture; // 'gyroid' | 'voronoi'
     // both use length + density
-    return `${MODEL_BASE}/heat-wave/${tx}/len${state.len}_dens${state.dens}${MODEL_EXT}`;
+    return `${MODEL_BASE}/heat_wave/${tx}/len${state.len}_dens${state.dens}${MODEL_EXT}`;
   }
 
   return null;
@@ -91,10 +92,10 @@ function resolveModelUrl(state) {
 // ----- UI value display mappings -----
 // These are just for the *label chips* (not filenames).
 // Adjust to match your real-world intended values if you want.
-const LENGTH_LABELS = ['3.75"', '4.75"', '5.75"', '6.75"', '7.75"', '8.75"'];
-const TWIST_LABELS  = ['0°', '15°', '45°', '90°'];
-const FF_LABELS     = ['0.25', '0.50', '0.75', '1.00', '1.25'];
-const DENS_LABELS   = ['0.5', '1.0', '1.5'];
+const LENGTH_LABELS = ['3-3/4"', '5"', '6-5/16"', '7-9/16"', '10-1/16"', '12-5/8"'];
+const TWIST_LABELS  = ['0°', '45°', '90°', '120°'];
+const FF_LABELS     = ['1', '2', '3', '4', '5'];
+const DENS_LABELS   = ['Low', 'Mid', 'Hi'];
 
 // ----- state + helpers -----
 let busy = false;
@@ -109,11 +110,6 @@ function setBusy(on, text = '') {
   panel.classList.toggle('busy', busy);
   panel.disabled = busy; // harmless even if fieldset; your CSS uses .busy anyway
   status.textContent = text || '';
-}
-
-function findFieldThatContains(controlEl) {
-  // finds nearest .field wrapper
-  return controlEl?.closest?.('.field') || controlEl?.parentElement;
 }
 
 function getState() {
