@@ -63,6 +63,25 @@
           <option value="1">Knob</option>
         </select>
       </div>
+      <!-- lake shape picker-->
+      <div class="field" id="field-lstype">
+        <span class="badge">Shape</span>
+        <!-- no value chip for Type -->
+        <select class="dropdown ctrl" id="lstype">
+          <option value="0">Simple</option>
+          <option value="1">Free Form</option>
+        </select>
+      </div>
+      <!-- heat wave picker -->
+      <div class="field" id="field-lstype">
+        <span class="badge">Texture</span>
+        <!-- no value chip for Type -->
+        <select class="dropdown ctrl" id="hwtxtr">
+          <option value="0">Gyroid</option>
+          <option value="1">Voronoi</option>
+        </select>
+      </div>
+
       <!-- venturi + lakeshore + heatwave length -->
       <div class="field" id="field-height">
         <span class="badge">Length</span>
@@ -82,15 +101,6 @@
         <input id="rad" class="slider ctrl" type="range" min="4" max="10" step="2" value="6" />
       </div>
 
-      <!-- lake shape picker-->
-      <div class="field" id="field-lstype">
-        <span class="badge">Shape</span>
-        <!-- no value chip for Type -->
-        <select class="dropdown ctrl" id="lstype">
-          <option value="0">Simple</option>
-          <option value="1">Free Form</option>
-        </select>
-      </div>
       <!-- lake form Factor -->
       <div class="field" id="field-ff">
         <span class="badge">Form Factor</span>
@@ -98,16 +108,6 @@
         <input id="prm" class="slider ctrl" type="range" min="0" max="4" step="1" value="1"/>
       </div>
 
-
-      <!-- heat wave picker -->
-      <div class="field" id="field-lstype">
-        <span class="badge">Texture</span>
-        <!-- no value chip for Type -->
-        <select class="dropdown ctrl" id="hwtxtr">
-          <option value="0">Gyroid</option>
-          <option value="1">Voronoi</option>
-        </select>
-      </div>
       <!-- heat wave density-->
       <div class="field" id="field-dens">
         <span class="badge">Density</span>
