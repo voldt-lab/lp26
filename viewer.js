@@ -9,6 +9,8 @@ import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment
 
 // Not in your importmap, so we import via full URL to avoid touching index.html
 import { GLTFLoader } from 'https://unpkg.com/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'https://unpkg.com/three@0.160.0/examples/jsm/loaders/DRACOLoader.js';
+
 
 // --- simple equirect "studio" environment (LDR) ---
 function makeStudioEnv(renderer, opts = {}) {
@@ -268,6 +270,10 @@ export function createViewer(container, opts = {}) {
 
   // Load a GLTF/GLB and apply the “house” material style
   const gltfLoader = new GLTFLoader();
+  // Draco (for GLB/GLTF with KHR_draco_mesh_compression)
+  const dracoLoader = new DRACOLoader();
+  dracoLoader.setDecoderPath('https://unpkg.com/three@0.160.0/examples/jsm/libs/draco/'); // or './draco/'
+  gltfLoader.setDRACOLoader(dracoLoader);
   let lastUrl = null;
 
   async function loadModel(url, {
