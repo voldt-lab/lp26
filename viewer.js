@@ -135,18 +135,18 @@ export function createViewer(container, opts = {}) {
     envMapIntensity: 1.2,
     clearcoat: 0.01,
     clearcoatRoughness: 0.12,
-    side: THREE.DoubleSide
+    side: THREE.FrontSide,
   });
 
   const satinMat = new THREE.MeshStandardMaterial({
     metalness: 0.25,
     roughness: 0.35,
-    side: THREE.DoubleSide,
+    side: THREE.FrontSide,
     envMapIntensity: 1.0
   });
 
   const renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
   renderer.setSize(innerWidth, innerHeight);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -273,6 +273,7 @@ export function createViewer(container, opts = {}) {
   // Draco (for GLB/GLTF with KHR_draco_mesh_compression)
   const dracoLoader = new DRACOLoader();
   dracoLoader.setDecoderPath('https://unpkg.com/three@0.160.0/examples/jsm/libs/draco/'); // or './draco/'
+  dracoLoader.setWorkerLimit(Math.min(4, navigator.hardwareConcurrency || 4));
   gltfLoader.setDRACOLoader(dracoLoader);
   let lastUrl = null;
 
