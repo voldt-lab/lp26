@@ -110,7 +110,7 @@ function pickMaterialForMesh(meshName){
   const n = String(meshName || '').toLowerCase();
   if (/\b(hardware|handle|knob|bar)\b/.test(n)) return 'metal';
   if (/\b(wall|body|shell)\b/.test(n)) return 'satin';
-  return 'metal';
+  return 'satin'; //catch all
 }
 
 export function createViewer(container, opts = {}) {
@@ -139,8 +139,9 @@ export function createViewer(container, opts = {}) {
   });
 
   const satinMat = new THREE.MeshStandardMaterial({
-    metalness: 0.25,
-    roughness: 0.35,
+    color: 0x4f4f4f,
+    metalness: 0.15,
+    roughness: 0.6,
     side: THREE.FrontSide,
     envMapIntensity: 1.0
   });
@@ -239,6 +240,9 @@ export function createViewer(container, opts = {}) {
         if (n.material) (Array.isArray(n.material) ? n.material : [n.material]).forEach(m => m.dispose?.());
       });
     }
+    group.position.set(0, 0, 0);
+    group.rotation.set(0, 0, 0);
+    group.scale.set(1, 1, 1);
   }
 
   function setGridVisible(show) {
