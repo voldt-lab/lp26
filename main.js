@@ -21,8 +21,8 @@ const fieldLsType  = document.getElementById('field-lstype');
 const fieldFF      = document.getElementById('field-ff');
 
 // Heat Wave controls
-const hwTxtrSelect = document.getElementById('hwtype');
-const fieldHwTxtr  = document.getElementById('field-hwtype');
+const mechTxtrSelect = document.getElementById('mechtype');
+const fieldHwTxtr  = document.getElementById('field-mechtype');
 const fieldDens    = document.getElementById('field-dens');
 
 // Sliders + their value chips (simplified now that IDs are unique)
@@ -80,10 +80,10 @@ function resolveModelUrl(state) {
     return `${MODEL_BASE}/lake_shore/simple/len${state.len}_tw${state.tw}${MODEL_EXT}`;
   }
 
-  if (product === 'heatwave') {
-    const tx = state.hwTexture; // 'gyroid' | 'voronoi'
+  if (product === 'mechanic') {
+    const tx = state.mechTexture; // 'gyroid' | 'voronoi'
     // both use length + density
-    return `${MODEL_BASE}/heat_wave/${tx}/len${state.len}_dens${state.dens}${MODEL_EXT}`;
+    return `${MODEL_BASE}/mechanic/${tx}/len${state.len}_dens${state.dens}${MODEL_EXT}`;
   }
 
   return null;
@@ -119,7 +119,7 @@ function getState() {
     // normalized product key
     product:
       product === '0' ? 'venturi' :
-      product === '1' ? 'heatwave' :
+      product === '1' ? 'mechanic' :
       'lakeshore',
 
     // slider indices
@@ -132,7 +132,7 @@ function getState() {
     // subtypes
     venturiType: (vTypeSelect.value === '1') ? 'knob' : 'bar',
     lakeType: (lsTypeSelect.value === '1') ? 'freeform' : 'simple',
-    hwTexture: (hwTxtrSelect.value === '1') ? 'voronoi' : 'gyroid',
+    mechTexture: (mechTxtrSelect.value === '1') ? 'voronoi' : 'gyroid',
   };
 
   return state;
@@ -185,7 +185,7 @@ function applyVisibility() {
     return;
   }
 
-  // heatwave
+  // mechanic
   show(fieldHwTxtr, true);
   show(fieldLen, true);
   show(fieldDens, true);
@@ -274,7 +274,7 @@ function wireUI() {
   prodSelect.addEventListener('change', onMajorChange);
   vTypeSelect.addEventListener('change', onMajorChange);
   lsTypeSelect.addEventListener('change', onMajorChange);
-  hwTxtrSelect.addEventListener('change', onMajorChange);
+  mechTxtrSelect.addEventListener('change', onMajorChange);
 
   // Sliders: update chip on input, load on change (release)
   lenSlider.addEventListener('input', applyValueChips);
