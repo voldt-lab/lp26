@@ -93,7 +93,7 @@ function resolveModelUrl(state) {
 // These are just for the *label chips* (not filenames).
 // Adjust to match your real-world intended values if you want.
 const LENGTH_LABELS = ['3-3/4"', '5"', '6-5/16"', '7-9/16"', '10-1/16"', '12-5/8"'];
-const TWIST_LABELS  = ['0°', '45°', '90°', '120°'];
+const TWIST_LABELS  = ['None', 'Minor', 'Medium', 'Max'];
 const FF_LABELS     = ['1', '2', '3', '4', '5'];
 const DENS_LABELS   = ['Low', 'Mid', 'Hi'];
 
