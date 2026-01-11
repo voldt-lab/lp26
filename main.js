@@ -29,8 +29,8 @@ const fieldDens    = document.getElementById('field-dens');
 const lenSlider = document.getElementById('len');
 const lenValue  = document.getElementById('lenVal');
 
-const rotSlider = document.getElementById('rot');
-const rotValue  = document.getElementById('rotVal');
+const twistSlider = document.getElementById('rot');
+const twistValue  = document.getElementById('rotVal');
 
 const radSlider = document.getElementById('rad');
 const radValue  = document.getElementById('radVal');
@@ -93,9 +93,10 @@ function resolveModelUrl(state) {
 // These are just for the *label chips* (not filenames).
 // Adjust to match your real-world intended values if you want.
 const LENGTH_LABELS = ['3-3/4"', '5"', '6-5/16"', '7-9/16"', '10-1/16"', '12-5/8"'];
-const TWIST_LABELS  = ['None', 'Minor', 'Medium', 'Max'];
+const TWIST_LABELS  = ['None', 'Minor', 'Max'];
 const FF_LABELS     = ['1', '2', '3', '4', '5'];
 const DENS_LABELS   = ['Low', 'Mid', 'Hi'];
+const RAD_LABELS    = ['3/4"', '1"', '1-1/8"'];
 
 // ----- state + helpers -----
 let busy = false;
@@ -124,8 +125,8 @@ function getState() {
 
     // slider indices
     len:  parseInt(lenSlider.value, 10),
-    tw:   parseInt(rotSlider.value, 10),
-    rad:  parseInt(radSlider.value, 10),     // note: radius slider is actual 4/6/8/10
+    tw:   parseInt(twistSlider.value, 10),
+    rad:  parseInt(radSlider.value, 10),     
     ff:   parseInt(ffSlider.value, 10),
     dens: parseInt(densSlider.value, 10),
 
@@ -197,11 +198,12 @@ function applyValueChips() {
   lenValue.textContent = LENGTH_LABELS[li];
 
   // twist
-  const ti = clampIndex(parseInt(rotSlider.value, 10), TWIST_LABELS.length);
-  rotValue.textContent = TWIST_LABELS[ti];
+  const ti = clampIndex(parseInt(twistSlider.value, 10), TWIST_LABELS.length);
+  twistValue.textContent = TWIST_LABELS[ti];
 
-  // radius (already “real” 4/6/8/10)
-  radValue.textContent = String(parseInt(radSlider.value, 10));
+  // radius 
+  const ri = clampIndex(parseInt(radSlider.value, 10), RAD_LABELS.length);
+  radValue.textContent = RAD_LABELS[ri];
 
   // form factor
   const ffi = clampIndex(parseInt(ffSlider.value, 10), FF_LABELS.length);
@@ -280,8 +282,8 @@ function wireUI() {
   lenSlider.addEventListener('input', applyValueChips);
   lenSlider.addEventListener('change', loadForCurrentState);
 
-  rotSlider.addEventListener('input', applyValueChips);
-  rotSlider.addEventListener('change', loadForCurrentState);
+  twistSlider.addEventListener('input', applyValueChips);
+  twistSlider.addEventListener('change', loadForCurrentState);
 
   radSlider.addEventListener('input', applyValueChips);
   radSlider.addEventListener('change', loadForCurrentState);
