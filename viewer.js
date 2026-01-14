@@ -139,9 +139,9 @@ export function createViewer(container, opts = {}) {
   });
 
   const satinMat = new THREE.MeshStandardMaterial({
-    color: 0x4f4f4f,
-    metalness: 0.15,
-    roughness: 0.6,
+    color: 0x828282,
+    metalness: 0.05,
+    roughness: 0.7,
     side: THREE.FrontSide,
     envMapIntensity: 1.0
   });
