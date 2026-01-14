@@ -1,7 +1,7 @@
 // viewer.js
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
+import { HDRLoader } from 'three/addons/loaders/HDRLoader.js';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
@@ -108,6 +108,7 @@ function makeGradient({
 // Heuristic: apply a consistent “house” material feel to imported GLTF meshes
 function pickMaterialForMesh(meshName){
   const n = String(meshName || '').toLowerCase();
+  // most exported meshes don't have names so this mechanism is just a scaffold for now
   if (/\b(hardware|handle|knob|bar)\b/.test(n)) return 'metal';
   if (/\b(wall|body|shell)\b/.test(n)) return 'satin';
   return 'satin'; //catch all
@@ -191,7 +192,7 @@ export function createViewer(container, opts = {}) {
       const envRT = pmrem.fromScene(new RoomEnvironment(), 0.04);
       envTex = envRT.texture;
     } else if (mode === 'hdr' && hdrUrl) {
-      const hdr = await new RGBELoader().loadAsync(hdrUrl);
+      const hdr = await new HDRLoader().loadAsync(hdrUrl);
       hdr.mapping = THREE.EquirectangularReflectionMapping;
       const envRT = pmrem.fromEquirectangular(hdr);
       envTex = envRT.texture;
