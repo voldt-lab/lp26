@@ -117,10 +117,10 @@ function pickMaterialForMesh(meshName){
 export function createViewer(container, opts = {}) {
   const scene = new THREE.Scene();
 
-  const axes = new THREE.AxesHelper(1);
+  const axes = new THREE.AxesHelper(0.1);
   scene.add(axes);
 
-  const grid = new THREE.GridHelper(10, 10, 0x828282, 0xa4a4a4);
+  const grid = new THREE.GridHelper(0.254, 10, 0x454545, 0x454545);
   grid.material.opacity = 0.5;
   grid.material.transparent = true;
   scene.add(grid);
