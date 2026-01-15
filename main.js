@@ -263,7 +263,7 @@ function wireUI() {
     gridOn = !gridOn;
     viewer.setGridVisible(gridOn);
     gridBtn.classList.toggle('active', gridOn);
-    gridBtn.textContent = gridOn ? 'Grid & Axis: On' : 'Grid & Axis: Off';
+    gridBtn.textContent = gridOn ? '3D Markers: On' : '3D Markers: Off';
   });
 
   // Product + subtype changes affect visibility + model

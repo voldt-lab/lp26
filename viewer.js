@@ -1,7 +1,7 @@
 // viewer.js
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
+import { HDRLoader } from 'three/addons/loaders/HDRLoader.js';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
@@ -108,6 +108,7 @@ function makeGradient({
 // Heuristic: apply a consistent “house” material feel to imported GLTF meshes
 function pickMaterialForMesh(meshName){
   const n = String(meshName || '').toLowerCase();
+  // most exported meshes don't have names so this mechanism is just a scaffold for now
   if (/\b(hardware|handle|knob|bar)\b/.test(n)) return 'metal';
   if (/\b(wall|body|shell)\b/.test(n)) return 'satin';
   return 'satin'; //catch all
@@ -116,11 +117,11 @@ function pickMaterialForMesh(meshName){
 export function createViewer(container, opts = {}) {
   const scene = new THREE.Scene();
 
-  const axes = new THREE.AxesHelper(1);
+  const axes = new THREE.AxesHelper(0.1);
   scene.add(axes);
 
-  const grid = new THREE.GridHelper(10, 10, 0x334, 0x223);
-  grid.material.opacity = 0.25;
+  const grid = new THREE.GridHelper(0.254, 10, 0x454545, 0x454545);
+  grid.material.opacity = 0.5;
   grid.material.transparent = true;
   scene.add(grid);
 
@@ -191,7 +192,7 @@ export function createViewer(container, opts = {}) {
       const envRT = pmrem.fromScene(new RoomEnvironment(), 0.04);
       envTex = envRT.texture;
     } else if (mode === 'hdr' && hdrUrl) {
-      const hdr = await new RGBELoader().loadAsync(hdrUrl);
+      const hdr = await new HDRLoader().loadAsync(hdrUrl);
       hdr.mapping = THREE.EquirectangularReflectionMapping;
       const envRT = pmrem.fromEquirectangular(hdr);
       envTex = envRT.texture;
@@ -251,7 +252,7 @@ export function createViewer(container, opts = {}) {
     axes.visible = v;
   }
 
-  function fitToObject(obj3d) {
+  function fitToObject(obj3d, { frameCamera = true } = {}) {
     const box = new THREE.Box3().setFromObject(obj3d);
     if (box.isEmpty()) return;
 
@@ -259,6 +260,8 @@ export function createViewer(container, opts = {}) {
     const center = new THREE.Vector3(); box.getCenter(center);
 
     obj3d.position.sub(center);
+    // IMPORTANT: after the first load, do not touch camera OR controls at all
+    if (!frameCamera) return;
     controls.target.set(0, 0, 0);
 
     const radius = 0.5 * size.length() || 1;
@@ -280,6 +283,7 @@ export function createViewer(container, opts = {}) {
   dracoLoader.setWorkerLimit(Math.min(4, navigator.hardwareConcurrency || 4));
   gltfLoader.setDRACOLoader(dracoLoader);
   let lastUrl = null;
+  let hasFramedOnce = false; 
 
   async function loadModel(url, {
     fit = true,
@@ -318,7 +322,10 @@ export function createViewer(container, opts = {}) {
 
     group.add(model);
 
-    if (fit) fitToObject(group);
+    if (fit) {
+      fitToObject(group, { frameCamera: !hasFramedOnce });
+      hasFramedOnce = true;
+    }
   }
 
   function setBloomEnabled(on, { strength = 0.4, radius = 0.8, threshold = 0.85 } = {}) {

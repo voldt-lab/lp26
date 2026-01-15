@@ -73,6 +73,7 @@ body{
   display: flex;        /* stack controls vertically */
   flex-direction: column;
   overflow: auto;       /* scroll *inside* panel if contents ever exceed height */
+  scrollbar-gutter: stable; /* prevent layout shift when scrollbar appears */
 }
 /* ---- Panel button (lower-left inside the left toolbar) ---- */
 .btn-panel{
@@ -96,8 +97,10 @@ body{
 
 /* thin divider under the product dropdown */
 .divider{
-  height: 1px;
-  background: rgba(255,255,255,.08);
+  flex: 0 0 auto;
+  width: 100%;
+  height: 0; /* use a border instead of a 1px background */
+  border-top: 1px solid rgba(255,255,255,.08);
   margin: 6px 0;
 }
 
