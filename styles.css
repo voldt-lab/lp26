@@ -52,6 +52,15 @@ body{
   flex-direction: column;
   gap: 30px;
 }
+/* heading */
+.toolbar::before{
+  content: "Select a design";
+  margin: 0 15px 0;
+  font-style: italic;
+  letter-spacing: .02em;
+  color: #b8bdc3;
+  opacity: .5;
+}
 #ctrlpanel.toolbar{
   border: 0; 
   margin: 0; 
@@ -83,16 +92,6 @@ body{
 }
 #gridToggle{
   margin-top: auto;
-}
-
-/* heading */
-.toolbar::before{
-  content: "Start with a product";
-  margin: 0 0 8px;
-  font-style: italic;
-  letter-spacing: .02em;
-  color: #b8bdc3;
-  opacity: .5;
 }
 
 /* thin divider under the product dropdown */
