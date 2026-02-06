@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
 /* theme colors */
 :root{
-  --accent:           #d86d1a;  /* normal */
+  --accent:           #dda05e;  /* normal */
   --accent-disabled:  #685546;  /* disabled highlight */
   --track:            #9a9a9a;
   --fs:14px; /*font size*/
