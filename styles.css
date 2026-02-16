@@ -131,7 +131,7 @@ body{
   font-variant-numeric: tabular-nums;
 }
 
-/* 3) Sliders: custom track + orange thumb, no filled-left highlight */
+/* Sliders: custom track + orange thumb, no filled-left highlight */
 .slider{
   /* kill native accent-fill & give us full control */
   -webkit-appearance: none;
@@ -218,6 +218,64 @@ body{
 .dropdown option:highlight{
   color: #2a2d31;
   background: #a45516;
+}
+
+/* ---- Segmented toggle (Density replacement) ---- */
+.segmented.ctrl{
+  width: 100%;
+}
+.segmented{
+  --pad: 4px;
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  padding: var(--pad);
+  border-radius: 12px;
+
+  /* match your dropdown/slider vibe */
+  background:
+    linear-gradient(#2a2e34, #242527) padding-box,
+    linear-gradient(180deg,#3a4047,#2b2f35) border-box;
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: 0 1px 0 rgba(255,255,255,.05) inset;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.segmented__thumb{
+  position: absolute;
+  top: var(--pad);
+  left: var(--pad);
+  height: calc(100% - (var(--pad) * 2));
+  width: 0px;               /* set by JS */
+  border-radius: 10px;
+  background: rgba(255,255,255,.08);
+  box-shadow: 0 1px 0 rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.10);
+  transition: transform 180ms ease, width 180ms ease;
+  pointer-events: none;
+}
+.segmented__btn{
+  flex: 1;                   /* equal segment widths */
+  position: relative;
+  z-index: 1;
+  border: 0;
+  background: transparent;
+  color: rgba(232,234,237,.55);
+  font: 700 13px/1 "Space Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  padding: 10px 0;           /* vertical rhythm like your sliders */
+  cursor: pointer;
+
+  display: flex;             /* true centering */
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-radius: 10px;
+}
+.segmented__btn[aria-pressed="true"]{
+  color: #e8eaed;
+}
+.segmented__btn:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(216,109,26,.18); /* matches your slider focus */
 }
 
 

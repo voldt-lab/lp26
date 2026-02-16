@@ -38,7 +38,8 @@ const radValue  = document.getElementById('radVal');
 const ffSlider  = document.getElementById('ff');
 const ffValue   = document.getElementById('ffVal');
 
-const densSlider = document.getElementById('dens');
+//const densSlider = document.getElementById('dens'); //----uncomment to revert to old slider
+const densToggle = document.getElementById('densToggle');
 const densValue  = document.getElementById('densVal');
 
 
@@ -113,6 +114,102 @@ function setBusy(on, text = '') {
   status.textContent = text || '';
 }
 
+// --- Density segmented control (replaces dens slider) ---
+let densIndex = 1; // default "Mid"
+function initDensityToggle() {
+  if (!densToggle) return;
+  /*begin defining click-slide*/
+  function indexFromClientX(clientX) {
+    let best = 0;
+    let bestDist = Infinity;
+    for (let i = 0; i < btns.length; i++) {
+      const r = btns[i].getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const d = Math.abs(clientX - cx);
+      if (d < bestDist) { bestDist = d; best = i; }
+    }
+    return best;
+  }
+
+  let dragging = false;
+
+  densToggle.addEventListener('pointerdown', (e) => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    dragging = true;
+    densToggle.setPointerCapture(e.pointerId);
+
+    densIndex = indexFromClientX(e.clientX);
+    render(); // UI only
+    e.preventDefault();
+  });
+
+  densToggle.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+
+    const idx = indexFromClientX(e.clientX);
+    if (idx !== densIndex) {
+      densIndex = idx;
+      render(); // UI only
+    }
+    e.preventDefault();
+  });
+
+  function endDrag(e) {
+    if (!dragging) return;
+    dragging = false;
+    try { densToggle.releasePointerCapture(e.pointerId); } catch {}
+
+    // Reload once, on release:
+    loadForCurrentState();
+    e.preventDefault();
+  }
+
+  densToggle.addEventListener('pointerup', endDrag);
+  densToggle.addEventListener('pointercancel', endDrag);
+
+  /*end defining click-slide*/
+
+  const btns  = Array.from(densToggle.querySelectorAll('.segmented__btn'));
+  const thumb = densToggle.querySelector('.segmented__thumb');
+
+  densIndex = parseInt(densToggle.getAttribute('data-active-index') || '1', 10);
+
+  function render({ reload = false } = {}) {
+    densIndex = clampIndex(densIndex, DENS_LABELS.length);
+    densValue.textContent = DENS_LABELS[densIndex];
+
+    btns.forEach((b, i) => b.setAttribute('aria-pressed', i === densIndex ? 'true' : 'false'));
+
+    // position thumb to active button, clamped to interior
+    const cs = getComputedStyle(densToggle);
+    const pad = parseFloat(cs.getPropertyValue('--pad')) || 0;
+    const rootRect = densToggle.getBoundingClientRect();
+    const btnRect  = btns[densIndex].getBoundingClientRect();
+
+    let left = (btnRect.left - rootRect.left) - pad;
+    const width = btnRect.width;
+    const maxLeft = (rootRect.width - (pad * 2)) - width;
+    left = Math.max(0, Math.min(left, maxLeft));
+
+    thumb.style.width = `${width}px`;
+    thumb.style.transform = `translateX(${left}px)`;
+
+    if (reload) loadForCurrentState();
+  }
+
+  btns.forEach((b) => {
+    b.addEventListener('click', () => {
+      densIndex = parseInt(b.dataset.index, 10);
+      render({reload: true});
+    });
+  });
+
+  // keep thumb correct on resize/font load
+  new ResizeObserver(() => render()).observe(densToggle);
+
+  render();
+}
+
 function getState() {
   const product = prodSelect.value; // "0" | "1" | "2"
 
@@ -128,7 +225,8 @@ function getState() {
     tw:   parseInt(twistSlider.value, 10),
     rad:  parseInt(radSlider.value, 10),     
     ff:   parseInt(ffSlider.value, 10),
-    dens: parseInt(densSlider.value, 10),
+    //dens: parseInt(densSlider.value, 10), //----uncomment to revert to old slider
+    dens: densIndex, // from segmented control
 
     // subtypes
     venturiType: (vTypeSelect.value === '1') ? 'knob' : 'bar',
@@ -210,8 +308,10 @@ function applyValueChips() {
   ffValue.textContent = FF_LABELS[ffi];
 
   // density
-  const di = clampIndex(parseInt(densSlider.value, 10), DENS_LABELS.length);
-  densValue.textContent = DENS_LABELS[di];
+  //const di = clampIndex(parseInt(densSlider.value, 10), DENS_LABELS.length); 
+  //densValue.textContent = DENS_LABELS[di];
+  //----uncomment above to revert to old slider
+  densValue.textContent = DENS_LABELS[clampIndex(densIndex, DENS_LABELS.length)];
 }
 
 function clampIndex(i, n) {
@@ -290,9 +390,10 @@ function wireUI() {
 
   ffSlider.addEventListener('input', applyValueChips);
   ffSlider.addEventListener('change', loadForCurrentState);
-
+/* uncomment below to revert to old slider
   densSlider.addEventListener('input', applyValueChips);
-  densSlider.addEventListener('change', loadForCurrentState);
+  densSlider.addEventListener('change', loadForCurrentState);*/
+  initDensityToggle();
 
   // initial
   applyVisibility();

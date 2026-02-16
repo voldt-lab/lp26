@@ -105,12 +105,21 @@
         <input id="ff" class="slider ctrl" type="range" min="0" max="4" step="1" value="1"/>
       </div>
 
-      <!-- mech density-->
+      <!-- mech density-->      
       <div class="field" id="field-dens">
         <span class="badge">Density</span>
-        <span id="densVal" class="value">1</span>
+        <span id="densVal" class="value">Mid</span>
+        <!-- old slicer
         <input id="dens" class="slider ctrl" type="range" min="0" max="2" step="1" value="1"/>
+        -->
+          <div class="segmented ctrl" id="densToggle" data-active-index="1">
+            <div class="segmented__thumb" aria-hidden="true"></div>
+            <button type="button" class="segmented__btn" data-index="0">Low</button>
+            <button type="button" class="segmented__btn" data-index="1">Mid</button>
+            <button type="button" class="segmented__btn" data-index="2">Hi</button>
+          </div>
       </div>
+      
 
       <!-- Docked helper toggle (lower-left of the left panel) -->
       <button id="gridToggle" class="btn-panel" type="button">3D Markers: On</button>
