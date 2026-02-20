@@ -103,6 +103,7 @@ const RAD_LABELS    = ['3/4"', '1"', '1-1/8"'];
 let busy = false;
 
 function show(el, on) {
+  //el is the control element
   el.style.display = on ? '' : 'none';
 }
 
@@ -331,7 +332,7 @@ async function loadForCurrentState() {
   try {
     // If another change happens while loading, ignore completion
     await viewer.loadModel(url, { fit: true, overrideMaterials: true });
-    if (token === loadToken) status.textContent = 'done';
+    if (token === loadToken) status.textContent = 'for illustration only';
   } catch (e) {
     console.error(e);
     if (token === loadToken) status.textContent = 'error (see console)';
