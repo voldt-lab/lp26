@@ -379,18 +379,25 @@ function wireUI() {
   lsTypeSelect.addEventListener('change', onMajorChange);
   mechTxtrSelect.addEventListener('change', onMajorChange);
 
-  // Sliders: update chip on input, load on change (release)
-  lenSlider.addEventListener('input', applyValueChips);
-  lenSlider.addEventListener('change', loadForCurrentState);
+  // Sliders: smooth drag (step=any while held), snap+load on release
+  function wireSmoothSlider(slider) {
+    slider.addEventListener('pointerdown', () => {
+      slider.dataset.origStep = slider.step;
+      slider.step = 'any';
+    });
+    slider.addEventListener('input', applyValueChips);
+    slider.addEventListener('change', () => {
+      slider.value = Math.round(parseFloat(slider.value));
+      slider.step = slider.dataset.origStep || '1';
+      applyValueChips();
+      loadForCurrentState();
+    });
+  }
 
-  twistSlider.addEventListener('input', applyValueChips);
-  twistSlider.addEventListener('change', loadForCurrentState);
-
-  radSlider.addEventListener('input', applyValueChips);
-  radSlider.addEventListener('change', loadForCurrentState);
-
-  ffSlider.addEventListener('input', applyValueChips);
-  ffSlider.addEventListener('change', loadForCurrentState);
+  wireSmoothSlider(lenSlider);
+  wireSmoothSlider(twistSlider);
+  wireSmoothSlider(radSlider);
+  wireSmoothSlider(ffSlider);
 /* uncomment below to revert to old slider
   densSlider.addEventListener('input', applyValueChips);
   densSlider.addEventListener('change', loadForCurrentState);*/

@@ -14,10 +14,12 @@
   <!-- Hero -->
   <div class="relative h-screen w-full overflow-hidden">
     <div class="absolute inset-0 bg-stone-900">
-      <img src="assets/5bb378fa3b6cbb00f861024bfca2927100ba3f88.jpg" alt="Studio" class="w-full h-full object-cover opacity-20" />
+      <img id="hero-0" src="assets/5bb378fa3b6cbb00f861024bfca2927100ba3f88.jpg" alt="Studio" class="absolute inset-0 w-full h-full object-cover" style="opacity:1;transition:opacity 1500ms ease-in-out" />
+      <img id="hero-1" src="assets/9938ab6682fc63e127dee83e1088543f4df50ad1.jpg" alt="Studio" class="absolute inset-0 w-full h-full object-cover" style="opacity:0;transition:opacity 1500ms ease-in-out" />
+      <img id="hero-2" src="assets/dec5396a8cc6e83670576a5d0a288c74f3074e6b.jpg" alt="Studio" class="absolute inset-0 w-full h-full object-cover" style="opacity:0;transition:opacity 1500ms ease-in-out" />
     </div>
     <div class="relative h-full flex items-end px-8 pb-16 lg:px-16 lg:pb-20">
-      <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 w-full">
+      <div class="bg-black/50 backdrop-blur-sm px-6 py-5 flex flex-col lg:flex-row gap-8 lg:gap-12 w-full">
         <h2 class="text-xl lg:text-2xl text-white font-semibold tracking-tight lg:min-w-[200px] shrink-0">Algorithmic <br />Craft</h2>
         <p class="text-xs lg:text-sm text-white/90 leading-relaxed font-light lg:pt-1 flex-1">Human hands meet machine precision. Voldt creates evolving product systems—variations generated through code, refined by hand, and made-to-order for your space. Designed and made at our studio in Michigan.</p>
       </div>
@@ -32,7 +34,7 @@
     <p class="text-xs tracking-[0.2em] uppercase text-stone-500 mb-4">Algorithmic Design Studio</p>
     <p class="text-sm text-stone-700 max-w-2xl mx-auto leading-relaxed">We explore computation as a design language, writing algorithms that generate forms only possible through code. Realized in walnut, brass, and 3D-printed polymers—manufactured in Michigan.</p>
     <div class="mt-8 flex justify-center gap-8 text-xs tracking-[0.15em] uppercase">
-      <a href="vestige-configurator.html" class="hover:text-stone-600 transition-colors">Configure Hardware</a>
+      <a href="hardware-configurator.html" class="hover:text-stone-600 transition-colors">Configure Hardware</a>
       <a href="custom-work.html" class="hover:text-stone-600 transition-colors">Custom Work</a>
     </div>
   </div>
@@ -42,20 +44,32 @@
   <script src="js/cart.js"></script>
   <script src="js/header.js"></script>
   <script>
+    // Hero slideshow
+    (function() {
+      const heroImgs = [
+        document.getElementById('hero-0'),
+        document.getElementById('hero-1'),
+        document.getElementById('hero-2')
+      ];
+      let current = 0;
+      setInterval(() => {
+        heroImgs[current].style.opacity = '0';
+        current = (current + 1) % heroImgs.length;
+        heroImgs[current].style.opacity = '1';
+      }, 5000);
+    })();
+  </script>
+  <script>
     const products = [
-      { id:'vestige', name:'VOLDT Hardware', category:'Vestige', size:'Configurable', img:'assets/914133ec573121502a172fcea0d7aaef759c00fe.jpg', hoverImg:null, link:'vestige-configurator.html' },
-      { id:'pf-floor', name:'PolyFrame Floor Lamp', category:'PolyFrames', size:null, img:'assets/29da261fae11e8815506ffcaee809b2fcbd34bfe.jpg', hoverImg:'assets/9978a8f52dc984036ee626d49e8bb08203893fe0.jpg', link:'polyframes-floor-lamp.html' },
-      { id:'pf-table', name:'PolyFrame Table Lamp', category:'PolyFrames', size:null, img:'assets/1967efac521aba866dc207ed580f4382af241561.jpg', hoverImg:'assets/e2cdfd0d1d94bbb72793037d94d5162bf2d2d773.jpg', link:'polyframes-table-lamp.html' },
+      { id:'voldt-hardware', name:'Mechanic Series', category:'Hardware', size:'Configurable', img:'assets/914133ec573121502a172fcea0d7aaef759c00fe.jpg', hoverImg:null, link:'hardware-configurator.html' },
+      { id:'dpa', name:'Detroit Pendant A', category:'Detroit Lights', size:'2 sizes', img:'assets/a6f766489f20f93f24f164ec925ce2cdb2eb835f.jpg', hoverImg:'assets/177f5475887bf8810ce02749613cac0cc9b75a4b.jpg', link:'detroit-pendant.html?style=A' },
+      { id:'pf-floor', name:'PolyFrame Floor Lamp', category:'PolyFrames', size:null, img:'assets/29da261fae11e8815506ffcaee809b2fcbd34bfe.jpg', hoverImg:'assets/e2cdfd0d1d94bbb72793037d94d5162bf2d2d773.jpg', link:'polyframes-floor-lamp.html' },
+      { id:'dtlb', name:'Detroit Table Lamp B', category:'Detroit Lights', size:'2 sizes', img:'assets/fc6a8d985282412e62851849b27a10efead95eb2.jpg', hoverImg:'assets/620fdc99d9a2f8039d4fd6ab9718cecf6b27f8f9.jpg', link:'detroit-table-lamp.html?style=B' },
+      { id:'pf-table', name:'PolyFrame Table Lamp', category:'PolyFrames', size:null, img:'assets/1967efac521aba866dc207ed580f4382af241561.jpg', hoverImg:'assets/9978a8f52dc984036ee626d49e8bb08203893fe0.jpg', link:'polyframes-table-lamp.html' },
       { id:'pf-coat', name:'PolyFrame Coat Rack', category:'PolyFrames', size:null, img:'assets/e606d72b5a5629a9b588ac32abe08e258b92b1db.jpg', hoverImg:'assets/fed88fa2d4adaef229128481e9b4e47ef2fdce81.jpg', link:'polyframes-coat-rack.html' },
       { id:'pf-coffee', name:'PolyFrame Coffee Table', category:'PolyFrames', size:null, img:'assets/90efc59c9eb30586b1c1fff261db8a917a4daff8.jpg', hoverImg:'assets/dec5396a8cc6e83670576a5d0a288c74f3074e6b.jpg', link:'polyframes-coffee-table.html' },
-      { id:'dtlb-lg', name:'Detroit Table Lamp B', category:'Detroit Lights', size:'Large', img:'assets/fc6a8d985282412e62851849b27a10efead95eb2.jpg', hoverImg:'assets/620fdc99d9a2f8039d4fd6ab9718cecf6b27f8f9.jpg', link:'detroit-table-lamp.html' },
-      { id:'dpa-lg', name:'Detroit Pendant A', category:'Detroit Lights', size:'Large', img:'assets/a6f766489f20f93f24f164ec925ce2cdb2eb835f.jpg', hoverImg:'assets/177f5475887bf8810ce02749613cac0cc9b75a4b.jpg', link:'detroit-pendant.html' },
-      { id:'dtla-lg', name:'Detroit Table Lamp A', category:'Detroit Lights', size:'Large', img:'assets/e005ffb8592589ea9883bf08ef2f100ef0b52bfb.jpg', hoverImg:'assets/38d7962704f7aa49355dd98db701b27a73d9e768.jpg', link:'detroit-table-lamp.html' },
-      { id:'dpb-lg', name:'Detroit Pendant B', category:'Detroit Lights', size:'Large', img:'assets/c3f1ecb063bbf7eb7ea437040bcf23b5d7c14808.jpg', hoverImg:'assets/a593fe151473b32b526b790458cee132453c2f08.jpg', link:'detroit-pendant.html' },
-      { id:'dpa-std', name:'Detroit Pendant A', category:'Detroit Lights', size:'Standard', img:'assets/ca93ba95ec2321cecc3f6971cc7b2456a99f48fc.jpg', hoverImg:'assets/92ce76be27045bd0283d04f5ae520db1c5684f4d.jpg', link:'detroit-pendant.html' },
-      { id:'dpb-std', name:'Detroit Pendant B', category:'Detroit Lights', size:'Standard', img:'assets/180fc790d95222d8b1e61a805e5d1a0cd85f30b0.jpg', hoverImg:'assets/d553197044225f86bdf58676f1b5016e67d7a92c.jpg', link:'detroit-pendant.html' },
-      { id:'dtla-std', name:'Detroit Table Lamp A', category:'Detroit Lights', size:'Standard', img:'assets/8afb5fbb428ef6e188acefcc150d78921c1a06a6.jpg', hoverImg:'assets/9938ab6682fc63e127dee83e1088543f4df50ad1.jpg', link:'detroit-table-lamp.html' },
-      { id:'dtlb-std', name:'Detroit Table Lamp B', category:'Detroit Lights', size:'Standard', img:'assets/f70e26754c5836fb0d7f077c0da565d8d4d3b7b3.jpg', hoverImg:null, link:'detroit-table-lamp.html' },
+      { id:'dtla', name:'Detroit Table Lamp A', category:'Detroit Lights', size:'2 sizes', img:'assets/e005ffb8592589ea9883bf08ef2f100ef0b52bfb.jpg', hoverImg:'assets/38d7962704f7aa49355dd98db701b27a73d9e768.jpg', link:'detroit-table-lamp.html?style=A' },
+      { id:'dpb', name:'Detroit Pendant B', category:'Detroit Lights', size:'2 sizes', img:'assets/c3f1ecb063bbf7eb7ea437040bcf23b5d7c14808.jpg', hoverImg:'assets/a593fe151473b32b526b790458cee132453c2f08.jpg', link:'detroit-pendant.html?style=B' },
     ];
     const grid = document.getElementById('product-grid');
     products.forEach(p => {

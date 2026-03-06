@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vestige Configurator — Voldt</title>
+  <title>Hardware Configurator — Voldt</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','sans-serif']}}}}</script>
   <link rel="stylesheet" href="css/styles.css" />
@@ -12,8 +12,8 @@
   <div class="pt-16">
     <section class="py-16 bg-white border-b border-neutral-200">
       <div class="max-w-7xl mx-auto px-6 lg:px-12">
-        <h1 class="text-5xl font-bold tracking-tight text-neutral-900 mb-6">Vestige Configurator</h1>
-        <p class="text-lg text-neutral-700 max-w-3xl leading-relaxed">Configure your Vestige hardware pull through finite predefined options. Live pricing and direct integration with checkout. Custom dimensions available through project inquiry.</p>
+        <h1 class="text-5xl font-bold tracking-tight text-neutral-900 mb-6">Hardware Configurator</h1>
+        <p class="text-lg text-neutral-700 max-w-3xl leading-relaxed">Configure your VOLDT hardware pull through finite predefined options. Live pricing and direct integration with checkout. Custom dimensions available through project inquiry.</p>
       </div>
     </section>
 
@@ -24,7 +24,7 @@
           <div class="relative">
             <div class="sticky top-32">
               <div class="bg-neutral-100 rounded-sm overflow-hidden mb-6" style="aspect-ratio:4/5">
-                <img src="https://images.unsplash.com/photo-1732532399621-afd080eb0b52?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080" alt="Vestige preview" class="w-full h-full object-cover" />
+                <img src="https://images.unsplash.com/photo-1732532399621-afd080eb0b52?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080" alt="Hardware preview" class="w-full h-full object-cover" />
               </div>
               <div class="bg-neutral-50 p-6 rounded-sm">
                 <h3 class="text-sm tracking-widest text-neutral-600 mb-4">CURRENT CONFIGURATION</h3>
@@ -117,7 +117,7 @@
 
     function handleAddToCart(){
       const price=calcPrice();
-      addItem({ id:'vestige-custom-'+Date.now(), name:'Vestige Pull Custom Configuration', price, image:'https://images.unsplash.com/photo-1732532399621-afd080eb0b52?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400', options:{...cfg} });
+      addItem({ id:'voldt-hardware-custom-'+Date.now(), name:'VOLDT Pull Custom Configuration', price, image:'https://images.unsplash.com/photo-1732532399621-afd080eb0b52?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400', options:{...cfg} });
       alert('Added to cart!');
     }
 

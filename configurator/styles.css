@@ -223,11 +223,13 @@ body{
 /* ---- Segmented toggle (Density replacement) ---- */
 .segmented.ctrl{
   width: 100%;
+  margin-top: 5px;
 }
 .segmented{
   --pad: 4px;
   position: relative;
   display: flex;
+  box-sizing: border-box;
   align-items: stretch;
   padding: var(--pad);
   border-radius: 12px;

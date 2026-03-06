@@ -82,9 +82,9 @@
 
       <!-- venturi + lakeshore + heatwave length -->
       <div class="field" id="field-len">
-        <span class="badge">Mounting</span>
+        <span class="badge" title="Spacing of the mounting points">Size</span>
         <span id="lenVal" class="value">3-3/4"</span>
-        <input id="len" class="slider ctrl" type="range" min="0" max="5" step="1" value="0" />
+        <input id="len" class="slider ctrl" type="range" min="0" max="5" step="1" value="3" title="Spacing of the mounting points"/>
       </div>
       <!-- Venturi + lake shore twist -->
       <div class="field" id="field-rot">
@@ -113,12 +113,12 @@
         <!-- old slicer
         <input id="dens" class="slider ctrl" type="range" min="0" max="2" step="1" value="1"/>
         -->
-          <div class="segmented ctrl" id="densToggle" data-active-index="1">
-            <div class="segmented__thumb" aria-hidden="true"></div>
-            <button type="button" class="segmented__btn" data-index="0">Low</button>
-            <button type="button" class="segmented__btn" data-index="1">Mid</button>
-            <button type="button" class="segmented__btn" data-index="2">Hi</button>
-          </div>
+        <div class="segmented ctrl" id="densToggle" data-active-index="1">
+          <div class="segmented__thumb" aria-hidden="true"></div>
+          <button type="button" class="segmented__btn" data-index="0">Low</button>
+          <button type="button" class="segmented__btn" data-index="1">Mid</button>
+          <button type="button" class="segmented__btn" data-index="2">Hi</button>
+        </div>
       </div>
       
 
