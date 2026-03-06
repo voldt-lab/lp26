@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detroit Table Lamp — Voldt</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','sans-serif']}}}}</script>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="bg-white font-sans">
+  <header id="site-header" class="fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-md"></header>
+  <div class="pt-16">
+    <div class="border-b border-black/5">
+      <div class="max-w-[1600px] mx-auto px-8 lg:px-16 py-6">
+        <a href="detroit-lights.html" class="inline-flex items-center gap-2 text-sm text-black/60 hover:text-black transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Back to Detroit Lights</a>
+      </div>
+    </div>
+
+    <div class="max-w-[1600px] mx-auto px-8 lg:px-16 py-16">
+      <div class="grid lg:grid-cols-2 gap-16 lg:gap-24">
+        <!-- Images -->
+        <div>
+          <div class="sticky top-8">
+            <div class="bg-black/5 mb-6 overflow-hidden" style="aspect-ratio:3/4">
+              <img id="main-img" src="assets/e005ffb8592589ea9883bf08ef2f100ef0b52bfb.jpg" alt="Detroit Table Lamp" class="w-full h-full object-cover" />
+            </div>
+            <div class="grid grid-cols-4 gap-3" id="color-thumbs"></div>
+          </div>
+        </div>
+
+        <!-- Product Details -->
+        <div>
+          <h1 class="text-4xl tracking-tight mb-4">Detroit Table Lamp</h1>
+          <p id="price-display" class="text-2xl mb-8">$895</p>
+
+          <div class="mb-12 pb-12 border-b border-black/5">
+            <p class="text-sm text-black/70 leading-relaxed mb-4">Plug-in table lamp</p>
+            <p class="text-sm text-black/70 leading-relaxed mb-4">Designed and manufactured by Voldt in Michigan with recycled materials and sustainable processes</p>
+            <p class="text-sm text-black/70 leading-relaxed mb-4">All designs are made to order - please allow up to two weeks for shipping.</p>
+            <p class="text-sm text-black/70 leading-relaxed">Contact us for additional specification options including custom colors</p>
+          </div>
+
+          <!-- Style -->
+          <div class="space-y-8 mb-12">
+            <div>
+              <label class="text-xs tracking-[0.15em] uppercase mb-4 block opacity-40">Style</label>
+              <div class="grid grid-cols-2 gap-3">
+                <button onclick="setStyle('A')" id="btn-style-A" class="px-6 py-4 text-sm border border-black bg-black text-white transition-all">Style A</button>
+                <button onclick="setStyle('B')" id="btn-style-B" class="px-6 py-4 text-sm border border-black/20 hover:border-black transition-all">Style B</button>
+              </div>
+            </div>
+            <div>
+              <label class="text-xs tracking-[0.15em] uppercase mb-4 block opacity-40">Size</label>
+              <div class="grid grid-cols-2 gap-3">
+                <button onclick="setSize('Standard')" id="btn-size-Standard" class="px-6 py-4 text-sm border border-black/20 hover:border-black transition-all">Standard</button>
+                <button onclick="setSize('Large')" id="btn-size-Large" class="px-6 py-4 text-sm border border-black bg-black text-white transition-all">Large</button>
+              </div>
+            </div>
+            <div>
+              <label class="text-xs tracking-[0.15em] uppercase mb-4 block opacity-40">Base Color</label>
+              <div class="grid grid-cols-2 gap-3">
+                <button onclick="setColor('Black')" id="btn-color-Black" class="px-6 py-4 text-sm border border-black bg-black text-white transition-all">Black</button>
+                <button onclick="setColor('Hawaii Blue')" id="btn-color-Hawaii Blue" class="px-6 py-4 text-sm border border-black/20 hover:border-black transition-all">Hawaii Blue</button>
+                <button onclick="setColor('Berry')" id="btn-color-Berry" class="px-6 py-4 text-sm border border-black/20 hover:border-black transition-all">Berry</button>
+                <button onclick="setColor('Mint')" id="btn-color-Mint" class="px-6 py-4 text-sm border border-black/20 hover:border-black transition-all">Mint</button>
+              </div>
+            </div>
+          </div>
+
+          <button onclick="handleAddToCart()" class="w-full bg-black text-white px-8 py-5 hover:bg-black/80 transition-all text-xs tracking-[0.15em] uppercase mb-12">Add to Cart</button>
+
+          <!-- About -->
+          <div class="mb-12 pb-12 border-b border-black/5">
+            <h3 class="text-xs tracking-[0.15em] uppercase mb-6 opacity-40">About the Design</h3>
+            <div class="space-y-4 text-sm text-black/70 leading-relaxed">
+              <p>A blend of technical innovation and artistic expression, our Detroit light series explores geometric details and textures drawing from Art Deco architecture - specifically, the Fisher Building's chandeliers located in downtown Detroit. When the light is on, crisp vertical lines appear and contrast with a warm internal glow.</p>
+              <p>The lamp offers direct and ambient light perfect for bedrooms, kitchens & living spaces.</p>
+            </div>
+          </div>
+
+          <!-- Materials -->
+          <div class="mb-12 pb-12 border-b border-black/5">
+            <h3 class="text-xs tracking-[0.15em] uppercase mb-6 opacity-40">Materials and Finish</h3>
+            <p class="text-sm text-black/70 leading-relaxed">Shade is made from recycled semi-translucent PETG, recycled polyactic acid (plant-based polymer)</p>
+          </div>
+
+          <!-- Dimensions -->
+          <div class="mb-12 pb-12 border-b border-black/5">
+            <h3 class="text-xs tracking-[0.15em] uppercase mb-6 opacity-40">Dimensions</h3>
+            <div class="space-y-6 text-sm text-black/70">
+              <div><p class="font-medium text-black mb-2">Standard</p><p>Diameter: 6.5"</p><p>Height: 8"</p></div>
+              <div><p class="font-medium text-black mb-2">Large</p><p>Diameter: 11"</p><p>Height: 13"</p></div>
+              <div class="pt-4 border-t border-black/5"><p>Cord Length: 12'-0"</p><p>On/Off Switch Distance from End: 2'-0"</p></div>
+            </div>
+          </div>
+
+          <!-- Specs -->
+          <div>
+            <h3 class="text-xs tracking-[0.15em] uppercase mb-6 opacity-40">Specifications</h3>
+            <ul class="space-y-2 text-sm text-black/70 leading-relaxed">
+              <li>For use with LED bulbs only, 60W max</li>
+              <li>Includes one (1) 3500k LED bulb</li>
+              <li>UL Listed File No. E365544</li>
+              <li>Polarized 2 Blade plug</li>
+              <li>Interior Use Only</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer id="site-footer" class="border-t border-stone-200 bg-white"></footer>
+  </div>
+
+  <script src="js/cart.js"></script><script src="js/header.js"></script>
+  <script>
+    const IMAGES = {
+      A: { Large: { Black:'assets/e005ffb8592589ea9883bf08ef2f100ef0b52bfb.jpg', 'Hawaii Blue':'assets/ce1a97a0731f5be98bc9ad8769c35e7435fe9435.jpg', Mint:'assets/fcae372e3e2e319c35b873af4e7cadb686f16aeb.jpg', Berry:'assets/c488793c00ce79ae32ff555c779df8df83424035.jpg' }, Standard: { Black:'assets/8afb5fbb428ef6e188acefcc150d78921c1a06a6.jpg', 'Hawaii Blue':'assets/d44a6528b5da6da3d935169b27ddc786f64271cc.jpg', Mint:'assets/5f79de34794c0f08724b2385b20da96c964f49bf.jpg', Berry:'assets/5052e70389a245bdc813e95443d938c6a40efe0f.jpg' } },
+      B: { Large: { Black:'assets/fc6a8d985282412e62851849b27a10efead95eb2.jpg', 'Hawaii Blue':'assets/96cf4df7a22b3d5afecd39d5a6b912b0f0bf711b.jpg', Mint:'assets/e5cabc7d6b6b291110b2d1779cda0408ae45d927.jpg', Berry:'assets/48930e47593549397031306d1d0f85863d875124.jpg' }, Standard: { Black:'assets/f70e26754c5836fb0d7f077c0da565d8d4d3b7b3.jpg', 'Hawaii Blue':'assets/9c08defe4c2bae6500cc88deb1f0ab34bdded9d2.jpg', Mint:'assets/c80dd0c8687f83a7604a97ccdbd781c4ae1c0c74.jpg', Berry:'assets/f7fb0b71884d7c00070f5859403bb0aed5a7907b.jpg' } }
+    };
+    const PRICES = { A:{ Standard:685, Large:895 }, B:{ Standard:725, Large:925 } };
+    const COLORS = ['Black','Hawaii Blue','Berry','Mint'];
+
+    const params = new URLSearchParams(location.search);
+    let style = ['A','B'].includes(params.get('style')) ? params.get('style') : 'A';
+    let size = ['Standard','Large'].includes(params.get('size')) ? params.get('size') : 'Large';
+    let color='Black';
+
+    function getImg(){ return IMAGES[style][size][color]; }
+    function getPrice(){ return PRICES[style][size]; }
+
+    function updateUI(){
+      document.getElementById('main-img').src = getImg();
+      document.getElementById('price-display').textContent = '$'+getPrice();
+      // style buttons
+      ['A','B'].forEach(s=>{ const b=document.getElementById('btn-style-'+s); b.className=b.className.replace(/border-black\/20|border-black bg-black text-white/g,''); b.className+=s===style?' border-black bg-black text-white':' border-black/20'; });
+      // size buttons
+      ['Standard','Large'].forEach(s=>{ const b=document.getElementById('btn-size-'+s); b.className=b.className.replace(/border-black\/20|border-black bg-black text-white/g,''); b.className+=s===size?' border-black bg-black text-white':' border-black/20'; });
+      // color buttons
+      COLORS.forEach(c=>{ const b=document.getElementById('btn-color-'+c); b.className=b.className.replace(/border-black\/20|border-black bg-black text-white/g,''); b.className+=c===color?' border-black bg-black text-white':' border-black/20'; });
+      // thumbnails
+      const thumbs=document.getElementById('color-thumbs'); thumbs.innerHTML='';
+      COLORS.forEach(c=>{ const d=document.createElement('button'); d.className='overflow-hidden transition-opacity'+(c===color?' ring-selected opacity-100':' opacity-60 hover:opacity-100'); d.style.aspectRatio='3/4'; d.style.background='#e7e5e4'; d.innerHTML=`<img src="${IMAGES[style][size][c]}" class="w-full h-full object-cover" />`; d.addEventListener('click',()=>setColor(c)); thumbs.appendChild(d); });
+    }
+
+    function setStyle(s){ style=s; updateUI(); }
+    function setSize(s){ size=s; updateUI(); }
+    function setColor(c){ color=c; document.getElementById('main-img').src=getImg(); updateUI(); }
+
+    function handleAddToCart(){
+      addItem({ id:'detroit-table-lamp-'+style.toLowerCase()+'-'+size.toLowerCase(), name:'Detroit Table Lamp '+style, price:getPrice(), image:getImg(), options:{style, size, color} });
+      alert('Added to cart!');
+    }
+
+    updateUI();
+  </script>
+</body>
+</html>

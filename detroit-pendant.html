@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detroit Pendant — Voldt</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','sans-serif']}}}}</script>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="bg-white font-sans">
+  <header id="site-header" class="fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-md"></header>
+  <div class="pt-16">
+    <div class="border-b border-black/5">
+      <div class="max-w-[1600px] mx-auto px-8 lg:px-16 py-6">
+        <a href="detroit-lights.html" class="inline-flex items-center gap-2 text-sm text-black/60 hover:text-black transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Back to Detroit Lights</a>
+      </div>
+    </div>
+    <div class="max-w-[1600px] mx-auto px-8 lg:px-16 py-16">
+      <div class="grid lg:grid-cols-2 gap-16 lg:gap-24">
+        <div>
+          <div class="sticky top-8">
+            <div class="bg-black/5 mb-6 overflow-hidden" style="aspect-ratio:3/4">
+              <img id="main-img" src="assets/ca93ba95ec2321cecc3f6971cc7b2456a99f48fc.jpg" alt="Detroit Pendant" class="w-full h-full object-cover" />
+            </div>
+            <div class="grid grid-cols-2 gap-3" id="thumbs"></div>
+          </div>
+        </div>
+        <div>
+          <h1 class="text-4xl tracking-tight mb-4">Detroit Pendant</h1>
+          <p id="price-display" class="text-2xl mb-8">$785</p>
+          <div class="mb-12 pb-12 border-b border-black/5">
+            <p class="text-sm text-black/70 leading-relaxed mb-4">Plug-in pendant light</p>
+            <p class="text-sm text-black/70 leading-relaxed mb-4">Wall-mount bracket included with each pendant light order</p>
+            <p class="text-sm text-black/70 leading-relaxed mb-4">Designed and manufactured by Voldt in Michigan with recycled materials and sustainable processes</p>
+            <p class="text-sm text-black/70 leading-relaxed mb-4">All designs are made to order - please allow up to two weeks for shipping.</p>
+            <p class="text-sm text-black/70 leading-relaxed">Contact us for additional specification options or customizations, including hardwired options</p>
+          </div>
+          <div class="space-y-8 mb-12">
+            <div>
+              <label class="text-xs tracking-[0.15em] uppercase mb-4 block opacity-40">Style</label>
+              <div class="grid grid-cols-2 gap-3">
+                <button onclick="setStyle('A')" id="btn-style-A" class="px-6 py-4 text-sm border border-black bg-black text-white transition-all">Style A</button>
+                <button onclick="setStyle('B')" id="btn-style-B" class="px-6 py-4 text-sm border border-black/20 hover:border-black transition-all">Style B</button>
+              </div>
+            </div>
+            <div>
+              <label class="text-xs tracking-[0.15em] uppercase mb-4 block opacity-40">Size</label>
+              <div class="grid grid-cols-2 gap-3">
+                <button onclick="setSize('Standard')" id="btn-size-Standard" class="px-6 py-4 text-sm border border-black bg-black text-white transition-all">Standard</button>
+                <button onclick="setSize('Large')" id="btn-size-Large" class="px-6 py-4 text-sm border border-black/20 hover:border-black transition-all">Large</button>
+              </div>
+            </div>
+          </div>
+          <button onclick="handleAddToCart()" class="w-full bg-black text-white px-8 py-5 hover:bg-black/80 transition-all text-xs tracking-[0.15em] uppercase mb-12">Add to Cart</button>
+          <div class="mb-12 pb-12 border-b border-black/5">
+            <h3 class="text-xs tracking-[0.15em] uppercase mb-6 opacity-40">About the Design</h3>
+            <div class="space-y-4 text-sm text-black/70 leading-relaxed">
+              <p>A blend of technical innovation and artistic expression, our Detroit light series explores geometric details and textures drawing from Art Deco architecture - specifically, the Fisher Building's chandeliers located in downtown Detroit. When the light is on, crisp vertical lines appear and contrast with a warm internal glow.</p>
+              <p>The lamp offers direct and ambient light perfect for bedrooms, kitchens & living spaces.</p>
+            </div>
+          </div>
+          <div class="mb-12 pb-12 border-b border-black/5">
+            <h3 class="text-xs tracking-[0.15em] uppercase mb-6 opacity-40">Materials and Finish</h3>
+            <p class="text-sm text-black/70 leading-relaxed">Shade is made from recycled semi-translucent PETG, recycled polyactic acid (plant-based polymer)</p>
+          </div>
+          <div class="mb-12 pb-12 border-b border-black/5">
+            <h3 class="text-xs tracking-[0.15em] uppercase mb-6 opacity-40">Dimensions</h3>
+            <div class="space-y-6 text-sm text-black/70">
+              <div><p class="font-medium text-black mb-2">Standard</p><p>Diameter: 6.5"</p><p>Height: 8"</p></div>
+              <div><p class="font-medium text-black mb-2">Large</p><p>Diameter: 11"</p><p>Height: 13"</p></div>
+              <div class="pt-4 border-t border-black/5"><p>Cord Length: 12'-0"</p><p>On/Off Switch Distance from End: 2'-0"</p></div>
+            </div>
+          </div>
+          <div>
+            <h3 class="text-xs tracking-[0.15em] uppercase mb-6 opacity-40">Specifications</h3>
+            <ul class="space-y-2 text-sm text-black/70 leading-relaxed">
+              <li>Mounting: Ceiling mounted drywall screws and Voldt Wall Bracket included with each order.</li>
+              <li>For use with LED bulbs only, 60W max, Includes one (1) 3500k LED bulb</li>
+              <li>UL Listed File No. E365544</li>
+              <li>Polarized 2 Blade plug</li>
+              <li>Interior Use Only</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer id="site-footer" class="border-t border-stone-200 bg-white"></footer>
+  </div>
+  <script src="js/cart.js"></script><script src="js/header.js"></script>
+  <script>
+    const WALL_BRACKET = 'assets/189ab8bb5687c930764c8f8f74c20cd0aec8db77.jpg';
+    const IMAGES = {
+      A:{ Standard:['assets/ca93ba95ec2321cecc3f6971cc7b2456a99f48fc.jpg', WALL_BRACKET], Large:['assets/a6f766489f20f93f24f164ec925ce2cdb2eb835f.jpg', WALL_BRACKET] },
+      B:{ Standard:['assets/180fc790d95222d8b1e61a805e5d1a0cd85f30b0.jpg', WALL_BRACKET], Large:['assets/c3f1ecb063bbf7eb7ea437040bcf23b5d7c14808.jpg', WALL_BRACKET] }
+    };
+    const PRICES = { A:{ Standard:785, Large:1285 }, B:{ Standard:825, Large:1385 } };
+    const params = new URLSearchParams(location.search);
+    let style = ['A','B'].includes(params.get('style')) ? params.get('style') : 'A';
+    let size = ['Standard','Large'].includes(params.get('size')) ? params.get('size') : 'Standard';
+    let selectedImg=0;
+
+    function getImages(){ return IMAGES[style][size]; }
+    function getPrice(){ return PRICES[style][size]; }
+
+    function updateUI(){
+      const imgs = getImages();
+      document.getElementById('main-img').src = imgs[selectedImg] || imgs[0];
+      document.getElementById('price-display').textContent = '$' + getPrice().toLocaleString();
+      ['A','B'].forEach(s=>{ const b=document.getElementById('btn-style-'+s); b.className=b.className.replace(/border-black\/20|border-black bg-black text-white/g,''); b.className+=s===style?' border-black bg-black text-white':' border-black/20'; });
+      ['Standard','Large'].forEach(s=>{ const b=document.getElementById('btn-size-'+s); b.className=b.className.replace(/border-black\/20|border-black bg-black text-white/g,''); b.className+=s===size?' border-black bg-black text-white':' border-black/20'; });
+      const thumbsEl=document.getElementById('thumbs'); thumbsEl.innerHTML='';
+      imgs.forEach((src,i)=>{ const btn=document.createElement('button'); btn.className='overflow-hidden transition-opacity'+(i===selectedImg?' ring-selected opacity-100':' opacity-60 hover:opacity-100'); btn.style.aspectRatio='3/4'; btn.style.background='#e7e5e4'; btn.innerHTML=`<img src="${src}" class="w-full h-full object-cover" />`; btn.addEventListener('click',()=>{ selectedImg=i; updateUI(); }); thumbsEl.appendChild(btn); });
+    }
+    function setStyle(s){ style=s; selectedImg=0; updateUI(); }
+    function setSize(s){ size=s; selectedImg=0; updateUI(); }
+    function handleAddToCart(){ addItem({ id:'detroit-pendant-'+style.toLowerCase()+'-'+size.toLowerCase(), name:'Detroit Pendant '+style, price:getPrice(), image:getImages()[0], options:{style,size} }); alert('Added to cart!'); }
+    updateUI();
+  </script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PolyFrames — Voldt</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','sans-serif']}}}}</script>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="bg-stone-50 font-sans">
+  <header id="site-header" class="fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-md"></header>
+
+  <div class="pt-16">
+    <!-- Hero -->
+    <section class="py-20 bg-white border-b border-stone-900/5">
+      <div class="max-w-[1600px] mx-auto px-8 lg:px-16">
+        <h1 class="text-5xl lg:text-6xl font-bold tracking-tight leading-[1] mb-8 text-stone-900">PolyFrames</h1>
+        <p class="text-base text-stone-600 max-w-3xl leading-relaxed">A node-based furniture system where algorithmic joinery meets solid walnut and 3D-printed components. Each piece explores computation as structural language—forms that could only exist through parametric design, realized with material integrity. Designed and manufactured in Michigan, made to order.</p>
+      </div>
+    </section>
+
+    <!-- Hero Image -->
+    <section class="relative bg-stone-200 overflow-hidden" style="height:60vh">
+      <img src="assets/924258946d09fc819309fa830e3332e826f1417a.jpg" alt="PolyFrames system" class="w-full h-full object-cover" />
+    </section>
+
+    <!-- Products Grid -->
+    <section class="py-32 bg-white">
+      <div class="max-w-[1600px] mx-auto px-8 lg:px-16">
+        <h2 class="text-2xl font-bold tracking-tight mb-20 text-stone-900">Available Products</h2>
+        <div class="grid md:grid-cols-2 gap-8" id="pf-grid"></div>
+      </div>
+    </section>
+
+    <!-- About the Collection -->
+    <section class="py-32 bg-white border-t border-stone-900/5">
+      <div class="max-w-[1600px] mx-auto px-8 lg:px-16">
+        <div class="grid lg:grid-cols-2 gap-24">
+          <div>
+            <h2 class="text-2xl font-bold tracking-tight mb-8 text-stone-900">About the Collection</h2>
+            <div class="space-y-6 text-base text-stone-600 leading-relaxed">
+              <p>PolyFrame Collection designs are made to order. Please allow 3-5 weeks for fulfillment.</p>
+              <p>Designed and crafted in Michigan. Made of solid black walnut with 3D-printed nylon and brass details.</p>
+              <p>Voldt's PolyFrame series is an algorithmic furniture system inspired by architectural forms.</p>
+              <p>Through this series, we are reimagining furniture design, fabrication and assembly processes by fusing handmade techniques with contemporary technologies. Transition details celebrate this by juxtaposing smooth walnut edges with sharp 3D-printed forms.</p>
+              <p>Materials are expertly selected to balance performance, sustainability and aesthetics. Recycled nylon and TPU joints are connected to durable walnut beams, while recycled PETG diffuses light through captivating textures.</p>
+              <p>3D-printed nodes act as assembly guides for irregular angles, resulting in a network that plays with our perception of stability.</p>
+            </div>
+          </div>
+          <div class="space-y-12">
+            <div>
+              <h3 class="text-xs tracking-[0.15em] uppercase text-stone-400 mb-4">Materials</h3>
+              <ul class="space-y-2 text-sm text-stone-600 leading-relaxed">
+                <li>Solid American black walnut, hand-finished</li>
+                <li>Recycled nylon 3D-printed nodes</li>
+                <li>Recycled TPU joints</li>
+                <li>Recycled PETG light diffusers</li>
+                <li>Brass hardware and detailing</li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="text-xs tracking-[0.15em] uppercase text-stone-400 mb-4">Manufacturing</h3>
+              <p class="text-sm text-stone-600 leading-relaxed">Designed and crafted at our studio in Michigan. CNC milling, 3D printing, and traditional finishing techniques.</p>
+            </div>
+            <div>
+              <h3 class="text-xs tracking-[0.15em] uppercase text-stone-400 mb-4">Lead Time</h3>
+              <p class="text-sm text-stone-600 leading-relaxed">Made to order: 3–5 weeks</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Custom CTA -->
+    <section class="py-32 bg-white border-t border-stone-900/5">
+      <div class="max-w-4xl mx-auto px-8 lg:px-16 text-center">
+        <h2 class="text-2xl font-bold tracking-tight mb-8 text-stone-900">Custom Configurations</h2>
+        <p class="text-base text-stone-600 mb-12 leading-relaxed">Our process allows us to create a seemingly infinite number of customized designs. Contact us for customized and commercial design services.</p>
+        <a href="custom-work.html" class="inline-flex items-center gap-3 border border-stone-400 text-stone-900 px-10 py-5 hover:border-stone-900 transition-colors text-xs tracking-[0.15em] uppercase">Request Custom Design <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
+    </section>
+
+    <footer id="site-footer" class="border-t border-stone-200 bg-white"></footer>
+  </div>
+
+  <script src="js/cart.js"></script>
+  <script src="js/header.js"></script>
+  <script>
+    const products = [
+      { id:'polyframes-table-lamp', name:'PolyFrame Table Lamp', price:449, desc:'1" thick solid black walnut with 3D-printed nylon and brass details', img:'assets/1967efac521aba866dc207ed580f4382af241561.jpg', hoverImg:'assets/9978a8f52dc984036ee626d49e8bb08203893fe0.jpg', link:'polyframes-table-lamp.html' },
+      { id:'polyframes-floor-lamp', name:'PolyFrame Floor Lamp', price:999, desc:'1" thick solid black walnut with 3D-printed nylon and brass details', img:'assets/29da261fae11e8815506ffcaee809b2fcbd34bfe.jpg', hoverImg:'assets/9978a8f52dc984036ee626d49e8bb08203893fe0.jpg', link:'polyframes-floor-lamp.html' },
+      { id:'polyframes-coat-rack', name:'PolyFrame Coat Rack', price:575, desc:'1" thick solid black walnut with 3D-printed nylon and brass details', img:'assets/e606d72b5a5629a9b588ac32abe08e258b92b1db.jpg', hoverImg:'assets/fed88fa2d4adaef229128481e9b4e47ef2fdce81.jpg', link:'polyframes-coat-rack.html' },
+      { id:'polyframes-coffee-table', name:'PolyFrame Coffee Table', price:null, desc:'1" thick solid black walnut with 3D-printed nylon and brass details', img:'assets/90efc59c9eb30586b1c1fff261db8a917a4daff8.jpg', hoverImg:'assets/dec5396a8cc6e83670576a5d0a288c74f3074e6b.jpg', link:'polyframes-coffee-table.html' },
+    ];
+    const grid = document.getElementById('pf-grid');
+    products.forEach(p => {
+      const a = document.createElement('a');
+      a.href = p.link;
+      a.className = 'group block';
+      a.innerHTML = `
+        <div class="relative bg-stone-200 mb-6 overflow-hidden" style="aspect-ratio:3/4">
+          <img src="${p.img}" alt="${p.name}" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 group-hover:opacity-0" />
+          <img src="${p.hoverImg}" alt="${p.name} alternate" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 opacity-0 group-hover:opacity-100" />
+        </div>
+        <h3 class="text-base tracking-tight mb-1 text-stone-900">${p.name}</h3>
+        <p class="text-sm text-stone-500 mb-4 leading-relaxed">${p.desc}</p>
+        <p class="text-base text-stone-900">${p.price ? '$'+p.price : 'Custom Pricing'}</p>
+      `;
+      grid.appendChild(a);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PolyFrame Table Lamp — Voldt</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','sans-serif']}}}}</script>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="bg-white font-sans">
+  <header id="site-header" class="fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-md"></header>
+  <div class="pt-16">
+    <div class="max-w-[1800px] mx-auto px-12 lg:px-20 py-12">
+      <a href="polyframes.html" class="inline-flex items-center gap-2 text-[11px] tracking-[0.2em] uppercase text-stone-500 hover:text-stone-900 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Back to Collection</a>
+    </div>
+    <section class="pb-32">
+      <div class="max-w-[1800px] mx-auto px-12 lg:px-20">
+        <div class="grid lg:grid-cols-2 gap-20">
+          <div>
+            <div class="bg-stone-100 mb-6" style="aspect-ratio:4/5"><img id="main-img" src="assets/1967efac521aba866dc207ed580f4382af241561.jpg" alt="PolyFrame Table Lamp" class="w-full h-full object-cover" /></div>
+            <div class="grid grid-cols-3 gap-4" id="thumbs"></div>
+          </div>
+          <div class="lg:pt-12">
+            <p class="text-[10px] tracking-[0.3em] uppercase text-stone-400 mb-6">PolyFrame Collection</p>
+            <h1 class="text-4xl lg:text-5xl mb-8 text-stone-900">PolyFrame Table Lamp</h1>
+            <p class="text-2xl mb-12 text-stone-900">$449</p>
+            <div class="space-y-10 mb-14 pb-14 border-b border-stone-200">
+              <div><p class="text-base text-stone-600 leading-relaxed font-light mb-6">1" thick solid black walnut with 3D-printed nylon and brass details</p><p class="text-sm text-stone-500 leading-relaxed">Designed and crafted in Michigan.</p></div>
+              <div><h3 class="text-[10px] tracking-[0.3em] uppercase text-stone-400 mb-4">Dimensions</h3><p class="text-sm text-stone-600">8.25"Diam x 23.5"H</p></div>
+            </div>
+            <button onclick="addToCart()" class="w-full bg-stone-900 text-white px-9 py-5 hover:bg-stone-800 transition-colors text-[11px] tracking-[0.2em] uppercase mb-8">Add to Cart</button>
+            <div class="mt-12 pt-12 border-t border-stone-200 space-y-6">
+              <div><h3 class="text-[10px] tracking-[0.3em] uppercase text-stone-400 mb-3">Lead Time</h3><p class="text-sm text-stone-600">Made to order: 3–5 weeks</p></div>
+              <div><h3 class="text-[10px] tracking-[0.3em] uppercase text-stone-400 mb-3">Manufacturing</h3><p class="text-sm text-stone-600">Designed and crafted in Michigan</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="py-32 bg-stone-50">
+      <div class="max-w-[1800px] mx-auto px-12 lg:px-20">
+        <h2 class="text-2xl mb-16 text-stone-900">More from PolyFrames</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <a href="polyframes-floor-lamp.html" class="group"><div class="bg-stone-200 mb-6 overflow-hidden" style="aspect-ratio:3/4"><img src="assets/29da261fae11e8815506ffcaee809b2fcbd34bfe.jpg" class="w-full h-full object-cover transition-opacity duration-700 group-hover:opacity-70" /></div><h3 class="text-lg text-stone-900 mb-2">PolyFrame Floor Lamp</h3><p class="text-sm text-stone-600">$999</p></a>
+          <a href="polyframes-coat-rack.html" class="group"><div class="bg-stone-200 mb-6 overflow-hidden" style="aspect-ratio:3/4"><img src="assets/e606d72b5a5629a9b588ac32abe08e258b92b1db.jpg" class="w-full h-full object-cover transition-opacity duration-700 group-hover:opacity-70" /></div><h3 class="text-lg text-stone-900 mb-2">PolyFrame Coat Rack</h3><p class="text-sm text-stone-600">$575</p></a>
+          <a href="polyframes-coffee-table.html" class="group"><div class="bg-stone-200 mb-6 overflow-hidden" style="aspect-ratio:3/4"><img src="assets/90efc59c9eb30586b1c1fff261db8a917a4daff8.jpg" class="w-full h-full object-cover transition-opacity duration-700 group-hover:opacity-70" /></div><h3 class="text-lg text-stone-900 mb-2">PolyFrame Coffee Table</h3><p class="text-sm text-stone-600">Custom Pricing</p></a>
+        </div>
+      </div>
+    </section>
+    <footer id="site-footer" class="border-t border-stone-200 bg-white"></footer>
+  </div>
+  <script src="js/cart.js"></script><script src="js/header.js"></script>
+  <script>
+    const images = ['assets/1967efac521aba866dc207ed580f4382af241561.jpg','assets/e2cdfd0d1d94bbb72793037d94d5162bf2d2d773.jpg','assets/9978a8f52dc984036ee626d49e8bb08203893fe0.jpg'];
+    const mainImg = document.getElementById('main-img');
+    const thumbsEl = document.getElementById('thumbs');
+    images.forEach((src,i) => {
+      const btn = document.createElement('div');
+      btn.className='bg-stone-100 cursor-pointer overflow-hidden'+(i===0?' ring-selected':'');
+      btn.style.aspectRatio='1';
+      btn.innerHTML=`<img src="${src}" class="w-full h-full object-cover" />`;
+      btn.addEventListener('click',()=>{ mainImg.src=src; thumbsEl.querySelectorAll('div').forEach(d=>d.classList.remove('ring-selected')); btn.classList.add('ring-selected'); });
+      thumbsEl.appendChild(btn);
+    });
+    function addToCart(){ addItem({id:'polyframes-table-lamp',name:'PolyFrame Table Lamp',price:449,image:images[0]}); alert('Added to cart!'); }
+  </script>
+</body>
+</html>

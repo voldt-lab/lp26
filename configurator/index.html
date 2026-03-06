@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>VOLDT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles.css" />
+
+    <!-- ES modules for three / rhino3dm / rhinocompute -->
+    <script async src="https://unpkg.com/es-module-shims@1.10.0/dist/es-module-shims.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.182.0/build/three.module.js",
+          "three/examples/jsm/controls/OrbitControls.js": "https://unpkg.com/three@0.182.0/examples/jsm/controls/OrbitControls.js",
+          "three/examples/jsm/postprocessing/UnrealBloomPass.js": "https://unpkg.com/three@0.182.0/examples/jsm/postprocessing/UnrealBloomPass.js",
+          "three/examples/jsm/postprocessing/RenderPass.js": "https://unpkg.com/three@0.182.0/examples/jsm/postprocessing/RenderPass.js",
+          "three/examples/jsm/postprocessing/EffectComposer.js": "https://unpkg.com/three@0.182.0/examples/jsm/postprocessing/EffectComposer.js",
+          "three/examples/jsm/environments/RoomEnvironment.js": "https://unpkg.com/three@0.182.0/examples/jsm/environments/RoomEnvironment.js",
+          "three/addons/": "https://unpkg.com/three@0.182.0/examples/jsm/"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <!-- Floating "About us" button (top-right) -->
+    <button id="aboutBtn" class="btn-float">About Us</button>
+
+    <!-- Info modal (hidden by default) -->
+    <div id="aboutModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
+      <div class="modal__backdrop" id="aboutBackdrop"></div>
+      <div class="modal__panel" role="document">
+        <button id="aboutClose" class="modal__close" aria-label="Close"></button>
+        <h2>Glad you're here!</h2>
+        <p>We want to create custom architectural hardware that blends design innovation with advanced digital fabrication. Our aim is to bridge the gap between craft and computation — bringing ideas to life through precision, creativity, and technology.</p>
+        <img src="ap25_4.JPG" style="width: 100%;"/>
+        <p>Come visit us at www.voldtlab.com, and see other things we've made.</p>
+      </div>
+    </div>
+
+
+    <!-- status texts -->
+    <span id="status" class="badge"></span>
+
+
+    <fieldset class="toolbar" id="ctrlpanel">
+      <!-- Product select in header -->
+      <select class="dropdown" id="prodtype">
+        <option value="0">Venturi</option>
+        <option value="1">Mechanic</option>
+        <option value="2">Lake Shore</option>
+      </select>
+      <div class="divider"></div>
+
+      <!-- venturi Type -->
+      <div class="field" id="field-vtype">
+        <span class="badge">Type</span>
+        <!-- no value chip for Type -->
+        <select class="dropdown ctrl" id="vtype">
+          <option value="0">Bar</option>
+          <option value="1">Knob</option>
+        </select>
+      </div>
+      <!-- lake shape picker-->
+      <div class="field" id="field-lstype">
+        <span class="badge">Shape</span>
+        <!-- no value chip for Type -->
+        <select class="dropdown ctrl" id="lstype">
+          <option value="0">Simple</option>
+          <option value="1">Free Form</option>
+        </select>
+      </div>
+      <!-- mechanic picker -->
+      <div class="field" id="field-mechtype">
+        <span class="badge">Texture</span>
+        <!-- no value chip for Type -->
+        <select class="dropdown ctrl" id="mechtype">
+          <option value="0">Gyroid</option>
+          <option value="1">Voronoi</option>
+        </select>
+      </div>
+
+      <!-- venturi + lakeshore + heatwave length -->
+      <div class="field" id="field-len">
+        <span class="badge">Mounting</span>
+        <span id="lenVal" class="value">3-3/4"</span>
+        <input id="len" class="slider ctrl" type="range" min="0" max="5" step="1" value="0" />
+      </div>
+      <!-- Venturi + lake shore twist -->
+      <div class="field" id="field-rot">
+        <span class="badge">Twist</span>
+        <span id="rotVal" class="value">Minor</span>
+        <input id="rot" class="slider ctrl" type="range" min="0" max="2" step="1" value="2" />
+      </div>
+      <!-- venturi Radius -->
+      <div class="field" id="field-rad">
+        <span class="badge">Radius</span>
+        <span id="radVal" class="value">1"</span>
+        <input id="rad" class="slider ctrl" type="range" min="0" max="2" step="1" value="1" />
+      </div>
+
+      <!-- lake form Factor -->
+      <div class="field" id="field-ff">
+        <span class="badge">Form Factor</span>
+        <span id="ffVal" class="value">0.50</span>
+        <input id="ff" class="slider ctrl" type="range" min="0" max="4" step="1" value="1"/>
+      </div>
+
+      <!-- mech density-->      
+      <div class="field" id="field-dens">
+        <span class="badge">Density</span>
+        <span id="densVal" class="value">Mid</span>
+        <!-- old slicer
+        <input id="dens" class="slider ctrl" type="range" min="0" max="2" step="1" value="1"/>
+        -->
+          <div class="segmented ctrl" id="densToggle" data-active-index="1">
+            <div class="segmented__thumb" aria-hidden="true"></div>
+            <button type="button" class="segmented__btn" data-index="0">Low</button>
+            <button type="button" class="segmented__btn" data-index="1">Mid</button>
+            <button type="button" class="segmented__btn" data-index="2">Hi</button>
+          </div>
+      </div>
+      
+
+      <!-- Docked helper toggle (lower-left of the left panel) -->
+      <button id="gridToggle" class="btn-panel" type="button" title='1 square is roughly 1"'>3D Markers: On</button>
+
+    </fieldset>
+
+
+    <div id="viewport" class="viewer"></div>
+
+    <!-- App entry -->
+    <script type="module" src="main.js"></script>
+  </body>
+</html>

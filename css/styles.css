@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  color: #1c1917;
+}
+
+img { display: block; max-width: 100%; }
+
+a { text-decoration: none; color: inherit; }
+
+/* Smooth image transitions for hover swaps */
+.img-hover-wrap { position: relative; overflow: hidden; }
+.img-hover-wrap img { transition: opacity 0.5s ease, transform 0.7s ease; }
+
+/* Prevent layout shift from nav dropdown */
+#nav-dropdown { overflow: hidden; }
+
+/* Ring utility for selected thumbnails */
+.ring-selected { outline: 2px solid #000; outline-offset: -2px; }
+
+/* Scrollbar minimal */
+html { scroll-behavior: smooth; }
