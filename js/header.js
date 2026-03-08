@@ -37,10 +37,10 @@ document.addEventListener('DOMContentLoaded', () => {
               <a href="products.html" class="block w-full py-3 text-center text-xs text-stone-700 hover:text-stone-900 hover:bg-stone-50 border-b border-yellow-600/10">Overview</a>
               <a href="polyframes.html" class="block w-full py-3 text-center text-xs text-stone-700 hover:text-stone-900 hover:bg-stone-50 border-b border-yellow-600/10">PolyFrames</a>
               <a href="detroit-lights.html" class="block w-full py-3 text-center text-xs text-stone-700 hover:text-stone-900 hover:bg-stone-50 border-b border-yellow-600/10">Detroit Lights</a>
-              <a href="vestige-configurator.html" class="block w-full py-3 text-center text-xs text-stone-700 hover:text-stone-900 hover:bg-stone-50">VOLDT Hardware</a>
+              <a href="voldt-hardware.html" class="block w-full py-3 text-center text-xs text-stone-700 hover:text-stone-900 hover:bg-stone-50">VOLDT Hardware</a>
             </div>
           </div>
-          <a href="vestige-configurator.html" class="block w-full py-4 text-center text-xs tracking-[0.15em] uppercase text-stone-900 hover:bg-stone-50 font-medium">VOLDT Hardware Configurator</a>
+          <a href="hardware-configurator.html" class="block w-full py-4 text-center text-xs tracking-[0.15em] uppercase text-stone-900 hover:bg-stone-50 font-medium">VOLDT Hardware Configurator</a>
           <a href="custom-work.html" class="block w-full py-4 text-center text-xs tracking-[0.15em] uppercase text-stone-900 hover:bg-stone-50 font-medium">Custom Projects</a>
           <div>
             <button id="info-btn" class="w-full flex items-center justify-center py-4 text-xs tracking-[0.15em] uppercase text-stone-900 hover:bg-stone-50 font-medium">
@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="max-w-[1800px] mx-auto px-12 lg:px-20 py-24">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-20">
           <div><div class="text-[11px] tracking-[0.3em] uppercase mb-6 text-stone-900 font-medium">VOLDT</div><p class="text-sm text-stone-500 leading-relaxed">Computational design and fabrication for contemporary interiors.</p></div>
-          <div><h3 class="text-[10px] tracking-[0.3em] uppercase mb-6 text-stone-400">Products</h3><ul class="space-y-4"><li><a href="vestige-hardware.html" class="text-sm text-stone-600 hover:text-stone-900 transition-colors">VOLDT Hardware</a></li><li><a href="polyframes.html" class="text-sm text-stone-600 hover:text-stone-900 transition-colors">PolyFrames</a></li><li><a href="detroit-lights.html" class="text-sm text-stone-600 hover:text-stone-900 transition-colors">Detroit Lights</a></li></ul></div>
+          <div><h3 class="text-[10px] tracking-[0.3em] uppercase mb-6 text-stone-400">Products</h3><ul class="space-y-4"><li><a href="voldt-hardware.html" class="text-sm text-stone-600 hover:text-stone-900 transition-colors">VOLDT Hardware</a></li><li><a href="polyframes.html" class="text-sm text-stone-600 hover:text-stone-900 transition-colors">PolyFrames</a></li><li><a href="detroit-lights.html" class="text-sm text-stone-600 hover:text-stone-900 transition-colors">Detroit Lights</a></li></ul></div>
           <div><h3 class="text-[10px] tracking-[0.3em] uppercase mb-6 text-stone-400">Studio</h3><ul class="space-y-4"><li><a href="about.html" class="text-sm text-stone-600 hover:text-stone-900 transition-colors">About</a></li><li><a href="custom-work.html" class="text-sm text-stone-600 hover:text-stone-900 transition-colors">Custom Work</a></li></ul></div>
           <div><h3 class="text-[10px] tracking-[0.3em] uppercase mb-6 text-stone-400">Contact</h3><p class="text-sm text-stone-600 leading-relaxed">Detroit, Michigan<br />US-Based Design & Manufacturing<br /><a href="mailto:info@voldtlab.com" class="hover:text-stone-900 transition-colors">info@voldtlab.com</a></p></div>
         </div>
