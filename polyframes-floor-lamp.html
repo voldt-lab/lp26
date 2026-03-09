@@ -34,7 +34,7 @@
           <div class="lg:pt-12">
             <p class="text-[10px] tracking-[0.3em] uppercase text-stone-400 mb-6">PolyFrame Collection</p>
             <h1 class="text-4xl lg:text-5xl mb-8 text-stone-900">PolyFrame Floor Lamp</h1>
-            <p class="text-2xl mb-12 text-stone-900">$999</p>
+            <p class="text-2xl mb-12 text-stone-900">$899</p>
 
             <div class="space-y-10 mb-14 pb-14 border-b border-stone-200">
               <div>
@@ -42,12 +42,19 @@
                 <p class="text-sm text-stone-500 leading-relaxed">Designed and crafted in Michigan. Made of solid black walnut with 3D-printed nylon and brass details.</p>
               </div>
               <div>
+                <h3 class="text-[10px] tracking-[0.3em] uppercase text-stone-400 mb-4">Shade Style</h3>
+                <div class="grid grid-cols-2 gap-3">
+                  <button onclick="setStyle('B')" id="btn-style-B" class="px-6 py-4 text-sm border border-stone-900 bg-stone-900 text-white transition-all">Style B</button>
+                  <button onclick="setStyle('A')" id="btn-style-A" class="px-6 py-4 text-sm border border-stone-200 hover:border-stone-900 transition-all">Style A</button>
+                </div>
+              </div>
+              <div>
                 <h3 class="text-[10px] tracking-[0.3em] uppercase text-stone-400 mb-4">Dimensions</h3>
                 <p class="text-sm text-stone-600">12.75"Diam x 62.25"H</p>
               </div>
             </div>
 
-            <button onclick="addToCart()" class="w-full bg-stone-900 text-white px-9 py-5 hover:bg-stone-800 transition-colors text-[11px] tracking-[0.2em] uppercase mb-8">Add to Cart</button>
+            <button onclick="addToCart()" class="w-full bg-stone-900 text-white px-9 py-5 hover:bg-[#C8922A] transition-colors text-[11px] tracking-[0.2em] uppercase mb-8">Add to Cart</button>
 
             <div class="mt-12 pt-12 border-t border-stone-200 space-y-6">
               <div><h3 class="text-[10px] tracking-[0.3em] uppercase text-stone-400 mb-3">Lead Time</h3><p class="text-sm text-stone-600">Made to order: 3–5 weeks</p></div>
@@ -63,8 +70,8 @@
       <div class="max-w-[1800px] mx-auto px-12 lg:px-20">
         <h2 class="text-2xl mb-16 text-stone-900">More from PolyFrames</h2>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <a href="polyframes-table-lamp.html" class="group"><div class="bg-stone-200 mb-6 overflow-hidden" style="aspect-ratio:3/4"><img src="assets/1967efac521aba866dc207ed580f4382af241561.jpg" alt="PolyFrame Table Lamp" class="w-full h-full object-cover transition-opacity duration-700 group-hover:opacity-70" /></div><h3 class="text-lg text-stone-900 mb-2">PolyFrame Table Lamp</h3><p class="text-sm text-stone-600">$449</p></a>
-          <a href="polyframes-coat-rack.html" class="group"><div class="bg-stone-200 mb-6 overflow-hidden" style="aspect-ratio:3/4"><img src="assets/e606d72b5a5629a9b588ac32abe08e258b92b1db.jpg" alt="PolyFrame Coat Rack" class="w-full h-full object-cover transition-opacity duration-700 group-hover:opacity-70" /></div><h3 class="text-lg text-stone-900 mb-2">PolyFrame Coat Rack</h3><p class="text-sm text-stone-600">$575</p></a>
+          <a href="polyframes-table-lamp.html" class="group"><div class="bg-stone-200 mb-6 overflow-hidden" style="aspect-ratio:3/4"><img src="assets/1967efac521aba866dc207ed580f4382af241561.jpg" alt="PolyFrame Table Lamp" class="w-full h-full object-cover transition-opacity duration-700 group-hover:opacity-70" /></div><h3 class="text-lg text-stone-900 mb-2">PolyFrame Table Lamp</h3><p class="text-sm text-stone-600">$349</p></a>
+          <a href="polyframes-coat-rack.html" class="group"><div class="bg-stone-200 mb-6 overflow-hidden" style="aspect-ratio:3/4"><img src="assets/e606d72b5a5629a9b588ac32abe08e258b92b1db.jpg" alt="PolyFrame Coat Rack" class="w-full h-full object-cover transition-opacity duration-700 group-hover:opacity-70" /></div><h3 class="text-lg text-stone-900 mb-2">PolyFrame Coat Rack</h3><p class="text-sm text-stone-600">$499</p></a>
           <a href="polyframes-coffee-table.html" class="group"><div class="bg-stone-200 mb-6 overflow-hidden" style="aspect-ratio:3/4"><img src="assets/90efc59c9eb30586b1c1fff261db8a917a4daff8.jpg" alt="PolyFrame Coffee Table" class="w-full h-full object-cover transition-opacity duration-700 group-hover:opacity-70" /></div><h3 class="text-lg text-stone-900 mb-2">PolyFrame Coffee Table</h3><p class="text-sm text-stone-600">Custom Pricing</p></a>
         </div>
       </div>
@@ -76,32 +83,40 @@
   <script src="js/cart.js"></script>
   <script src="js/header.js"></script>
   <script>
-    const images = [
-      'assets/29da261fae11e8815506ffcaee809b2fcbd34bfe.jpg',
-      'assets/1b923dec13dce24528a89dc0d34b282870f24044.jpg',
-      'assets/1dc22c0e5e5a70b2d01612236d1e20f666a19e71.jpg',
-      'assets/5becb0c2cb1a8366f7aecaee8b187530e7989e67.jpg',
-      'assets/9978a8f52dc984036ee626d49e8bb08203893fe0.jpg',
-      'assets/e2cdfd0d1d94bbb72793037d94d5162bf2d2d773.jpg',
-    ];
+    const IMAGES = {
+      A: ['assets/floorA.jpg'],
+      B: ['assets/29da261fae11e8815506ffcaee809b2fcbd34bfe.jpg','assets/1b923dec13dce24528a89dc0d34b282870f24044.jpg','assets/1dc22c0e5e5a70b2d01612236d1e20f666a19e71.jpg','assets/5becb0c2cb1a8366f7aecaee8b187530e7989e67.jpg','assets/e2cdfd0d1d94bbb72793037d94d5162bf2d2d773.jpg']
+    };
+    let style = 'B';
     const mainImg = document.getElementById('main-img');
     const thumbsEl = document.getElementById('thumbs');
-    images.forEach((src, i) => {
-      const btn = document.createElement('div');
-      btn.className = 'bg-stone-100 cursor-pointer overflow-hidden' + (i===0 ? ' ring-selected' : '');
-      btn.style.aspectRatio = '1';
-      btn.innerHTML = `<img src="${src}" class="w-full h-full object-cover" />`;
-      btn.addEventListener('click', () => {
-        mainImg.src = src;
-        thumbsEl.querySelectorAll('div').forEach(d => d.classList.remove('ring-selected'));
-        btn.classList.add('ring-selected');
+
+    function renderThumbs() {
+      thumbsEl.innerHTML = '';
+      IMAGES[style].forEach((src, i) => {
+        const btn = document.createElement('div');
+        btn.className = 'bg-stone-100 cursor-pointer overflow-hidden' + (i === 0 ? ' ring-selected' : '');
+        btn.style.aspectRatio = '1';
+        btn.innerHTML = `<img src="${src}" class="w-full h-full object-cover" />`;
+        btn.addEventListener('click', () => { mainImg.src = src; thumbsEl.querySelectorAll('div').forEach(d => d.classList.remove('ring-selected')); btn.classList.add('ring-selected'); });
+        thumbsEl.appendChild(btn);
       });
-      thumbsEl.appendChild(btn);
-    });
-    function addToCart() {
-      addItem({ id:'polyframes-floor-lamp', name:'PolyFrame Floor Lamp', price:999, image:images[0] });
-      alert('Added to cart!');
     }
+
+    function setStyle(s) {
+      style = s;
+      mainImg.src = IMAGES[style][0];
+      ['A','B'].forEach(x => {
+        const b = document.getElementById('btn-style-' + x);
+        b.className = x === style
+          ? 'px-6 py-4 text-sm border border-stone-900 bg-stone-900 text-white transition-all'
+          : 'px-6 py-4 text-sm border border-stone-200 hover:border-stone-900 transition-all';
+      });
+      renderThumbs();
+    }
+
+    renderThumbs();
+    function addToCart() { addItem({ id:'polyframes-floor-lamp-'+style.toLowerCase(), name:'PolyFrame Floor Lamp '+style, price:899, image:IMAGES[style][0] }); alert('Added to cart!'); }
   </script>
 </body>
 </html>

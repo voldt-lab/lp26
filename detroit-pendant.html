@@ -51,7 +51,7 @@
               </div>
             </div>
           </div>
-          <button onclick="handleAddToCart()" class="w-full bg-black text-white px-8 py-5 hover:bg-black/80 transition-all text-xs tracking-[0.15em] uppercase mb-12">Add to Cart</button>
+          <button onclick="handleAddToCart()" class="w-full bg-black text-white px-8 py-5 hover:bg-[#C8922A] transition-all text-xs tracking-[0.15em] uppercase mb-12">Add to Cart</button>
           <div class="mb-12 pb-12 border-b border-black/5">
             <h3 class="text-xs tracking-[0.15em] uppercase mb-6 opacity-40">About the Design</h3>
             <div class="space-y-4 text-sm text-black/70 leading-relaxed">
@@ -93,7 +93,7 @@
       A:{ Standard:['assets/ca93ba95ec2321cecc3f6971cc7b2456a99f48fc.jpg', WALL_BRACKET], Large:['assets/a6f766489f20f93f24f164ec925ce2cdb2eb835f.jpg', WALL_BRACKET] },
       B:{ Standard:['assets/180fc790d95222d8b1e61a805e5d1a0cd85f30b0.jpg', WALL_BRACKET], Large:['assets/c3f1ecb063bbf7eb7ea437040bcf23b5d7c14808.jpg', WALL_BRACKET] }
     };
-    const PRICES = { A:{ Standard:785, Large:1285 }, B:{ Standard:825, Large:1385 } };
+    const PRICES = { A:{ Standard:99, Large:229 }, B:{ Standard:99, Large:229 } };
     const params = new URLSearchParams(location.search);
     let style = ['A','B'].includes(params.get('style')) ? params.get('style') : 'A';
     let size = ['Standard','Large'].includes(params.get('size')) ? params.get('size') : 'Standard';
