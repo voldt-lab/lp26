@@ -116,6 +116,12 @@ Cart page also includes `<script src="js/shopify.js"></script>` between cart.js 
 - [ ] Add **mounting style selector** to `configurator/main.js` + UI in `configurator/index.html`
 - [ ] **Cap max length at 11 1/8"** — remove GLB files longer than this from `configurator/mechanic/` and `configurator/lake_shore/`; remove corresponding steps from the length sliders in `configurator/main.js`
 - [ ] **Add 3" length option** — add GLB files and insert the 3" step into the length sliders
+- [ ] eliminate about us button once embedded
+
+## Site To-Dos
+- [ ] Landing page to direct to trade or retail
+- [ ] Add Trade page - hide shopping cart
+- [ ] Click anywhere to close hamburger menu
 
 ## Forms
 
