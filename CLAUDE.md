@@ -24,7 +24,7 @@
 | `detroit-pendant.html` | Detroit Pendant — ?style=A or ?style=B |
 | `detroit-table-lamp.html` | Detroit Table Lamp — ?style=A or ?style=B |
 | `custom-work.html` | Custom Projects page — Reconfigure + Bespoke inquiry |
-| `cart.html` | Cart page |
+| `cart.html` | Cart page — wired to Shopify checkout via `js/shopify.js` |
 | `about.html` | About |
 | `faq.html` | FAQ |
 | `shipping-returns.html` | Shipping & Returns |
@@ -34,6 +34,7 @@
 | File | Purpose |
 |------|---------|
 | `js/cart.js` | Cart state in localStorage — `addItem`, `removeItem`, `updateQty`, `clearCart`, `getCart`, `getTotal`, `getCount`, `updateCartBadge` |
+| `js/shopify.js` | Shopify Storefront API integration — `createShopifyCheckout()` maps cart items to variant GIDs, calls `cartCreate` mutation, redirects to `checkoutUrl` |
 | `js/header.js` | Injects shared header + footer HTML into `#site-header` / `#site-footer`; wires nav dropdown + scroll shadow |
 | `js/nav.js` | Older standalone nav script — superseded by header.js; may still be referenced in some pages |
 
@@ -62,6 +63,8 @@ Every page:
 ```
 header.js injects all nav/footer HTML — never edit nav links directly in pages.
 
+Cart page also includes `<script src="js/shopify.js"></script>` between cart.js and header.js.
+
 ## Design System
 
 ### Typography / Color Rules
@@ -83,11 +86,42 @@ header.js injects all nav/footer HTML — never edit nav links directly in pages
 { id, name, price, qty, image, options: { key: value } }
 ```
 
-## Pending Work (Shopify Integration)
-- **Status**: Cart is localStorage-only; `handleCheckout()` shows an alert stub
-- **To do**:
-  1. Write `js/shopify.js` — `shopifyFetch`, `createCart`, `addToCart`, `getCheckoutUrl`
-  2. Wire into `cart.js` to replace the checkout stub
-  3. Build variant ID lookup table mapping configurator state → Shopify variant IDs
-  4. Add Shopify products for: Detroit Lights, PolyFrame Floor/Table Lamp, Coffee Table, VOLDT Hardware
-  5. PolyFrame Coat Stand: add variant options in Shopify (currently "Default Title" only)
+## Shopify Integration
+
+- **Store**: `voldt-2.myshopify.com`
+- **Storefront API token** (public, safe client-side): `6f7494dd98f3629db5b1132b90087320`
+- **Setup**: Headless — custom frontend + Shopify checkout only. The Shopify Online Store theme redirects all storefront pages to `voldt.design` via `theme.liquid` meta refresh; checkout URLs (`/checkouts/...`) are unaffected.
+- **Checkout flow**: `createShopifyCheckout()` in `js/shopify.js` reads localStorage cart, maps item IDs to Shopify variant GIDs, calls the `cartCreate` GraphQL mutation, and redirects to the returned `checkoutUrl`.
+- **Cart notes**: Detroit lamp color (Black/Blue/Berry/Mint) is not a Shopify variant — it's passed as a cart note via `buildNote()` so it's visible in the order.
+- **Custom work / bespoke orders**: Handled via Shopify Draft Orders in the Admin GUI — no API needed. Create order manually after agreeing on scope + price, send invoice to customer.
+
+### Variant ID Map (in `js/shopify.js`)
+| Cart ID | Product |
+|---------|---------|
+| `polyframes-coat-rack` | PolyFrame Coat Rack (single variant) |
+| `polyframes-table-lamp-a` / `-b` | PolyFrame Table Lamp Style A/B |
+| `polyframes-floor-lamp-a` / `-b` | PolyFrame Floor Lamp Style A/B |
+| `polyframes-coffee-table` | PolyFrame Coffee Table |
+| `detroit-pendant-a-standard` / `-large` | Detroit Pendant Style A, Standard/Large |
+| `detroit-pendant-b-standard` / `-large` | Detroit Pendant Style B, Standard/Large |
+| `detroit-table-lamp-a-standard` / `-large` | Detroit Table Lamp Style A, Standard/Large |
+| `detroit-table-lamp-b-standard` / `-large` | Detroit Table Lamp Style B, Standard/Large |
+
+### Remaining Shopify Work
+- Add Shopify products + variant IDs for: VOLDT Hardware (configurator)
+- Wire configurator state → cart item IDs → variant GIDs for hardware products
+
+## Configurator To-Dos
+- [ ] Add **screw size selector** to `configurator/main.js` + UI in `configurator/index.html`
+- [ ] Add **mounting style selector** to `configurator/main.js` + UI in `configurator/index.html`
+- [ ] **Cap max length at 11 1/8"** — remove GLB files longer than this from `configurator/mechanic/` and `configurator/lake_shore/`; remove corresponding steps from the length sliders in `configurator/main.js`
+- [ ] **Add 3" length option** — add GLB files and insert the 3" step into the length sliders
+
+## Forms
+
+| Page | Formspree endpoint |
+|------|-------------------|
+| `contact.html` | `https://formspree.io/f/mnjgjnlb` |
+| `custom-work.html` | `https://formspree.io/f/xzdjdndr` |
+
+Both use AJAX mode (`Accept: application/json`) — no page redirect on submit; form is replaced with an inline success message on success.
