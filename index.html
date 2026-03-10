@@ -7,7 +7,7 @@
   <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','sans-serif']}}}}</script>
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body class="bg-white font-sans">
+<body class="bg-white font-sans" data-hide-cart>
 
   <header id="site-header" class="fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-md"></header>
 
@@ -19,24 +19,62 @@
       <img id="hero-2" src="assets/dec5396a8cc6e83670576a5d0a288c74f3074e6b.jpg" alt="Studio" class="absolute inset-0 w-full h-full object-cover" style="opacity:0;transition:opacity 1500ms ease-in-out" />
       <img id="hero-3" src="assets/204dfe37854bd8dd87119ad0e887bfd683da7398.jpg" alt="Pendants" class="absolute inset-0 w-full h-full object-cover" style="opacity:0;transition:opacity 1500ms ease-in-out" />
     </div>
+    <!-- Hero overlay text -->
     <div class="relative h-full flex items-end px-8 pb-16 lg:px-16 lg:pb-20">
       <div class="bg-black/50 backdrop-blur-sm px-6 py-5 flex flex-col lg:flex-row gap-8 lg:gap-12 w-full">
         <h2 class="text-xl lg:text-2xl text-white font-semibold tracking-tight lg:min-w-[200px] shrink-0">Algorithmic <br />Craft</h2>
-        <p class="text-xs lg:text-sm text-white/90 leading-relaxed font-light lg:pt-1 flex-1">Human hands meet machine precision. Voldt creates evolving product systems—variations generated through code, refined by hand, and made-to-order for your space. Designed and made at our studio in Michigan.</p>
+        <p class="text-xs lg:text-sm text-white/90 leading-relaxed font-light lg:pt-1 flex-1">Computation as design material. VOLDT creates furniture, lighting, and architectural hardware through algorithmic systems—variations generated through code, refined by hand, and made-to-order in Michigan.</p>
       </div>
     </div>
   </div>
 
-  <!-- Product Grid -->
-  <div class="grid grid-cols-2 lg:grid-cols-3" id="product-grid"></div>
+  <!-- Dual Entry CTAs -->
+  <div class="flex flex-col lg:flex-row min-h-[60vh]">
 
-  <!-- Bottom Section -->
-  <div class="bg-stone-50 px-8 py-16 text-center border-t border-stone-200">
-    <p class="text-xs tracking-[0.2em] uppercase text-stone-500 mb-4">Algorithmic Design Studio</p>
-    <p class="text-sm text-stone-700 max-w-2xl mx-auto leading-relaxed">We explore computation as a design language, writing algorithms that generate forms only possible through code. Realized in walnut, brass, and 3D-printed polymers—manufactured in Michigan.</p>
-    <div class="mt-8 flex justify-center gap-8 text-xs tracking-[0.15em] uppercase">
-      <a href="hardware-configurator.html" class="hover:text-stone-600 transition-colors">Configure Hardware</a>
-      <a href="custom-work.html" class="hover:text-stone-600 transition-colors">Custom Work</a>
+    <!-- Shop / Retail -->
+    <a href="products.html" class="group flex-1 flex flex-col justify-between px-10 py-14 lg:px-16 lg:py-20 bg-white border-b lg:border-b-0 lg:border-r border-stone-200 hover:bg-stone-50 transition-colors duration-300">
+      <div>
+        <p class="text-[10px] tracking-[0.2em] uppercase text-stone-400 mb-6">Collections</p>
+        <h2 class="text-3xl lg:text-4xl font-semibold text-stone-900 tracking-tight leading-tight mb-6">Shop Online</h2>
+        <p class="text-sm text-stone-500 leading-relaxed max-w-sm">Furniture, lighting, and architectural hardware. Browse standard editions and configure hardware online — made to order, ships from Michigan.</p>
+      </div>
+      <div class="mt-12 flex items-center gap-3">
+        <span class="text-xs tracking-[0.15em] uppercase text-stone-900 font-medium">Browse Collections</span>
+        <span class="text-stone-400 group-hover:translate-x-1 transition-transform duration-200">→</span>
+      </div>
+    </a>
+
+    <!-- Studio & Trade / B2B -->
+    <a href="trade.html" class="group flex-1 flex flex-col justify-between px-10 py-14 lg:px-16 lg:py-20 bg-stone-900 hover:bg-stone-800 transition-colors duration-300">
+      <div>
+        <p class="text-[10px] tracking-[0.2em] uppercase text-stone-400 mb-6">Studio & Trade</p>
+        <h2 class="text-3xl lg:text-4xl font-semibold text-white tracking-tight leading-tight mb-6">Work With Us</h2>
+        <p class="text-sm text-stone-400 leading-relaxed max-w-sm">Specification, project quantities, and custom fabrication for architects, designers, and contractors. Hardware, furniture, and bespoke commissions.</p>
+      </div>
+      <div class="mt-12 flex items-center gap-3">
+        <span class="text-xs tracking-[0.15em] uppercase text-white font-medium">Studio & Trade</span>
+        <span class="text-stone-500 group-hover:translate-x-1 transition-transform duration-200">→</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- Recognition Strip -->
+  <div class="bg-stone-50 border-t border-stone-200 px-8 py-8 lg:px-16">
+    <div class="max-w-[1600px] mx-auto flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-12">
+      <div class="flex items-center gap-3">
+        <span class="text-[9px] tracking-[0.15em] uppercase text-stone-400">Recognition</span>
+        <span class="text-stone-300">—</span>
+        <span class="text-[11px] text-stone-600 font-medium">ICFF Launchpad 2026</span>
+        <span class="text-stone-300 hidden sm:inline">·</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="text-[11px] text-stone-600 font-medium">ArtPrize 2025 — Design Winner</span>
+        <span class="text-stone-300 hidden sm:inline">·</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="text-[11px] text-stone-600 font-medium">Designed & Made in Michigan</span>
+      </div>
     </div>
   </div>
 
@@ -61,36 +99,6 @@
       }, 5000);
     })();
   </script>
-  <script>
-    const products = [
-      { id:'voldt-hardware', name:'Mechanic Series', category:'Hardware', size:'Configurable', img:'assets/914133ec573121502a172fcea0d7aaef759c00fe.jpg', hoverImg:null, link:'hardware-configurator.html' },
-      { id:'dpa', name:'Detroit Pendant A', category:'Detroit Lights', size:'2 sizes', img:'assets/a6f766489f20f93f24f164ec925ce2cdb2eb835f.jpg', hoverImg:'assets/177f5475887bf8810ce02749613cac0cc9b75a4b.jpg', link:'detroit-pendant.html?style=A' },
-      { id:'pf-floor', name:'PolyFrame Floor Lamp', category:'PolyFrames', size:null, img:'assets/29da261fae11e8815506ffcaee809b2fcbd34bfe.jpg', hoverImg:'assets/e2cdfd0d1d94bbb72793037d94d5162bf2d2d773.jpg', link:'polyframes-floor-lamp.html' },
-      { id:'dtlb', name:'Detroit Table Lamp B', category:'Detroit Lights', size:'2 sizes', img:'assets/fc6a8d985282412e62851849b27a10efead95eb2.jpg', hoverImg:'assets/620fdc99d9a2f8039d4fd6ab9718cecf6b27f8f9.jpg', link:'detroit-table-lamp.html?style=B' },
-      { id:'pf-table', name:'PolyFrame Table Lamp', category:'PolyFrames', size:null, img:'assets/1967efac521aba866dc207ed580f4382af241561.jpg', hoverImg:'assets/9978a8f52dc984036ee626d49e8bb08203893fe0.jpg', link:'polyframes-table-lamp.html' },
-      { id:'pf-coat', name:'PolyFrame Coat Rack', category:'PolyFrames', size:null, img:'assets/e606d72b5a5629a9b588ac32abe08e258b92b1db.jpg', hoverImg:'assets/fed88fa2d4adaef229128481e9b4e47ef2fdce81.jpg', link:'polyframes-coat-rack.html' },
-      { id:'pf-coffee', name:'PolyFrame Coffee Table', category:'PolyFrames', size:null, img:'assets/90efc59c9eb30586b1c1fff261db8a917a4daff8.jpg', hoverImg:'assets/dec5396a8cc6e83670576a5d0a288c74f3074e6b.jpg', link:'polyframes-coffee-table.html' },
-      { id:'dtla', name:'Detroit Table Lamp A', category:'Detroit Lights', size:'2 sizes', img:'assets/e005ffb8592589ea9883bf08ef2f100ef0b52bfb.jpg', hoverImg:'assets/38d7962704f7aa49355dd98db701b27a73d9e768.jpg', link:'detroit-table-lamp.html?style=A' },
-      { id:'dpb', name:'Detroit Pendant B', category:'Detroit Lights', size:'2 sizes', img:'assets/c3f1ecb063bbf7eb7ea437040bcf23b5d7c14808.jpg', hoverImg:'assets/a593fe151473b32b526b790458cee132453c2f08.jpg', link:'detroit-pendant.html?style=B' },
-    ];
-    const grid = document.getElementById('product-grid');
-    products.forEach(p => {
-      const a = document.createElement('a');
-      a.href = p.link;
-      a.className = 'group relative overflow-hidden bg-stone-100 block';
-      a.style.aspectRatio = '3/4';
-      a.innerHTML = `
-        <img src="${p.img}" alt="${p.name}" class="absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:opacity-0 scale-100 group-hover:scale-105" />
-        ${p.hoverImg ? `<img src="${p.hoverImg}" alt="${p.name} alternate" class="absolute inset-0 w-full h-full object-cover transition-all duration-700 opacity-0 group-hover:opacity-100" />` : ''}
-        <div class="absolute top-3 left-3 w-32 bg-white/90 backdrop-blur-sm border border-white/60 shadow-lg px-3 py-2 rounded-sm" style="min-height:56px">
-          <p class="text-[7px] tracking-[0.15em] uppercase text-stone-500 mb-0.5 font-medium">${p.category}</p>
-          <h3 class="text-[10px] text-stone-900 font-medium leading-tight">${p.name}</h3>
-          ${p.size ? `<p class="text-[8px] text-stone-600 mt-0.5">${p.size}</p>` : ''}
-        </div>
-        <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
-      `;
-      grid.appendChild(a);
-    });
-  </script>
+
 </body>
 </html>

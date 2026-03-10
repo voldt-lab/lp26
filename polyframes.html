@@ -16,6 +16,7 @@
       <div class="max-w-[1600px] mx-auto px-8 lg:px-16">
         <h1 class="text-5xl lg:text-6xl font-bold tracking-tight leading-[1] mb-8 text-stone-900">PolyFrames</h1>
         <p class="text-base text-stone-600 max-w-3xl leading-relaxed">A node-based furniture system where algorithmic joinery meets solid walnut and 3D-printed components. Each piece explores computation as structural language—forms that could only exist through parametric design, realized with material integrity. Designed and manufactured in Michigan, made to order.</p>
+        <p class="text-sm text-stone-500 mt-4 max-w-2xl leading-relaxed">Standard pieces are available to purchase online. Custom configurations and commercial commissions — alternate dimensions, materials, and integrated features — are available through our studio inquiry process.</p>
       </div>
     </section>
 
@@ -72,11 +73,27 @@
     </section>
 
     <!-- Custom CTA -->
-    <section class="py-32 bg-white border-t border-stone-900/5">
-      <div class="max-w-4xl mx-auto px-8 lg:px-16 text-center">
-        <h2 class="text-2xl font-bold tracking-tight mb-8 text-stone-900">Custom Configurations</h2>
-        <p class="text-base text-stone-600 mb-12 leading-relaxed">Our process allows us to create a seemingly infinite number of customized designs. Contact us for customized and commercial design services.</p>
-        <a href="custom-work.html" class="inline-flex items-center gap-3 border border-stone-400 text-stone-900 px-10 py-5 hover:border-stone-900 transition-colors text-xs tracking-[0.15em] uppercase">Request Custom Design <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    <section class="py-32 bg-stone-900 border-t border-stone-900/5">
+      <div class="max-w-[1600px] mx-auto px-8 lg:px-16">
+        <div class="grid md:grid-cols-2 gap-16 items-start">
+          <div>
+            <p class="text-[10px] tracking-[0.2em] uppercase text-stone-400 mb-6">Commission & Trade</p>
+            <h2 class="text-3xl font-bold tracking-tight mb-6 text-white">Custom configurations and commercial installations.</h2>
+            <p class="text-sm text-stone-400 leading-relaxed mb-8">Our algorithmic process can generate a wide range of configurations beyond the standard collection — alternate dimensions, wood species, integrated features, or full room compositions. We work with interior designers, architects, and hospitality clients from specification through delivery.</p>
+            <div class="flex flex-col sm:flex-row gap-4">
+              <a href="custom-work.html#inquiry-form-section" class="inline-flex items-center justify-center gap-2 border border-white text-white text-xs tracking-[0.15em] uppercase px-8 py-4 hover:bg-white hover:text-stone-900 transition-colors">Commission a Piece <svg xmlns="http://www.w3.org/2000/svg" width="16" height="12" viewBox="0 0 18 12" fill="none"><path d="M0 6H16M11 1L16 6L11 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+              <a href="trade.html" class="inline-flex items-center justify-center gap-2 border border-stone-700 text-stone-400 text-xs tracking-[0.15em] uppercase px-8 py-4 hover:border-stone-400 hover:text-stone-200 transition-colors">Studio & Trade Info <svg xmlns="http://www.w3.org/2000/svg" width="16" height="12" viewBox="0 0 18 12" fill="none"><path d="M0 6H16M11 1L16 6L11 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            </div>
+          </div>
+          <div class="space-y-4">
+            <ul class="space-y-3">
+              <li class="flex items-start gap-3 text-sm text-stone-300"><span class="text-stone-600 shrink-0">—</span>Custom dimensions and configurations by quote</li>
+              <li class="flex items-start gap-3 text-sm text-stone-300"><span class="text-stone-600 shrink-0">—</span>Alternate wood species and finish options</li>
+              <li class="flex items-start gap-3 text-sm text-stone-300"><span class="text-stone-600 shrink-0">—</span>Multi-piece room compositions and hospitality fit-outs</li>
+              <li class="flex items-start gap-3 text-sm text-stone-300"><span class="text-stone-600 shrink-0">—</span>6–12 weeks from design approval (quantity-dependent)</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -104,7 +121,10 @@
         </div>
         <h3 class="text-base tracking-tight mb-1 text-stone-900">${p.name}</h3>
         <p class="text-sm text-stone-500 mb-4 leading-relaxed">${p.desc}</p>
-        <p class="text-base text-stone-900">${p.price ? '$'+p.price : 'Custom Pricing'}</p>
+        ${p.price
+          ? `<p class="text-base text-stone-900">$${p.price}</p>`
+          : `<p class="text-xs tracking-[0.15em] uppercase text-stone-500 mt-2">Commission — <a href="custom-work.html#inquiry-form-section" class="underline hover:text-stone-900 transition-colors" onclick="event.stopPropagation()">Inquire</a></p>`
+        }
       `;
       grid.appendChild(a);
     });
