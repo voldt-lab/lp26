@@ -12,68 +12,27 @@
   <div class="pt-16">
     <section class="py-16 bg-white border-b border-neutral-200">
       <div class="max-w-7xl mx-auto px-6 lg:px-12">
-        <h1 class="text-5xl font-bold tracking-tight text-neutral-900 mb-6">Hardware Configurator</h1>
-        <p class="text-lg text-neutral-700 max-w-3xl leading-relaxed">Configure your VOLDT hardware pull through finite predefined options. Live pricing and direct integration with checkout. Custom dimensions available through project inquiry.</p>
+        <div class="flex items-center gap-4 mb-6">
+          <h1 class="text-5xl font-bold tracking-tight text-neutral-900">Hardware Configurator</h1>
+          <button onclick="scrollToConfigurator()" title="Jump to configurator" class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full border border-neutral-300 text-neutral-500 hover:border-neutral-900 hover:text-neutral-900 transition-colors duration-200">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+          </button>
+        </div>
+        <p class="text-lg text-neutral-700 max-w-3xl leading-relaxed">Configure your VOLDT hardware below to explore the full range of design options.</p>
       </div>
     </section>
 
-    <section class="py-16">
-      <div class="max-w-7xl mx-auto px-6 lg:px-12">
-        <div class="grid lg:grid-cols-2 gap-16">
-          <!-- Preview -->
-          <div class="relative">
-            <div class="sticky top-32">
-              <div class="bg-neutral-100 rounded-sm overflow-hidden mb-6" style="aspect-ratio:4/5">
-                <img src="https://images.unsplash.com/photo-1732532399621-afd080eb0b52?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080" alt="Hardware preview" class="w-full h-full object-cover" />
-              </div>
-              <div class="bg-neutral-50 p-6 rounded-sm">
-                <h3 class="text-sm tracking-widest text-neutral-600 mb-4">CURRENT CONFIGURATION</h3>
-                <ul class="space-y-2 text-neutral-900">
-                  <li class="flex justify-between"><span class="text-neutral-600">Size</span><span id="cfg-size">8"</span></li>
-                  <li class="flex justify-between"><span class="text-neutral-600">Finish</span><span id="cfg-finish">Brushed Brass</span></li>
-                  <li class="flex justify-between"><span class="text-neutral-600">Mounting</span><span id="cfg-mounting">Surface Mount</span></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <!-- Options -->
-          <div class="space-y-10">
-            <!-- Size -->
-            <div>
-              <label class="block text-sm tracking-widest text-neutral-600 mb-4">SIZE</label>
-              <div class="grid grid-cols-2 gap-3" id="size-btns"></div>
-            </div>
-            <!-- Finish -->
-            <div>
-              <label class="block text-sm tracking-widest text-neutral-600 mb-4">FINISH</label>
-              <div class="space-y-3" id="finish-btns"></div>
-            </div>
-            <!-- Mounting -->
-            <div>
-              <label class="block text-sm tracking-widest text-neutral-600 mb-4">MOUNTING TYPE</label>
-              <div class="space-y-3" id="mounting-btns"></div>
-            </div>
-            <!-- Price & CTA -->
-            <div class="pt-8 border-t border-neutral-200">
-              <div class="flex items-baseline justify-between mb-6">
-                <span class="text-sm tracking-widest text-neutral-600">TOTAL PRICE</span>
-                <span id="total-price" class="text-3xl text-neutral-900">$295</span>
-              </div>
-              <button onclick="handleAddToCart()" class="w-full bg-neutral-900 text-neutral-50 px-8 py-4 hover:bg-neutral-800 transition-colors mb-3">Add to Cart</button>
-              <p class="text-sm text-neutral-600 text-center">3–4 week lead time</p>
-            </div>
-          </div>
-        </div>
-      </div>
+    <!-- Configurator iframe -->
+    <section class="w-full border-b border-neutral-200">
+      <iframe id="configurator-frame" src="configurator/index.html" style="width:100%;height:80vh;min-height:600px;border:none;display:block;"></iframe>
     </section>
 
     <!-- Supporting Info -->
     <section class="py-24 bg-neutral-50">
       <div class="max-w-7xl mx-auto px-6 lg:px-12">
         <div class="grid md:grid-cols-3 gap-8">
-          <div class="bg-white border border-neutral-200 p-8"><h3 class="text-lg text-neutral-900 mb-4">Project Quantities</h3><p class="text-neutral-700 mb-6">Orders over 50 units qualify for project pricing and dedicated production scheduling.</p><a href="custom-work.html" class="inline-flex items-center gap-2 text-neutral-900 hover:gap-4 transition-all text-sm">Request Quote <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></div>
-          <div class="bg-white border border-neutral-200 p-8"><h3 class="text-lg text-neutral-900 mb-4">Custom Dimensions</h3><p class="text-neutral-700 mb-6">Need a size outside the standard range? Custom lengths from 4" to 36" available.</p><a href="custom-work.html" class="inline-flex items-center gap-2 text-neutral-900 hover:gap-4 transition-all text-sm">Inquire <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></div>
+          <div class="bg-white border border-neutral-200 p-8"><h3 class="text-lg text-neutral-900 mb-4">Project Quantities</h3><p class="text-neutral-700 mb-6">Orders over 20 units qualify for project pricing and dedicated production scheduling.</p><a href="custom-work.html" class="inline-flex items-center gap-2 text-neutral-900 hover:gap-4 transition-all text-sm">Request Quote <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></div>
+          <div class="bg-white border border-neutral-200 p-8"><h3 class="text-lg text-neutral-900 mb-4">Custom Dimensions</h3><p class="text-neutral-700 mb-6">Need a size outside the standard range? Customize any dimension to whatever decimal place you need.</p><a href="custom-work.html" class="inline-flex items-center gap-2 text-neutral-900 hover:gap-4 transition-all text-sm">Inquire <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></div>
           <div class="bg-white border border-neutral-200 p-8"><h3 class="text-lg text-neutral-900 mb-4">Lead Time</h3><p class="text-neutral-700 mb-6">Standard configurations ship in 3–4 weeks. Custom orders may require additional time.</p><p class="text-sm text-neutral-600">US-based manufacturing</p></div>
         </div>
       </div>
@@ -90,38 +49,17 @@
   </div>
   <script src="js/cart.js"></script><script src="js/header.js"></script>
   <script>
-    const SIZES = [{label:'6"',value:'6"',price:225},{label:'8"',value:'8"',price:295},{label:'12"',value:'12"',price:395},{label:'18"',value:'18"',price:545}];
-    const FINISHES = [{label:'Brushed Brass',value:'Brushed Brass',mod:0},{label:'Matte Black',value:'Matte Black',mod:-20},{label:'Polished Nickel',value:'Polished Nickel',mod:10}];
-    const MOUNTINGS = [{label:'Surface Mount',value:'Surface Mount'},{label:'Through Bolt',value:'Through Bolt'}];
-
-    let cfg = { size:'8"', finish:'Brushed Brass', mounting:'Surface Mount' };
-
-    function calcPrice(){ const s=SIZES.find(x=>x.value===cfg.size); const f=FINISHES.find(x=>x.value===cfg.finish); return (s?.price||0)+(f?.mod||0); }
-
-    function makeBtnClass(active){ return 'p-4 border transition-colors text-left w-full '+(active?'border-neutral-900 bg-neutral-900 text-neutral-50':'border-neutral-300 bg-white text-neutral-900 hover:border-neutral-900'); }
-
-    function render(){
-      document.getElementById('cfg-size').textContent=cfg.size;
-      document.getElementById('cfg-finish').textContent=cfg.finish;
-      document.getElementById('cfg-mounting').textContent=cfg.mounting;
-      document.getElementById('total-price').textContent='$'+calcPrice();
-
-      document.getElementById('size-btns').innerHTML=SIZES.map(s=>`<button onclick="setSize('${s.value}')" class="${makeBtnClass(cfg.size===s.value).replace('text-left','text-center')} grid-btn"><div class="text-lg mb-1">${s.label}</div><div class="text-sm opacity-75">Base $${s.price}</div></button>`).join('');
-      document.getElementById('finish-btns').innerHTML=FINISHES.map(f=>`<button onclick="setFinish('${f.value}')" class="${makeBtnClass(cfg.finish===f.value)}"><div class="flex justify-between items-center"><span>${f.label}</span>${f.mod!==0?`<span class="text-sm">${f.mod>0?'+':''}$${f.mod}</span>`:''}</div></button>`).join('');
-      document.getElementById('mounting-btns').innerHTML=MOUNTINGS.map(m=>`<button onclick="setMounting('${m.value}')" class="${makeBtnClass(cfg.mounting===m.value)}">${m.label}</button>`).join('');
+    function resizeConfigurator() {
+      const frame = document.getElementById('configurator-frame');
+      frame.style.height = Math.max(600, window.innerHeight - 128) + 'px';
     }
-
-    function setSize(v){ cfg.size=v; render(); }
-    function setFinish(v){ cfg.finish=v; render(); }
-    function setMounting(v){ cfg.mounting=v; render(); }
-
-    function handleAddToCart(){
-      const price=calcPrice();
-      addItem({ id:'voldt-hardware-custom-'+Date.now(), name:'VOLDT Pull Custom Configuration', price, image:'https://images.unsplash.com/photo-1732532399621-afd080eb0b52?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400', options:{...cfg} });
-      alert('Added to cart!');
+    function scrollToConfigurator() {
+      const frame = document.getElementById('configurator-frame');
+      const top = frame.getBoundingClientRect().top + window.scrollY - 64;
+      window.scrollTo({ top, behavior: 'smooth' });
     }
-
-    render();
+    window.addEventListener('load', resizeConfigurator);
+    window.addEventListener('resize', resizeConfigurator);
   </script>
 </body>
 </html>
