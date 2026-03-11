@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <a href="voldt-hardware.html" class="block w-full py-3 text-center text-xs text-stone-700 hover:text-stone-900 hover:bg-stone-50">VOLDT Hardware</a>
             </div>
           </div>
-          <a href="hardware-configurator.html" class="block w-full py-4 text-center text-xs tracking-[0.15em] uppercase text-stone-900 hover:bg-stone-50 font-medium">VOLDT Hardware Configurator</a>
+          <a href="hardware-config.html" class="block w-full py-4 text-center text-xs tracking-[0.15em] uppercase text-stone-900 hover:bg-stone-50 font-medium">VOLDT Hardware Configurator</a>
           <a href="custom-work.html" class="block w-full py-4 text-center text-xs tracking-[0.15em] uppercase text-stone-900 hover:bg-stone-50 font-medium">Custom Projects</a>
           <a href="trade.html" class="block w-full py-4 text-center text-xs tracking-[0.15em] uppercase text-stone-900 hover:bg-stone-50 font-medium">Studio & Trade</a>
           <div>

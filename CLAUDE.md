@@ -14,7 +14,7 @@
 | `index.html` | Home — hero slideshow + product grid (JS-rendered) |
 | `products.html` | Products overview — 3 series with images |
 | `voldt-hardware.html` | VOLDT Hardware collection page |
-| `hardware-configurator.html` | Wrapper that embeds `configurator/index.html` via iframe |
+| `hardware-config.html` | Wrapper that embeds `configurator/index.html` via iframe |
 | `polyframes.html` | PolyFrames collection overview |
 | `polyframes-floor-lamp.html` | Product detail |
 | `polyframes-table-lamp.html` | Product detail |
