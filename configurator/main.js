@@ -357,7 +357,16 @@ function wireUI() {
   aboutBackdrop.addEventListener('click', closeAbout);
   document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeAbout(); });
 
-  // Grid & Axis toggle (unchanged)
+  // Position viewport-tools flush against the panel's actual right edge
+  const viewportTools = document.getElementById('viewport-tools');
+  function positionViewportTools() {
+    const r = panel.getBoundingClientRect();
+    viewportTools.style.left = (r.right + 14) + 'px';
+  }
+  positionViewportTools();
+  window.addEventListener('resize', positionViewportTools);
+
+  // Grid & Axis toggle
   const gridBtn = document.getElementById('gridToggle');
   let gridOn = true;
   gridBtn.addEventListener('click', () => {
@@ -365,6 +374,11 @@ function wireUI() {
     viewer.setGridVisible(gridOn);
     gridBtn.classList.toggle('active', gridOn);
     gridBtn.textContent = gridOn ? '3D Markers: On' : '3D Markers: Off';
+  });
+
+  // Zoom to fit
+  document.getElementById('zoomFitBtn').addEventListener('click', () => {
+    viewer.zoomToFit();
   });
 
   // Product + subtype changes affect visibility + model

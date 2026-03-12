@@ -328,6 +328,23 @@ export function createViewer(container, opts = {}) {
     }
   }
 
+  function zoomToFit() {
+    if (group.children.length === 0) return;
+    const box = new THREE.Box3().setFromObject(group);
+    if (box.isEmpty()) return;
+    const size   = new THREE.Vector3(); box.getSize(size);
+    const center = new THREE.Vector3(); box.getCenter(center);
+    const radius = 0.5 * size.length() || 1;
+    camera.near = Math.max(0.01, radius / 100);
+    camera.far  = radius * 20;
+    camera.updateProjectionMatrix();
+    const dist = radius / Math.tan(THREE.MathUtils.degToRad(camera.fov * 0.5));
+    camera.position.set(center.x + dist, center.y + dist * 0.7, center.z + dist * 1.2);
+    camera.lookAt(center);
+    controls.target.copy(center);
+    controls.update();
+  }
+
   function setBloomEnabled(on, { strength = 0.4, radius = 0.8, threshold = 0.85 } = {}) {
     bloom.enabled = !!on;
     bloom.strength = strength;
@@ -347,5 +364,6 @@ export function createViewer(container, opts = {}) {
     setBloomEnabled,
     setToneExposure,
     setGridVisible,
+    zoomToFit,
   };
 }

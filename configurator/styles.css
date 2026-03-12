@@ -75,25 +75,57 @@ body{
   overflow: auto;       /* scroll *inside* panel if contents ever exceed height */
   scrollbar-gutter: stable; /* prevent layout shift when scrollbar appears */
 }
-/* ---- Panel button (lower-left inside the left toolbar) ---- */
-.btn-panel{
-  position: static;               /* <-- no absolute positioning */
-  align-self: flex-start;         /* keep it left-aligned */
-  margin: 0 0 14px 14px;          /* left & bottom spacing */
+/* ---- Viewport overlay tools (bottom-left of 3D canvas) ---- */
+#viewport-tools {
+  position: fixed;      /* JS sets left; bottom is static */
+  bottom: 14px;
+  left: 14px;           /* fallback; overridden by JS after panel measures */
+  z-index: 1200;
+  display: flex;
+  align-items: stretch; /* all buttons share the same height */
+  gap: 8px;
+}
+.vp-tool-btn {
   padding: 12px 16px;
-  border-radius: 12px;
-  background: rgba(255,255,255,0.06);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.16);
   color: #dfe5ec;
   cursor: pointer;
+  backdrop-filter: blur(8px);
+  font-family: "Space Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: var(--fs);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
-.btn-panel.active{
+.vp-tool-btn:hover { background: rgba(255,255,255,0.14); }
+.vp-tool-btn.active {
   background: rgba(110,200,255,0.18);
   border-color: rgba(110,200,255,.35);
 }
-#gridToggle{
-  margin-top: auto;
+/* icon-only button — same size as text button; position: relative for tooltip */
+.vp-tool-icon { position: relative; }
+/* tooltip */
+.vp-tool-icon[data-tip]::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 7px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  background: rgba(20,22,26,0.95);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #d5d9de;
+  font-size: 11px;
+  padding: 4px 9px;
+  border-radius: 6px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 9999;
 }
+.vp-tool-icon[data-tip]:hover::after { opacity: 1; }
 
 /* thin divider under the product dropdown */
 .divider{

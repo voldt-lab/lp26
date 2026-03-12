@@ -124,11 +124,17 @@
       </div>
       
 
-      <!-- Docked helper toggle (lower-left of the left panel) -->
-      <button id="gridToggle" class="btn-panel" type="button" title='1 square is roughly 1"'>3D Markers: On</button>
-
     </fieldset>
 
+    <!-- Viewport overlay tools — positioned by JS relative to actual panel right edge -->
+    <div id="viewport-tools">
+      <button id="gridToggle" class="vp-tool-btn" type="button" title='1 square is roughly 1"'>3D Markers: On</button>
+      <button id="zoomFitBtn" class="vp-tool-btn vp-tool-icon" type="button" aria-label="Zoom to fit" data-tip="Zoom to fit">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 6V1h5M15 6V1h-5M1 10v5h5M15 10v5h-5"/>
+        </svg>
+      </button>
+    </div>
 
     <div id="viewport" class="viewer"></div>
 
