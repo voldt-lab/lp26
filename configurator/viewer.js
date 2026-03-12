@@ -8,8 +8,8 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 
 // Not in your importmap, so we import via full URL to avoid touching index.html
-import { GLTFLoader } from 'https://unpkg.com/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
-import { DRACOLoader } from 'https://unpkg.com/three@0.160.0/examples/jsm/loaders/DRACOLoader.js';
+import { GLTFLoader } from 'https://unpkg.com/three@0.182.0/examples/jsm/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'https://unpkg.com/three@0.182.0/examples/jsm/loaders/DRACOLoader.js';
 
 
 // --- simple equirect "studio" environment (LDR) ---
@@ -279,7 +279,7 @@ export function createViewer(container, opts = {}) {
   const gltfLoader = new GLTFLoader();
   // Draco (for GLB/GLTF with KHR_draco_mesh_compression)
   const dracoLoader = new DRACOLoader();
-  dracoLoader.setDecoderPath('https://unpkg.com/three@0.160.0/examples/jsm/libs/draco/'); // or './draco/'
+  dracoLoader.setDecoderPath('https://unpkg.com/three@0.182.0/examples/jsm/libs/draco/'); // or './draco/'
   dracoLoader.setWorkerLimit(Math.min(4, navigator.hardwareConcurrency || 4));
   gltfLoader.setDRACOLoader(dracoLoader);
   let lastUrl = null;
@@ -290,36 +290,33 @@ export function createViewer(container, opts = {}) {
     overrideMaterials = true, // set false if you want to keep gltf materials as-authored
   } = {}) {
     if (!url) throw new Error('loadModel(url) requires a url');
-    if (url === lastUrl) return; // no-op
+    if (url === lastUrl) return;
 
-    lastUrl = url;
-    clear();
-
+    // Load first. Do NOT clear current model yet.
     const gltf = await gltfLoader.loadAsync(url);
     const model = gltf.scene || gltf.scenes?.[0];
     if (!model) throw new Error(`No scene in glTF: ${url}`);
 
-    // Apply consistent materials / env intensity
     model.traverse(o => {
       if (!o.isMesh) return;
 
-      // normals (some exports omit them)
       if (o.geometry && !o.geometry.attributes.normal) {
         o.geometry.computeVertexNormals();
       }
 
       if (overrideMaterials) {
-        const which = pickMaterialForMesh(o.name);
-        o.material = (which === 'satin') ? satinMat : metalMat;
+        o.material = satinMat; // or your existing assignment logic
       }
 
-      // ensure envMapIntensity consistent even if material is kept
       if (o.material && 'envMapIntensity' in o.material) {
         o.material.envMapIntensity = 1.2;
         o.material.needsUpdate = true;
       }
     });
 
+    // Only now replace the current model
+    clear();
+    lastUrl = url;
     group.add(model);
 
     if (fit) {

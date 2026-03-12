@@ -328,16 +328,31 @@ async function loadForCurrentState() {
 
   if (!url) return;
 
-  setBusy(true, 'loading model...');
+  setBusy(true, 'Loading model...');
+
   try {
-    // If another change happens while loading, ignore completion
     await viewer.loadModel(url, { fit: true, overrideMaterials: true });
-    if (token === loadToken) status.textContent = 'for illustration only';
+
+    // only the latest request should update status
+    if (token !== loadToken) return;
+
+    status.textContent = 'For illustration only';
   } catch (e) {
-    console.error(e);
-    if (token === loadToken) status.textContent = 'error (see console)';
+    console.error(`Failed to load`, e);
+
+    // if this request is already stale, do nothing
+    if (token !== loadToken) return;
+
+    const msg = String(e?.message || e);
+    status.textContent =
+      msg.includes('404') || msg.includes('Not Found')
+        ? 'Missing resource'
+        : 'Load failed';
   } finally {
-    if (token === loadToken) setBusy(false, status.textContent);
+    // always release busy state for the latest request
+    if (token === loadToken) {
+      setBusy(false, status.textContent);
+    }
   }
 }
 
