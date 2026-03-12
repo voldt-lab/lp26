@@ -119,9 +119,7 @@ Cart page also includes `<script src="js/shopify.js"></script>` between cart.js 
 - [ ] eliminate about us button once embedded
 
 ## Site To-Dos
-- [x] Landing page to direct to trade or retail
-- [x] Add Trade page - hide shopping cart
-- [ ] Click anywhere to close hamburger menu
+- [ ] Add the retail versions of hardware - flesh out their product cards
 
 ## Forms
 

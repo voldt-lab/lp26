@@ -85,7 +85,8 @@ document.addEventListener('DOMContentLoaded', () => {
       menuIcon.innerHTML = MENU_ICON;
     }
 
-    menuBtn.addEventListener('click', () => {
+    menuBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
       menuOpen = !menuOpen;
       navDropdown.style.display = menuOpen ? 'block' : 'none';
       menuIcon.innerHTML = menuOpen ? CLOSE_ICON : MENU_ICON;
@@ -105,6 +106,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.querySelectorAll('#nav-dropdown a').forEach(link => link.addEventListener('click', closeAll));
+
+    // Click anywhere outside the header to close the menu
+    document.addEventListener('click', (e) => {
+      if (menuOpen && !headerEl.contains(e.target)) closeAll();
+    });
 
     // --- SCROLL SHADOW ---
     window.addEventListener('scroll', () => {

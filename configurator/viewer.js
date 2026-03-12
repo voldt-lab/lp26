@@ -253,7 +253,7 @@ export function createViewer(container, opts = {}) {
   }
 
   function fitToObject(obj3d, { frameCamera = true } = {}) {
-    const box = new THREE.Box3().setFromObject(obj3d);
+    const box = new THREE.Box3().setFromObject(obj3d, true);
     if (box.isEmpty()) return;
 
     const size = new THREE.Vector3(); box.getSize(size);
@@ -283,7 +283,8 @@ export function createViewer(container, opts = {}) {
   dracoLoader.setWorkerLimit(Math.min(4, navigator.hardwareConcurrency || 4));
   gltfLoader.setDRACOLoader(dracoLoader);
   let lastUrl = null;
-  let hasFramedOnce = false; 
+  let hasFramedOnce = false;
+  let loadGen = 0;
 
   async function loadModel(url, {
     fit = true,
@@ -292,8 +293,14 @@ export function createViewer(container, opts = {}) {
     if (!url) throw new Error('loadModel(url) requires a url');
     if (url === lastUrl) return;
 
+    const gen = ++loadGen;
+    lastUrl = null; // reset so a failed URL can be retried
+
     // Load first. Do NOT clear current model yet.
     const gltf = await gltfLoader.loadAsync(url);
+
+    // If a newer load was started while we were fetching, discard this result
+    if (gen !== loadGen) return;
     const model = gltf.scene || gltf.scenes?.[0];
     if (!model) throw new Error(`No scene in glTF: ${url}`);
 
@@ -327,7 +334,7 @@ export function createViewer(container, opts = {}) {
 
   function zoomToFit() {
     if (group.children.length === 0) return;
-    const box = new THREE.Box3().setFromObject(group);
+    const box = new THREE.Box3().setFromObject(group, true);
     if (box.isEmpty()) return;
     const size   = new THREE.Vector3(); box.getSize(size);
     const center = new THREE.Vector3(); box.getCenter(center);
@@ -339,7 +346,11 @@ export function createViewer(container, opts = {}) {
     camera.position.set(center.x + dist, center.y + dist * 0.7, center.z + dist * 1.2);
     camera.lookAt(center);
     controls.target.copy(center);
+    // Disable damping momentarily so OrbitControls fully commits the new position
+    const wasDamping = controls.enableDamping;
+    controls.enableDamping = false;
     controls.update();
+    controls.enableDamping = wasDamping;
   }
 
   function setBloomEnabled(on, { strength = 0.4, radius = 0.8, threshold = 0.85 } = {}) {
