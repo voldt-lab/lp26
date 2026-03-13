@@ -48,7 +48,7 @@ function buildNote(cartItems) {
   return lines.length ? lines.join('\n') : null;
 }
 
-async function createShopifyCheckout() {
+async function createShopifyCheckout(discountCode = '') {
   const cartItems = getCart();
   const lines = [];
   const unmapped = [];
@@ -93,7 +93,10 @@ async function createShopifyCheckout() {
 
     const checkoutUrl = result?.cart?.checkoutUrl;
     if (checkoutUrl) {
-      window.location.href = checkoutUrl;
+      const url = discountCode
+        ? `${checkoutUrl}${checkoutUrl.includes('?') ? '&' : '?'}discount=${encodeURIComponent(discountCode)}`
+        : checkoutUrl;
+      window.location.href = url;
     } else {
       throw new Error('No checkoutUrl returned');
     }

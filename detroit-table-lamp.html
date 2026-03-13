@@ -148,8 +148,9 @@
     function setColor(c){ color=c; document.getElementById('main-img').src=getImg(); updateUI(); }
 
     function handleAddToCart(){
-      addItem({ id:'detroit-table-lamp-'+style.toLowerCase()+'-'+size.toLowerCase(), name:'Detroit Table Lamp '+style, price:getPrice(), image:getImg(), options:{style, size, color} });
-      alert('Added to cart!');
+      const item = { id:'detroit-table-lamp-'+style.toLowerCase()+'-'+size.toLowerCase(), name:'Detroit Table Lamp '+style, price:getPrice(), image:getImg(), options:{style, size, color} };
+      addItem(item);
+      showCartToast(item.name);
     }
 
     updateUI();

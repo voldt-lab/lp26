@@ -113,7 +113,7 @@
     }
     function setStyle(s){ style=s; selectedImg=0; updateUI(); }
     function setSize(s){ size=s; selectedImg=0; updateUI(); }
-    function handleAddToCart(){ addItem({ id:'detroit-pendant-'+style.toLowerCase()+'-'+size.toLowerCase(), name:'Detroit Pendant '+style, price:getPrice(), image:getImages()[0], options:{style,size} }); alert('Added to cart!'); }
+    function handleAddToCart(){ const item = { id:'detroit-pendant-'+style.toLowerCase()+'-'+size.toLowerCase(), name:'Detroit Pendant '+style, price:getPrice(), image:getImages()[0], options:{style,size} }; addItem(item); showCartToast(item.name); }
     updateUI();
   </script>
 </body>

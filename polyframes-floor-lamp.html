@@ -116,7 +116,7 @@
     }
 
     renderThumbs();
-    function addToCart() { addItem({ id:'polyframes-floor-lamp-'+style.toLowerCase(), name:'PolyFrame Floor Lamp '+style, price:899, image:IMAGES[style][0] }); alert('Added to cart!'); }
+    function addToCart() { const item={ id:'polyframes-floor-lamp-'+style.toLowerCase(), name:'PolyFrame Floor Lamp '+style, price:899, image:IMAGES[style][0] }; addItem(item); showCartToast(item.name); }
   </script>
 </body>
 </html>

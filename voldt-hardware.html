@@ -34,8 +34,8 @@
     <section class="py-16 bg-neutral-50">
       <div class="max-w-7xl mx-auto px-6 lg:px-12">
         <div class="grid md:grid-cols-2 gap-8">
-          <div class="bg-neutral-100 rounded-sm overflow-hidden" style="aspect-ratio:4/5"><img src="https://images.unsplash.com/photo-1732532399621-afd080eb0b52?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080" alt="VOLDT hardware 1" class="w-full h-full object-cover" /></div>
-          <div class="bg-neutral-100 rounded-sm overflow-hidden" style="aspect-ratio:4/5"><img src="https://images.unsplash.com/photo-1732532399621-afd080eb0b52?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080" alt="VOLDT hardware 2" class="w-full h-full object-cover" /></div>
+          <div id="gallery-left" class="bg-neutral-100 rounded-sm overflow-hidden relative" style="aspect-ratio:4/5"></div>
+          <div id="gallery-right" class="bg-neutral-100 rounded-sm overflow-hidden relative" style="aspect-ratio:4/5"></div>
         </div>
       </div>
     </section>
@@ -48,34 +48,36 @@
             <h2 class="text-3xl font-bold tracking-tight text-neutral-900 mb-6">Concept</h2>
             <p class="text-lg text-neutral-700 leading-relaxed mb-8">VOLDT Hardware employs parametric design to generate a coherent family of pulls and handles. Each variation maintains the algorithmic DNA of the system while offering precise control over dimensional and material properties.</p>
             <p class="text-neutral-700 leading-relaxed">The configurator presents finite predefined options rather than unlimited customization, ensuring every output maintains design integrity and manufacturability.</p>
+            <button onclick="scrollToConfigurator()" class="mt-8 inline-flex items-center gap-2 border border-neutral-300 text-neutral-700 text-sm px-6 py-3 hover:border-neutral-900 hover:text-neutral-900 transition-colors duration-200">
+              Configure
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+            </button>
           </div>
           <div class="space-y-8">
             <div><h3 class="text-sm tracking-widest text-neutral-600 mb-3">MATERIALS & FINISHES</h3><ul class="space-y-2 text-neutral-900"><li>Gun Metal Grey</li><li>Muted Green</li><li>Brisk Orange</li></ul></div>
             <div><h3 class="text-sm tracking-widest text-neutral-600 mb-3">INSTALLATION</h3><ul class="space-y-2 text-neutral-900"><li>Surface mount or through-bolt</li><li>Compatible with 3/4" to 2" door thickness</li><li>Mounting hardware included</li></ul></div>
-            <div><h3 class="text-sm tracking-widest text-neutral-600 mb-3">LEAD TIME & MANUFACTURING</h3><ul class="space-y-2 text-neutral-900"><li>3–4 weeks production</li><li>3D Printed</li><li>US-based manufacturing</li></ul></div>
+            <div><h3 class="text-sm tracking-widest text-neutral-600 mb-3">LEAD TIME</h3><ul class="space-y-2 text-neutral-900"><li>US-based manufacturing</li><li>3–4 weeks production</li><li>Standard & expedited shipping</li></ul></div>
             <div><h3 class="text-sm tracking-widest text-neutral-600 mb-3">AWARDS & EXHIBITIONS</h3><ul class="space-y-2 text-neutral-900"><li>ArtPrize 2025 Design Winner</li><li>ICFF 2026 Launchpad</li></ul></div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Standard Editions -->
+    <!-- Configurator -->
+    <section id="configurator-section" class="w-full border-t border-b border-neutral-200 relative" style="scroll-margin-top:64px">
+      <div id="configurator-overlay" style="position:absolute;inset:0;z-index:5;cursor:pointer;display:flex;align-items:center;justify-content:center;" onclick="activateConfigurator()">
+        <span style="background:#fff;color:#171717;font-family:Inter,sans-serif;font-size:14px;letter-spacing:0.08em;text-transform:uppercase;padding:12px 24px;border:1px solid #e5e5e5;pointer-events:none;">Click to interact</span>
+      </div>
+      <iframe id="configurator-frame" src="configurator/index.html" style="width:100%;height:80vh;min-height:600px;border:none;display:block;"></iframe>
+    </section>
+
+    <!-- Supporting Info -->
     <section class="py-24 bg-neutral-50">
       <div class="max-w-7xl mx-auto px-6 lg:px-12">
-        <h2 class="text-3xl font-bold tracking-tight text-neutral-900 mb-12">Standard Editions</h2>
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="products-grid"></div>
-        <div class="mt-12 bg-stone-900 p-8 lg:p-10">
-          <div class="grid lg:grid-cols-2 gap-8 items-start">
-            <div>
-              <p class="text-[10px] tracking-[0.2em] uppercase text-stone-400 mb-3">Trade & Project Pricing</p>
-              <h3 class="text-xl font-bold text-white mb-3">Specifying for a full project?</h3>
-              <p class="text-sm text-stone-400 leading-relaxed">Orders of 25+ units — kitchen fit-outs, millwork packages, multi-unit residential — qualify for project pricing. Custom dimensions, finish specs, and hole spacing available. We respond within 2 business days with a quote.</p>
-            </div>
-            <div class="flex flex-col gap-4 lg:items-end lg:justify-center">
-              <a href="trade.html" class="inline-flex items-center justify-center gap-2 bg-white text-stone-900 text-xs tracking-[0.15em] uppercase px-6 py-4 hover:bg-stone-100 transition-colors">Studio & Trade Info <svg xmlns="http://www.w3.org/2000/svg" width="16" height="12" viewBox="0 0 18 12" fill="none"><path d="M0 6H16M11 1L16 6L11 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-              <a href="trade.html#inquiry-form-section" class="inline-flex items-center justify-center gap-2 border border-stone-600 text-stone-300 text-xs tracking-[0.15em] uppercase px-6 py-4 hover:border-white hover:text-white transition-colors">Request a Project Quote <svg xmlns="http://www.w3.org/2000/svg" width="16" height="12" viewBox="0 0 18 12" fill="none"><path d="M0 6H16M11 1L16 6L11 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-            </div>
-          </div>
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="bg-white border border-neutral-200 p-8"><h3 class="text-lg text-neutral-900 mb-4">Project Quantities</h3><p class="text-neutral-700 mb-6">Orders over 20 units qualify for project pricing and dedicated production scheduling.</p><a href="trade.html#inquiry-form-section" class="inline-flex items-center gap-2 text-neutral-900 hover:gap-4 transition-all text-sm">Request Quote <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></div>
+          <div class="bg-white border border-neutral-200 p-8"><h3 class="text-lg text-neutral-900 mb-4">Custom Dimensions</h3><p class="text-neutral-700 mb-6">Need a size outside the standard range? Customize any dimension to whatever decimal place you need.</p><a href="trade.html#inquiry-form-section" class="inline-flex items-center gap-2 text-neutral-900 hover:gap-4 transition-all text-sm">Inquire <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></div>
+          <div class="bg-white border border-neutral-200 p-8"><h3 class="text-lg text-neutral-900 mb-4">Lead Time</h3><p class="text-neutral-700 mb-6">Standard configurations ship in 3–4 weeks. Custom orders may require additional time.</p><p class="text-sm text-neutral-600">US-based manufacturing</p></div>
         </div>
       </div>
     </section>
@@ -84,9 +86,8 @@
     <div class="sticky bottom-0 z-40 bg-neutral-900 text-neutral-50 border-t border-neutral-800">
       <div class="max-w-7xl mx-auto px-6 lg:px-12 py-4">
         <div class="flex flex-wrap items-center justify-between gap-4">
-          <div><p class="text-sm text-neutral-400">VOLDT Hardware</p><p class="text-neutral-50">From $225 — 3–4 week lead time</p></div>
+          <div><p class="text-sm text-neutral-400">VOLDT Hardware</p><p class="text-neutral-50">From $49, 3–4 week lead time</p></div>
           <div class="flex flex-wrap gap-3">
-            <a href="hardware-config.html" class="inline-flex items-center gap-2 bg-neutral-50 text-neutral-900 px-6 py-3 hover:bg-neutral-200 transition-colors text-sm">Configure</a>
             <a href="#" class="inline-flex items-center gap-2 border border-neutral-50 text-neutral-50 px-6 py-3 hover:bg-neutral-800 transition-colors text-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download Spec Sheet</a>
           </div>
         </div>
@@ -97,32 +98,65 @@
   </div>
   <script src="js/cart.js"></script><script src="js/header.js"></script>
   <script>
-    const products = [
-      { id:'voldt-pull-6-brass', name:'VOLDT Pull 6" - Brushed Brass', price:245, size:'6"', finish:'Brushed Brass', mounting:'Surface Mount' },
-      { id:'voldt-pull-8-brass', name:'VOLDT Pull 8" - Brushed Brass', price:295, size:'8"', finish:'Brushed Brass', mounting:'Surface Mount' },
-      { id:'voldt-pull-12-brass', name:'VOLDT Pull 12" - Brushed Brass', price:395, size:'12"', finish:'Brushed Brass', mounting:'Surface Mount' },
-      { id:'voldt-pull-6-nickel', name:'VOLDT Pull 6" - Satin Nickel', price:225, size:'6"', finish:'Satin Nickel', mounting:'Surface Mount' },
-      { id:'voldt-pull-8-nickel', name:'VOLDT Pull 8" - Satin Nickel', price:275, size:'8"', finish:'Satin Nickel', mounting:'Surface Mount' },
-      { id:'voldt-pull-12-nickel', name:'VOLDT Pull 12" - Satin Nickel', price:375, size:'12"', finish:'Satin Nickel', mounting:'Surface Mount' },
-    ];
-    const UNSPLASH_IMG = 'https://images.unsplash.com/photo-1732532399621-afd080eb0b52?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400';
-    const grid = document.getElementById('products-grid');
-    products.forEach(p => {
-      const div = document.createElement('div');
-      div.className = 'bg-white border border-neutral-200';
-      div.innerHTML = `
-        <div class="bg-neutral-100" style="aspect-ratio:1"><img src="${UNSPLASH_IMG}" alt="${p.name}" class="w-full h-full object-cover" /></div>
-        <div class="p-6">
-          <h3 class="text-lg text-neutral-900 mb-2">${p.name}</h3>
-          <p class="text-sm text-neutral-600 mb-1">${p.size}</p>
-          <p class="text-sm text-neutral-600 mb-4">${p.mounting}</p>
-          <p class="text-xl text-neutral-900 mb-6">$${p.price}</p>
-          <button onclick="handleAdd('${p.id}','${p.name}',${p.price})" class="w-full bg-neutral-900 text-neutral-50 px-6 py-3 hover:bg-neutral-800 transition-colors text-sm">Add to Cart</button>
-        </div>
-      `;
-      grid.appendChild(div);
+    // --- Gallery slideshow ---
+    (function(){
+      const imgs = [
+        'assets/ap25_1.jpg',
+        'assets/ap25_2.jpg',
+        'assets/ap25_5.JPG',
+        'assets/5bb378fa3b6cbb00f861024bfca2927100ba3f88.jpg',
+        'assets/914133ec573121502a172fcea0d7aaef759c00fe.jpg',
+      ];
+      const FADE = 600; // ms
+      const HOLD = 4000; // ms between advances
+      function buildSlot(el) {
+        const layers = imgs.map((src, i) => {
+          const img = document.createElement('img');
+          img.src = src;
+          img.alt = 'VOLDT hardware';
+          img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity '+FADE+'ms ease;opacity:0;';
+          el.appendChild(img);
+          return img;
+        });
+        return layers;
+      }
+      const leftLayers  = buildSlot(document.getElementById('gallery-left'));
+      const rightLayers = buildSlot(document.getElementById('gallery-right'));
+      let idx = 0;
+      function show(layers, i) {
+        layers.forEach((l, j) => l.style.opacity = j === i ? '1' : '0');
+      }
+      show(leftLayers,  0);
+      show(rightLayers, 1);
+      setInterval(() => {
+        idx = (idx + 1) % imgs.length;
+        show(leftLayers,  idx);
+        show(rightLayers, (idx + 1) % imgs.length);
+      }, HOLD);
+    })();
+
+    function activateConfigurator() {
+      document.getElementById('configurator-overlay').style.display = 'none';
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      const section = document.getElementById('configurator-section');
+      section.addEventListener('mouseleave', () => {
+        document.getElementById('configurator-overlay').style.display = 'flex';
+      });
     });
-    function handleAdd(id, name, price){ addItem({id, name, price, image:UNSPLASH_IMG}); alert('Added to cart!'); }
+    function resizeConfigurator() {
+      const frame = document.getElementById('configurator-frame');
+      const cta = document.querySelector('.sticky');
+      const ctaH = cta ? cta.offsetHeight : 0;
+      frame.style.height = Math.max(600, window.innerHeight - 128 - ctaH) + 'px';
+    }
+    function scrollToConfigurator() {
+      const section = document.getElementById('configurator-section');
+      const top = section.getBoundingClientRect().top + window.scrollY - 64;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+    window.addEventListener('load', resizeConfigurator);
+    window.addEventListener('resize', resizeConfigurator);
   </script>
 </body>
 </html>

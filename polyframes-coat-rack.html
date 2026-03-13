@@ -54,7 +54,7 @@
     const images=['assets/e606d72b5a5629a9b588ac32abe08e258b92b1db.jpg','assets/fed88fa2d4adaef229128481e9b4e47ef2fdce81.jpg'];
     const mainImg=document.getElementById('main-img');const thumbsEl=document.getElementById('thumbs');
     images.forEach((src,i)=>{ const btn=document.createElement('div'); btn.className='bg-stone-100 cursor-pointer overflow-hidden'+(i===0?' ring-selected':''); btn.style.aspectRatio='1'; btn.innerHTML=`<img src="${src}" class="w-full h-full object-cover" />`; btn.addEventListener('click',()=>{ mainImg.src=src; thumbsEl.querySelectorAll('div').forEach(d=>d.classList.remove('ring-selected')); btn.classList.add('ring-selected'); }); thumbsEl.appendChild(btn); });
-    function addToCart(){ addItem({id:'polyframes-coat-rack',name:'PolyFrame Coat Rack',price:499,image:images[0]}); alert('Added to cart!'); }
+    function addToCart(){ const item={id:'polyframes-coat-rack',name:'PolyFrame Coat Rack',price:499,image:images[0]}; addItem(item); showCartToast(item.name); }
   </script>
 </body>
 </html>
