@@ -8,10 +8,9 @@ const panel  = document.getElementById('ctrlpanel');
 // Product select
 const prodSelect = document.getElementById('prodtype');
 
-// Venturi controls
+// Heat Wave controls
 const vTypeSelect = document.getElementById('vtype');
 const fieldVType  = document.getElementById('field-vtype');
-const fieldRad    = document.getElementById('field-rad');
 const fieldRot    = document.getElementById('field-rot');
 const fieldLen    = document.getElementById('field-len');
 
@@ -32,9 +31,6 @@ const lenValue  = document.getElementById('lenVal');
 const twistSlider = document.getElementById('rot');
 const twistValue  = document.getElementById('rotVal');
 
-const radSlider = document.getElementById('rad');
-const radValue  = document.getElementById('radVal');
-
 const ffSlider  = document.getElementById('ff');
 const ffValue   = document.getElementById('ffVal');
 
@@ -45,6 +41,7 @@ const densValue  = document.getElementById('densVal');
 const spSlider = document.getElementById('sp');
 const spValue  = document.getElementById('spVal');
 const fieldSp  = document.getElementById('field-sp');
+const spBadge  = fieldSp.querySelector('.badge');
 
 
 // Viewer (keep your old look)
@@ -69,14 +66,9 @@ function resolveModelUrl(state) {
   // That makes it easy to pre-bake without worrying about decimal formatting.
   const { product } = state;
 
-  if (product === 'venturi') {
-    const vtype = state.venturiType; // 'bar' | 'knob'
-    if (vtype === 'knob') {
-      // knob uses radius + twist
-      return `${MODEL_BASE}/venturi/knob/rad${state.rad}_tw${state.tw}${MODEL_EXT}`;
-    }
-    // bar uses length + twist
-    return `${MODEL_BASE}/venturi/bar/len${state.len}_tw${state.tw}${MODEL_EXT}`;
+  if (product === 'heatwave') {
+    const vtype = state.heatwaveType; // 'chrystal' | 'bulb'
+    return `${MODEL_BASE}/heat_wave/${vtype}/len${state.len}_dens${state.dens}${MODEL_EXT}`;
   }
 
   if (product === 'lakeshore') {
@@ -101,13 +93,24 @@ function resolveModelUrl(state) {
 // ----- UI value display mappings -----
 // These are just for the *label chips* (not filenames).
 // Adjust to match your real-world intended values if you want.
-const LENGTH_LABELS  = ['3-3/4"', '5"', '6-5/16"', '7-9/16"', '10-1/16"', '12-5/8"'];
+const LENGTH_LABELS  = ['3-3/4"', '5"', '6-5/16"', '7-9/16"', '10-1/16"'];
 const TWIST_LABELS   = ['None', 'Minor', 'Max'];
 const FF_LABELS      = ['1', '2', '3', '4', '5'];
 const DENS_LABELS    = ['Low', 'Mid', 'Hi'];
-const RAD_LABELS     = ['3/4"', '1"', '1-1/8"'];
 const SPACING_LABELS = ['3-3/4"', '5"', '6-5/16"', '7-9/16"', '10-1/16"'];
 const SPACING_METERS = [0.09525, 0.127, 0.160338, 0.192088, 0.255588];
+
+// ----- spacing validation -----
+function isSpacingValid() {
+  return parseInt(spSlider.value, 10) <= parseInt(lenSlider.value, 10);
+}
+
+function updateSpacingWarning() {
+  const valid = isSpacingValid();
+  spBadge.textContent = valid ? 'CTC' : 'CTC*';
+  spBadge.classList.toggle('badge--warning', !valid);
+  spBadge.title = valid ? 'Mounting Holes Cetner-to-Center' : 'Spacing cannot exceed handle length';
+}
 
 // ----- state + helpers -----
 let busy = false;
@@ -227,21 +230,20 @@ function getState() {
   const state = {
     // normalized product key
     product:
-      product === '0' ? 'venturi' :
+      product === '0' ? 'heatwave' :
       product === '1' ? 'mechanic' :
       'lakeshore',
 
     // slider indices
     len:  parseInt(lenSlider.value, 10),
     tw:   parseInt(twistSlider.value, 10),
-    rad:  parseInt(radSlider.value, 10),
     ff:   parseInt(ffSlider.value, 10),
     sp:   parseInt(spSlider.value, 10),
     //dens: parseInt(densSlider.value, 10), //----uncomment to revert to old slider
     dens: densIndex, // from segmented control
 
     // subtypes
-    venturiType: (vTypeSelect.value === '1') ? 'knob' : 'bar',
+    heatwaveType: vTypeSelect.value === '1' ? 'bulb' : 'chrystal',
     lakeType: (lsTypeSelect.value === '1') ? 'freeform' : 'simple',
     mechTexture: (mechTxtrSelect.value === '1') ? 'voronoi' : 'gyroid',
   };
@@ -262,25 +264,14 @@ function applyVisibility() {
   show(fieldLen, false);
   show(fieldSp, false);
   show(fieldRot, false);
-  show(fieldRad, false);
   show(fieldFF, false);
   show(fieldDens, false);
 
-  if (st.product === 'venturi') {
+  if (st.product === 'heatwave') {
     show(fieldVType, true);
-
-    // venturi: always uses twist
-    show(fieldRot, true);
-
-    if (st.venturiType === 'knob') {
-      show(fieldRad, true);
-      show(fieldLen, false);
-      show(fieldSp, false);
-    } else {
-      show(fieldLen, true);
-      show(fieldSp, true);
-      show(fieldRad, false);
-    }
+    show(fieldLen, true);
+    show(fieldSp, true);
+    show(fieldDens, true);
     return;
   }
 
@@ -317,10 +308,6 @@ function applyValueChips() {
   const ti = clampIndex(parseInt(twistSlider.value, 10), TWIST_LABELS.length);
   twistValue.textContent = TWIST_LABELS[ti];
 
-  // radius 
-  const ri = clampIndex(parseInt(radSlider.value, 10), RAD_LABELS.length);
-  radValue.textContent = RAD_LABELS[ri];
-
   // form factor
   const ffi = clampIndex(parseInt(ffSlider.value, 10), FF_LABELS.length);
   ffValue.textContent = FF_LABELS[ffi];
@@ -343,6 +330,9 @@ function clampIndex(i, n) {
 
 let loadToken = 0;
 async function loadForCurrentState() {
+  updateSpacingWarning();
+  if (!isSpacingValid()) return;
+
   const token = ++loadToken;
   const st = getState();
   const handleUrl = resolveModelUrl(st);
@@ -450,7 +440,6 @@ function wireUI() {
   wireSmoothSlider(lenSlider);
   wireSmoothSlider(spSlider);
   wireSmoothSlider(twistSlider);
-  wireSmoothSlider(radSlider);
   wireSmoothSlider(ffSlider);
 /* uncomment below to revert to old slider
   densSlider.addEventListener('input', applyValueChips);

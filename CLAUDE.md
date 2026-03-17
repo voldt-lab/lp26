@@ -48,10 +48,11 @@
 **Configurator GLB structure:**
 
 Handle GLBs (grip only, no stems — being re-exported progressively from Rhino):
-- `configurator/mechanic/{voronoi,gyroid}/len{0-5}_dens{0-2}.glb`
-- `configurator/lake_shore/simple/len{0-5}_tw{0-2}.glb`
+- `configurator/mechanic/{voronoi,gyroid}/len{0-4}_dens{0-2}.glb`
+- `configurator/lake_shore/simple/len{0-4}_tw{0-2}.glb`
 - `configurator/lake_shore/free_form/ff{0-4}.glb`
-- `configurator/venturi/knob/rad{0-2}_tw{0-2}.glb`
+- `configurator/heat_wave/chrystal/len{0-4}_dens{0-2}.glb`
+- `configurator/heat_wave/bulb/len{0-4}_dens{0-2}.glb`
 
 Shared stem GLB (one mounting stem, screw hole center at world origin):
 - `configurator/stem.glb`
@@ -121,9 +122,12 @@ Cart page also includes `<script src="js/shopify.js"></script>` between cart.js 
 
 ### Configurator
 - [ ] **Re-export all handle GLBs** from Rhino without stems (only `mechanic/gyroid/len2_dens1.glb` done so far)
+- [ ] **Export Heat Wave Chrystal GLBs** — `heat_wave/chrystal/len{0-4}_dens{0-2}.glb` (old `rad*_tw*` knob files still in folder, need replacing)
+- [ ] **Export Heat Wave Bulb GLBs** — create `heat_wave/bulb/` folder and export `len{0-4}_dens{0-2}.glb`
+- [ ] **Delete old knob files** from `heat_wave/chrystal/` (`rad*_tw*.glb` are leftover and won't load)
 - [ ] Add **screw size selector** to `configurator/main.js` + UI in `configurator/index.html`
 - [ ] Add **mounting style selector** — `resolveStemUrl()` in `main.js` already has a hook for per-style stems; add UI and additional stem GLBs
-- [ ] **Cap max length at 11 1/8"** — remove GLB files for len5 (12-5/8") from all product folders; update slider `max` from 5 to 4 in `index.html`
+- [x] **Cap max length at 10-1/16"** — slider max set to 4, len5 (12-5/8") removed; delete any remaining `len5_*` GLB files from all product folders
 - [ ] **Add 3" length option** — add GLB files and insert a 3" step into the length sliders
 - [ ] Eliminate About Us button once configurator is embedded in the site
 

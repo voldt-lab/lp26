@@ -48,19 +48,18 @@
     <fieldset class="toolbar" id="ctrlpanel">
       <!-- Product select in header -->
       <select class="dropdown" id="prodtype">
-        <option value="0">Venturi</option>
+        <option value="0">Heat Wave</option>
         <option value="1">Mechanic</option>
         <option value="2">Lake Shore</option>
       </select>
       <div class="divider"></div>
 
-      <!-- venturi Type -->
+      <!-- heat wave Type -->
       <div class="field" id="field-vtype">
         <span class="badge">Type</span>
-        <!-- no value chip for Type -->
         <select class="dropdown ctrl" id="vtype">
-          <option value="0">Bar</option>
-          <option value="1" selected>Knob</option>
+          <option value="0" selected>Chrystal</option>
+          <option value="1">Bulb</option>
         </select>
       </div>
       <!-- lake shape picker-->
@@ -82,29 +81,23 @@
         </select>
       </div>
 
-      <!-- venturi + lakeshore + heatwave length -->
+      <!-- heat wave + lakeshore + mechanic length -->
       <div class="field" id="field-len">
         <span class="badge" title="Spacing of the mounting points">Size</span>
         <span id="lenVal" class="value">3-3/4"</span>
-        <input id="len" class="slider ctrl" type="range" min="0" max="5" step="1" value="3" title="Spacing of the mounting points"/>
+        <input id="len" class="slider ctrl" type="range" min="0" max="4" step="1" value="3" title="Spacing of the mounting points"/>
       </div>
       <!-- hole spacing -->
       <div class="field" id="field-sp">
-        <span class="badge">Hole Spacing</span>
+        <span class="badge">CTC</span>
         <span id="spVal" class="value">5"</span>
         <input id="sp" class="slider ctrl" type="range" min="0" max="4" step="1" value="1" />
       </div>
-      <!-- Venturi + lake shore twist -->
+      <!-- lake shore twist -->
       <div class="field" id="field-rot">
         <span class="badge">Twist</span>
         <span id="rotVal" class="value">Minor</span>
         <input id="rot" class="slider ctrl" type="range" min="0" max="2" step="1" value="2" />
-      </div>
-      <!-- venturi Radius -->
-      <div class="field" id="field-rad">
-        <span class="badge">Radius</span>
-        <span id="radVal" class="value">1"</span>
-        <input id="rad" class="slider ctrl" type="range" min="0" max="2" step="1" value="1" />
       </div>
 
       <!-- lake form Factor -->

@@ -149,10 +149,14 @@ body{
 
 
 /* labels + numeric chips */
-.badge{ 
-  font-size: 13px; 
-  color:#d5d9de; 
-  opacity:.9; 
+.badge{
+  font-size: 13px;
+  color:#d5d9de;
+  opacity:.9;
+}
+.badge--warning {
+  color: #e05050;
+  opacity: 1;
 }
 .value{
   background: transparent !important;
