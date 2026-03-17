@@ -36,21 +36,36 @@
 | `js/cart.js` | Cart state in localStorage — `addItem`, `removeItem`, `updateQty`, `clearCart`, `getCart`, `getTotal`, `getCount`, `updateCartBadge` |
 | `js/shopify.js` | Shopify Storefront API integration — `createShopifyCheckout()` maps cart items to variant GIDs, calls `cartCreate` mutation, redirects to `checkoutUrl` |
 | `js/header.js` | Injects shared header + footer HTML into `#site-header` / `#site-footer`; wires nav dropdown + scroll shadow |
-| `js/nav.js` | Older standalone nav script — superseded by header.js; may still be referenced in some pages |
 
 ### Configurator (iframe embed at `configurator/`)
 | File | Purpose |
 |------|---------|
 | `configurator/index.html` | 3D hardware configurator UI |
-| `configurator/main.js` | UI wiring — product/variant selects, sliders with smooth drag, density toggle |
-| `configurator/viewer.js` | Three.js GLB viewer |
+| `configurator/main.js` | UI wiring — product/variant selects, length + hole spacing + twist + density sliders, density segmented toggle |
+| `configurator/viewer.js` | Three.js GLB viewer — `loadModel()` for single GLB, `loadComposite()` for handle + stems |
 | `configurator/styles.css` | Configurator-specific styles (dark theme) |
 
 **Configurator GLB structure:**
+
+Handle GLBs (grip only, no stems — being re-exported progressively from Rhino):
 - `configurator/mechanic/{voronoi,gyroid}/len{0-5}_dens{0-2}.glb`
 - `configurator/lake_shore/simple/len{0-5}_tw{0-2}.glb`
 - `configurator/lake_shore/free_form/ff{0-4}.glb`
 - `configurator/venturi/knob/rad{0-2}_tw{0-2}.glb`
+
+Shared stem GLB (one mounting stem, screw hole center at world origin):
+- `configurator/stem.glb`
+
+**Composite loading (`loadComposite` in viewer.js):**
+Loads handle GLB + `stem.glb` in parallel. Auto-detects the handle's longest bounding-box axis, then clones the stem twice and offsets each copy by ±(spacingMeters/2) along that axis. The far clone is mirrored so both posts face outward.
+
+**Hole spacing values (in `main.js`):**
+```js
+SPACING_LABELS = ['3-3/4"', '5"', '6-5/16"', '7-9/16"', '10-1/16"']
+SPACING_METERS = [0.09525, 0.127, 0.160338, 0.192088, 0.255588]
+```
+
+**GLB re-export status:** Only `mechanic/gyroid/len2_dens1.glb` has been re-exported without stems. All other handle GLBs still have baked-in stems and will look wrong until re-exported from Rhino.
 
 ## Shared Layout Pattern
 Every page:
@@ -61,7 +76,7 @@ Every page:
 <script src="js/cart.js"></script>
 <script src="js/header.js"></script>
 ```
-header.js injects all nav/footer HTML — never edit nav links directly in pages.
+`header.js` injects all nav/footer HTML — never edit nav links directly in pages.
 
 Cart page also includes `<script src="js/shopify.js"></script>` between cart.js and header.js.
 
@@ -70,15 +85,11 @@ Cart page also includes `<script src="js/shopify.js"></script>` between cart.js 
 ### Typography / Color Rules
 - Max content width: `max-w-[1600px]` (most pages) or `max-w-[1800px]` (custom-work)
 - Horizontal padding: `px-8 lg:px-16` (most) or `px-12 lg:px-20` (custom-work)
-- **Grey on white**: use stone-400–600 range (darker = more legible)
-- **Grey on dark (stone-900) backgrounds**: use stone-100–400 range (brighter needed)
-  - Headings: `text-white`
-  - Subtitle/tagline: `text-stone-200`
-  - Body paragraphs: `text-stone-400`
-  - List items: `text-stone-300`
-  - Bold product names in lists: `text-stone-100`
-  - Section eyebrow labels: `text-stone-400`
-  - Decorative dashes (—): `text-stone-600` (intentionally dim)
+- **Grey on white**: use stone-400–600 range
+- **Grey on dark (stone-900) backgrounds**: use stone-100–400 range
+  - Headings: `text-white` / Subtitle: `text-stone-200` / Body: `text-stone-400`
+  - List items: `text-stone-300` / Bold product names: `text-stone-100`
+  - Section eyebrow labels: `text-stone-400` / Decorative dashes: `text-stone-600`
 - Buttons (dark bg cards): `border border-white text-white hover:bg-white hover:text-stone-900`
 
 ### Cart Item Shape
@@ -90,15 +101,14 @@ Cart page also includes `<script src="js/shopify.js"></script>` between cart.js 
 
 - **Store**: `voldt-2.myshopify.com`
 - **Storefront API token** (public, safe client-side): `6f7494dd98f3629db5b1132b90087320`
-- **Setup**: Headless — custom frontend + Shopify checkout only. The Shopify Online Store theme redirects all storefront pages to `voldt.design` via `theme.liquid` meta refresh; checkout URLs (`/checkouts/...`) are unaffected.
-- **Checkout flow**: `createShopifyCheckout()` in `js/shopify.js` reads localStorage cart, maps item IDs to Shopify variant GIDs, calls the `cartCreate` GraphQL mutation, and redirects to the returned `checkoutUrl`.
-- **Cart notes**: Detroit lamp color (Black/Blue/Berry/Mint) is not a Shopify variant — it's passed as a cart note via `buildNote()` so it's visible in the order.
-- **Custom work / bespoke orders**: Handled via Shopify Draft Orders in the Admin GUI — no API needed. Create order manually after agreeing on scope + price, send invoice to customer.
+- **Setup**: Headless — custom frontend + Shopify checkout only. Theme redirects storefront pages to `voldt.design` via `theme.liquid`; checkout URLs are unaffected.
+- **Cart notes**: Detroit lamp color (Black/Blue/Berry/Mint) is passed as a cart note via `buildNote()` — not a Shopify variant.
+- **Custom work**: Handled via Shopify Draft Orders in Admin GUI — no API needed.
 
 ### Variant ID Map (in `js/shopify.js`)
 | Cart ID | Product |
 |---------|---------|
-| `polyframes-coat-rack` | PolyFrame Coat Rack (single variant) |
+| `polyframes-coat-rack` | PolyFrame Coat Rack |
 | `polyframes-table-lamp-a` / `-b` | PolyFrame Table Lamp Style A/B |
 | `polyframes-floor-lamp-a` / `-b` | PolyFrame Floor Lamp Style A/B |
 | `polyframes-coffee-table` | PolyFrame Coffee Table |
@@ -107,19 +117,20 @@ Cart page also includes `<script src="js/shopify.js"></script>` between cart.js 
 | `detroit-table-lamp-a-standard` / `-large` | Detroit Table Lamp Style A, Standard/Large |
 | `detroit-table-lamp-b-standard` / `-large` | Detroit Table Lamp Style B, Standard/Large |
 
-### Remaining Shopify Work
-- Add Shopify products + variant IDs for: VOLDT Hardware (configurator)
-- Wire configurator state → cart item IDs → variant GIDs for hardware products
+## To-Dos
 
-## Configurator To-Dos
+### Configurator
+- [ ] **Re-export all handle GLBs** from Rhino without stems (only `mechanic/gyroid/len2_dens1.glb` done so far)
 - [ ] Add **screw size selector** to `configurator/main.js` + UI in `configurator/index.html`
-- [ ] Add **mounting style selector** to `configurator/main.js` + UI in `configurator/index.html`
-- [ ] **Cap max length at 11 1/8"** — remove GLB files longer than this from `configurator/mechanic/` and `configurator/lake_shore/`; remove corresponding steps from the length sliders in `configurator/main.js`
-- [ ] **Add 3" length option** — add GLB files and insert the 3" step into the length sliders
-- [ ] eliminate about us button once embedded
+- [ ] Add **mounting style selector** — `resolveStemUrl()` in `main.js` already has a hook for per-style stems; add UI and additional stem GLBs
+- [ ] **Cap max length at 11 1/8"** — remove GLB files for len5 (12-5/8") from all product folders; update slider `max` from 5 to 4 in `index.html`
+- [ ] **Add 3" length option** — add GLB files and insert a 3" step into the length sliders
+- [ ] Eliminate About Us button once configurator is embedded in the site
 
-## Site To-Dos
-- [ ] Add the retail versions of hardware - flesh out their product cards
+### Shopify
+- [ ] Add Shopify products + variant IDs for VOLDT Hardware (configurator)
+- [ ] Wire configurator state → cart item IDs → variant GIDs
+
 
 ## Forms
 
@@ -128,4 +139,4 @@ Cart page also includes `<script src="js/shopify.js"></script>` between cart.js 
 | `contact.html` | `https://formspree.io/f/mnjgjnlb` |
 | `custom-work.html` | `https://formspree.io/f/xzdjdndr` |
 
-Both use AJAX mode (`Accept: application/json`) — no page redirect on submit; form is replaced with an inline success message on success.
+Both use AJAX mode (`Accept: application/json`) — form replaced with inline success message on submit.

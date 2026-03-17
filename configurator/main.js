@@ -42,6 +42,10 @@ const ffValue   = document.getElementById('ffVal');
 const densToggle = document.getElementById('densToggle');
 const densValue  = document.getElementById('densVal');
 
+const spSlider = document.getElementById('sp');
+const spValue  = document.getElementById('spVal');
+const fieldSp  = document.getElementById('field-sp');
+
 
 // Viewer (keep your old look)
 const viewer = createViewer(root, {
@@ -55,6 +59,10 @@ const viewer = createViewer(root, {
 // IMPORTANT: This is the *only* place you should need to edit to match your actual filenames.
 const MODEL_BASE = '.';   // root folder
 const MODEL_EXT  = '.glb';     // change to '.gltf' if needed
+
+function resolveStemUrl() {
+  return `${MODEL_BASE}/stem${MODEL_EXT}`;
+}
 
 function resolveModelUrl(state) {
   // We intentionally use *indices* (slider values) in filenames.
@@ -93,11 +101,13 @@ function resolveModelUrl(state) {
 // ----- UI value display mappings -----
 // These are just for the *label chips* (not filenames).
 // Adjust to match your real-world intended values if you want.
-const LENGTH_LABELS = ['3-3/4"', '5"', '6-5/16"', '7-9/16"', '10-1/16"', '12-5/8"'];
-const TWIST_LABELS  = ['None', 'Minor', 'Max'];
-const FF_LABELS     = ['1', '2', '3', '4', '5'];
-const DENS_LABELS   = ['Low', 'Mid', 'Hi'];
-const RAD_LABELS    = ['3/4"', '1"', '1-1/8"'];
+const LENGTH_LABELS  = ['3-3/4"', '5"', '6-5/16"', '7-9/16"', '10-1/16"', '12-5/8"'];
+const TWIST_LABELS   = ['None', 'Minor', 'Max'];
+const FF_LABELS      = ['1', '2', '3', '4', '5'];
+const DENS_LABELS    = ['Low', 'Mid', 'Hi'];
+const RAD_LABELS     = ['3/4"', '1"', '1-1/8"'];
+const SPACING_LABELS = ['3-3/4"', '5"', '6-5/16"', '7-9/16"', '10-1/16"'];
+const SPACING_METERS = [0.09525, 0.127, 0.160338, 0.192088, 0.255588];
 
 // ----- state + helpers -----
 let busy = false;
@@ -224,8 +234,9 @@ function getState() {
     // slider indices
     len:  parseInt(lenSlider.value, 10),
     tw:   parseInt(twistSlider.value, 10),
-    rad:  parseInt(radSlider.value, 10),     
+    rad:  parseInt(radSlider.value, 10),
     ff:   parseInt(ffSlider.value, 10),
+    sp:   parseInt(spSlider.value, 10),
     //dens: parseInt(densSlider.value, 10), //----uncomment to revert to old slider
     dens: densIndex, // from segmented control
 
@@ -249,6 +260,7 @@ function applyVisibility() {
 
   // shared sliders
   show(fieldLen, false);
+  show(fieldSp, false);
   show(fieldRot, false);
   show(fieldRad, false);
   show(fieldFF, false);
@@ -263,8 +275,10 @@ function applyVisibility() {
     if (st.venturiType === 'knob') {
       show(fieldRad, true);
       show(fieldLen, false);
+      show(fieldSp, false);
     } else {
       show(fieldLen, true);
+      show(fieldSp, true);
       show(fieldRad, false);
     }
     return;
@@ -275,11 +289,13 @@ function applyVisibility() {
 
     if (st.lakeType === 'simple') {
       show(fieldLen, true);
+      show(fieldSp, true);
       show(fieldRot, true);
       show(fieldFF, false);
     } else {
       show(fieldFF, true);
       show(fieldLen, false);
+      show(fieldSp, false);
       show(fieldRot, false);
     }
     return;
@@ -288,6 +304,7 @@ function applyVisibility() {
   // mechanic
   show(fieldHwTxtr, true);
   show(fieldLen, true);
+  show(fieldSp, true);
   show(fieldDens, true);
 }
 
@@ -308,6 +325,10 @@ function applyValueChips() {
   const ffi = clampIndex(parseInt(ffSlider.value, 10), FF_LABELS.length);
   ffValue.textContent = FF_LABELS[ffi];
 
+  // hole spacing
+  const spi = clampIndex(parseInt(spSlider.value, 10), SPACING_LABELS.length);
+  spValue.textContent = SPACING_LABELS[spi];
+
   // density
   //const di = clampIndex(parseInt(densSlider.value, 10), DENS_LABELS.length); 
   //densValue.textContent = DENS_LABELS[di];
@@ -324,14 +345,17 @@ let loadToken = 0;
 async function loadForCurrentState() {
   const token = ++loadToken;
   const st = getState();
-  const url = resolveModelUrl(st);
+  const handleUrl = resolveModelUrl(st);
 
-  if (!url) return;
+  if (!handleUrl) return;
 
   setBusy(true, 'Loading model...');
 
+  const stemUrl  = resolveStemUrl();
+  const spacingM = SPACING_METERS[clampIndex(st.sp, SPACING_METERS.length)];
+
   try {
-    await viewer.loadModel(url, { fit: true, overrideMaterials: true });
+    await viewer.loadComposite(handleUrl, stemUrl, spacingM);
 
     // only the latest request should update status
     if (token !== loadToken) return;
@@ -424,6 +448,7 @@ function wireUI() {
   }
 
   wireSmoothSlider(lenSlider);
+  wireSmoothSlider(spSlider);
   wireSmoothSlider(twistSlider);
   wireSmoothSlider(radSlider);
   wireSmoothSlider(ffSlider);

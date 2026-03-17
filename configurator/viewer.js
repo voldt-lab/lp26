@@ -275,6 +275,22 @@ export function createViewer(container, opts = {}) {
     controls.update();
   }
 
+  function applyHouseMaterial(obj, override = true) {
+    obj.traverse(o => {
+      if (!o.isMesh) return;
+      if (o.geometry && !o.geometry.attributes.normal) {
+        o.geometry.computeVertexNormals();
+      }
+      if (override) {
+        o.material = satinMat;
+      }
+      if (o.material && 'envMapIntensity' in o.material) {
+        o.material.envMapIntensity = 1.2;
+        o.material.needsUpdate = true;
+      }
+    });
+  }
+
   // Load a GLTF/GLB and apply the “house” material style
   const gltfLoader = new GLTFLoader();
   // Draco (for GLB/GLTF with KHR_draco_mesh_compression)
@@ -304,22 +320,7 @@ export function createViewer(container, opts = {}) {
     const model = gltf.scene || gltf.scenes?.[0];
     if (!model) throw new Error(`No scene in glTF: ${url}`);
 
-    model.traverse(o => {
-      if (!o.isMesh) return;
-
-      if (o.geometry && !o.geometry.attributes.normal) {
-        o.geometry.computeVertexNormals();
-      }
-
-      if (overrideMaterials) {
-        o.material = satinMat; // or your existing assignment logic
-      }
-
-      if (o.material && 'envMapIntensity' in o.material) {
-        o.material.envMapIntensity = 1.2;
-        o.material.needsUpdate = true;
-      }
-    });
+    applyHouseMaterial(model, overrideMaterials);
 
     // Only now replace the current model
     clear();
@@ -330,6 +331,50 @@ export function createViewer(container, opts = {}) {
       fitToObject(group, { frameCamera: !hasFramedOnce });
       hasFramedOnce = true;
     }
+  }
+
+  async function loadComposite(handleUrl, stemUrl, spacingMeters) {
+    if (!handleUrl) throw new Error('loadComposite requires a handleUrl');
+
+    const gen = ++loadGen;
+    lastUrl = null;
+
+    const [handleGltf, stemGltf] = await Promise.all([
+      gltfLoader.loadAsync(handleUrl),
+      gltfLoader.loadAsync(stemUrl),
+    ]);
+    if (gen !== loadGen) return;
+
+    const handle = handleGltf.scene || handleGltf.scenes?.[0];
+    const stemTemplate = stemGltf.scene || stemGltf.scenes?.[0];
+    if (!handle) throw new Error(`No scene in handle glTF: ${handleUrl}`);
+
+    applyHouseMaterial(handle);
+
+    // Detect the handle's long axis from its bounding box
+    const hBox = new THREE.Box3().setFromObject(handle);
+    const hSize = new THREE.Vector3(); hBox.getSize(hSize);
+    const axis = hSize.x >= hSize.y && hSize.x >= hSize.z ? 'x'
+               : hSize.z >= hSize.y ? 'z' : 'y';
+
+    clear();
+    lastUrl = handleUrl;
+    group.add(handle);
+
+    if (stemTemplate && spacingMeters > 0) {
+      const half = spacingMeters / 2;
+      const stemA = stemTemplate.clone(true);
+      const stemB = stemTemplate.clone(true);
+      applyHouseMaterial(stemA);
+      applyHouseMaterial(stemB);
+      stemA.position[axis] =  half;
+      stemB.position[axis] = -half;
+      stemB.scale[axis] = -1; // mirror so both posts face outward
+      group.add(stemA, stemB);
+    }
+
+    fitToObject(group, { frameCamera: !hasFramedOnce });
+    hasFramedOnce = true;
   }
 
   function zoomToFit() {
@@ -368,6 +413,7 @@ export function createViewer(container, opts = {}) {
     setLoading,
     clear,
     loadModel,
+    loadComposite,
     setEnvironment,
     setBloomEnabled,
     setToneExposure,
