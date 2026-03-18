@@ -26,19 +26,15 @@
   <script src="js/header.js"></script>
   <script>
     const products = [
-      { id:'vestige', name:'VOLDT Hardware', category:'Vestige', size:'Configurable', img:'assets/914133ec573121502a172fcea0d7aaef759c00fe.jpg', hoverImg:null, link:'hardware-config.html' },
-      { id:'pf-floor', name:'PolyFrame Floor Lamp', category:'PolyFrames', size:null, img:'assets/29da261fae11e8815506ffcaee809b2fcbd34bfe.jpg', hoverImg:'assets/9978a8f52dc984036ee626d49e8bb08203893fe0.jpg', link:'polyframes-floor-lamp.html' },
+      { id:'vestige', name:'VOLDT Hardware', category:'Vestige', size:'Configurable', img:'assets/914133ec573121502a172fcea0d7aaef759c00fe.jpg', hoverImg:'assets/ap25_1.jpg', link:'hardware-config.html' },
+      { id:'pf-floor', name:'PolyFrame Floor Lamp', category:'PolyFrames', size:null, img:'assets/29da261fae11e8815506ffcaee809b2fcbd34bfe.jpg', hoverImg:'assets/1b923dec13dce24528a89dc0d34b282870f24044.jpg', link:'polyframes-floor-lamp.html' },
+      { id:'dtla', name:'Detroit Table Lamp A', category:'Detroit Lights', size:'Shade Style A', img:'assets/8afb5fbb428ef6e188acefcc150d78921c1a06a6.jpg', hoverImg:'assets/9938ab6682fc63e127dee83e1088543f4df50ad1.jpg', link:'detroit-table-lamp.html?style=A' },
       { id:'pf-table', name:'PolyFrame Table Lamp', category:'PolyFrames', size:null, img:'assets/1967efac521aba866dc207ed580f4382af241561.jpg', hoverImg:'assets/e2cdfd0d1d94bbb72793037d94d5162bf2d2d773.jpg', link:'polyframes-table-lamp.html' },
+      { id:'dpa', name:'Detroit Pendant A', category:'Detroit Lights', size:'Shade Style A', img:'assets/ca93ba95ec2321cecc3f6971cc7b2456a99f48fc.jpg', hoverImg:'assets/92ce76be27045bd0283d04f5ae520db1c5684f4d.jpg', link:'detroit-pendant.html?style=A' },
       { id:'pf-coat', name:'PolyFrame Coat Rack', category:'PolyFrames', size:null, img:'assets/e606d72b5a5629a9b588ac32abe08e258b92b1db.jpg', hoverImg:'assets/fed88fa2d4adaef229128481e9b4e47ef2fdce81.jpg', link:'polyframes-coat-rack.html' },
+      { id:'dtlb', name:'Detroit Table Lamp B', category:'Detroit Lights', size:'Shade Style B', img:'assets/f70e26754c5836fb0d7f077c0da565d8d4d3b7b3.jpg', hoverImg:'assets/620fdc99d9a2f8039d4fd6ab9718cecf6b27f8f9.jpg', link:'detroit-table-lamp.html?style=B' },
       { id:'pf-coffee', name:'PolyFrame Coffee Table', category:'PolyFrames', size:null, img:'assets/90efc59c9eb30586b1c1fff261db8a917a4daff8.jpg', hoverImg:'assets/dec5396a8cc6e83670576a5d0a288c74f3074e6b.jpg', link:'polyframes-coffee-table.html' },
-      { id:'dtlb-lg', name:'Detroit Table Lamp B', category:'Detroit Lights', size:'Large', img:'assets/fc6a8d985282412e62851849b27a10efead95eb2.jpg', hoverImg:'assets/620fdc99d9a2f8039d4fd6ab9718cecf6b27f8f9.jpg', link:'detroit-table-lamp.html' },
-      { id:'dpa-lg', name:'Detroit Pendant A', category:'Detroit Lights', size:'Large', img:'assets/a6f766489f20f93f24f164ec925ce2cdb2eb835f.jpg', hoverImg:'assets/177f5475887bf8810ce02749613cac0cc9b75a4b.jpg', link:'detroit-pendant.html' },
-      { id:'dtla-lg', name:'Detroit Table Lamp A', category:'Detroit Lights', size:'Large', img:'assets/e005ffb8592589ea9883bf08ef2f100ef0b52bfb.jpg', hoverImg:'assets/38d7962704f7aa49355dd98db701b27a73d9e768.jpg', link:'detroit-table-lamp.html' },
-      { id:'dpb-lg', name:'Detroit Pendant B', category:'Detroit Lights', size:'Large', img:'assets/c3f1ecb063bbf7eb7ea437040bcf23b5d7c14808.jpg', hoverImg:'assets/a593fe151473b32b526b790458cee132453c2f08.jpg', link:'detroit-pendant.html' },
-      { id:'dpa-std', name:'Detroit Pendant A', category:'Detroit Lights', size:'Standard', img:'assets/ca93ba95ec2321cecc3f6971cc7b2456a99f48fc.jpg', hoverImg:'assets/92ce76be27045bd0283d04f5ae520db1c5684f4d.jpg', link:'detroit-pendant.html' },
-      { id:'dpb-std', name:'Detroit Pendant B', category:'Detroit Lights', size:'Standard', img:'assets/180fc790d95222d8b1e61a805e5d1a0cd85f30b0.jpg', hoverImg:'assets/d553197044225f86bdf58676f1b5016e67d7a92c.jpg', link:'detroit-pendant.html' },
-      { id:'dtla-std', name:'Detroit Table Lamp A', category:'Detroit Lights', size:'Standard', img:'assets/8afb5fbb428ef6e188acefcc150d78921c1a06a6.jpg', hoverImg:'assets/9938ab6682fc63e127dee83e1088543f4df50ad1.jpg', link:'detroit-table-lamp.html' },
-      { id:'dtlb-std', name:'Detroit Table Lamp B', category:'Detroit Lights', size:'Standard', img:'assets/f70e26754c5836fb0d7f077c0da565d8d4d3b7b3.jpg', hoverImg:null, link:'detroit-table-lamp.html' },
+      { id:'dpb', name:'Detroit Pendant B', category:'Detroit Lights', size:'Shade Style B', img:'assets/180fc790d95222d8b1e61a805e5d1a0cd85f30b0.jpg', hoverImg:'assets/d553197044225f86bdf58676f1b5016e67d7a92c.jpg', link:'detroit-pendant.html?style=B' },
     ];
     const grid = document.getElementById('product-grid');
     products.forEach(p => {

@@ -29,12 +29,11 @@ document.addEventListener('DOMContentLoaded', () => {
         <nav class="divide-y divide-yellow-600/10">
           <a href="shop-all.html" class="block w-full py-4 text-center text-xs tracking-[0.15em] uppercase text-stone-900 hover:bg-stone-50 font-medium">Shop All</a>
           <div>
-            <div class="w-full flex items-center justify-center py-4 text-xs tracking-[0.15em] uppercase font-medium hover:bg-stone-50">
-              <a href="collections.html" class="text-stone-900">Collections</a>
-              <button id="collections-chevron-btn" class="ml-2 flex items-center text-stone-900" aria-label="Expand collections">
+            <button id="collections-btn" class="w-full flex items-center justify-center py-4 text-xs tracking-[0.15em] uppercase text-stone-900 hover:bg-stone-50 font-medium">
+              <span class="flex items-center gap-2"><a href="collections.html" id="collections-link" class="text-stone-900 hover:text-stone-600">Collections</a>
                 <svg id="collections-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .2s"><polyline points="6 9 12 15 18 9"/></svg>
-              </button>
-            </div>
+              </span>
+            </button>
             <div id="collections-menu" class="bg-stone-50 border-t border-yellow-600/10" style="display:none">
               <a href="polyframes.html" class="block w-full py-3 text-center text-xs text-stone-700 hover:text-stone-900 hover:bg-stone-50 border-b border-yellow-600/10">PolyFrames</a>
               <a href="detroit-lights.html" class="block w-full py-3 text-center text-xs text-stone-700 hover:text-stone-900 hover:bg-stone-50 border-b border-yellow-600/10">Detroit Lights</a>
@@ -44,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <a href="trade.html" class="block w-full py-4 text-center text-xs tracking-[0.15em] uppercase text-stone-900 hover:bg-stone-50 font-medium">Studio & Trade</a>
           <div>
             <button id="info-btn" class="w-full flex items-center justify-center py-4 text-xs tracking-[0.15em] uppercase text-stone-900 hover:bg-stone-50 font-medium">
-              <span class="flex items-center gap-2">Info
+              <span class="flex items-center gap-2"><a href="about.html" id="info-link" class="text-stone-900 hover:text-stone-600">Info</a>
                 <svg id="info-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .2s"><polyline points="6 9 12 15 18 9"/></svg>
               </span>
             </button>
@@ -63,10 +62,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const menuBtn = document.getElementById('menu-btn');
     const menuIcon = document.getElementById('menu-icon');
     const navDropdown = document.getElementById('nav-dropdown');
-    const collectionsChevronBtn = document.getElementById('collections-chevron-btn');
+    const collectionsBtn = document.getElementById('collections-btn');
+    const collectionsLink = document.getElementById('collections-link');
     const collectionsMenu = document.getElementById('collections-menu');
     const collectionsChevron = document.getElementById('collections-chevron');
     const infoBtn = document.getElementById('info-btn');
+    const infoLink = document.getElementById('info-link');
     const infoMenu = document.getElementById('info-menu');
     const infoChevron = document.getElementById('info-chevron');
 
@@ -93,17 +94,21 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!menuOpen) { collectionsOpen=false; infoOpen=false; collectionsMenu.style.display='none'; infoMenu.style.display='none'; }
     });
 
-    collectionsChevronBtn.addEventListener('click', () => {
+    collectionsBtn.addEventListener('click', () => {
       collectionsOpen = !collectionsOpen;
       collectionsMenu.style.display = collectionsOpen ? 'block' : 'none';
       collectionsChevron.style.transform = collectionsOpen ? 'rotate(180deg)' : '';
     });
+
+    collectionsLink.addEventListener('click', (e) => { e.stopPropagation(); closeAll(); });
 
     infoBtn.addEventListener('click', () => {
       infoOpen = !infoOpen;
       infoMenu.style.display = infoOpen ? 'block' : 'none';
       infoChevron.style.transform = infoOpen ? 'rotate(180deg)' : '';
     });
+
+    infoLink.addEventListener('click', (e) => { e.stopPropagation(); closeAll(); });
 
     document.querySelectorAll('#nav-dropdown a').forEach(link => link.addEventListener('click', closeAll));
 
