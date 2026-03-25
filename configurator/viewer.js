@@ -351,15 +351,16 @@ export function createViewer(container, opts = {}) {
 
     applyHouseMaterial(handle);
 
-    // Detect the handle's long axis from its bounding box
-    const hBox = new THREE.Box3().setFromObject(handle);
-    const hSize = new THREE.Vector3(); hBox.getSize(hSize);
-    const axis = hSize.x >= hSize.y && hSize.x >= hSize.z ? 'x'
-               : hSize.z >= hSize.y ? 'z' : 'y';
-
     clear();
     lastUrl = handleUrl;
     group.add(handle);
+
+    // Compute handle bounds now that it's in the scene graph
+    const hBox = new THREE.Box3().setFromObject(handle);
+    const hSize = new THREE.Vector3(); hBox.getSize(hSize);
+    const hCenter = new THREE.Vector3(); hBox.getCenter(hCenter);
+    const axis = hSize.x >= hSize.y && hSize.x >= hSize.z ? 'x'
+               : hSize.z >= hSize.y ? 'z' : 'y';
 
     if (stemTemplate && spacingMeters > 0) {
       const half = spacingMeters / 2;
@@ -367,13 +368,29 @@ export function createViewer(container, opts = {}) {
       const stemB = stemTemplate.clone(true);
       applyHouseMaterial(stemA);
       applyHouseMaterial(stemB);
-      stemA.position[axis] =  half;
-      stemB.position[axis] = -half;
+      // Offset stems from the handle's actual bounding box center, not group origin
+      stemA.position.copy(hCenter); stemA.position[axis] += half;
+      stemB.position.copy(hCenter); stemB.position[axis] -= half;
       stemB.scale[axis] = -1; // mirror so both posts face outward
       group.add(stemA, stemB);
     }
 
-    fitToObject(group, { frameCamera: !hasFramedOnce });
+    // Frame camera to the assembled group WITHOUT moving any models.
+    // (fitToObject also repositions obj3d, which would break the Rhino-exported positions.)
+    const aBox = new THREE.Box3().setFromObject(group, true);
+    if (!aBox.isEmpty() && !hasFramedOnce) {
+      const aSize   = new THREE.Vector3(); aBox.getSize(aSize);
+      const aCenter = new THREE.Vector3(); aBox.getCenter(aCenter);
+      const radius  = 0.5 * aSize.length() || 1;
+      camera.near = Math.max(0.01, radius / 100);
+      camera.far  = radius * 20;
+      camera.updateProjectionMatrix();
+      const dist = radius / Math.tan(THREE.MathUtils.degToRad(camera.fov * 0.5));
+      camera.position.set(aCenter.x + dist, aCenter.y + dist * 0.7, aCenter.z + dist * 1.2);
+      camera.lookAt(aCenter);
+      controls.target.copy(aCenter);
+      controls.update();
+    }
     hasFramedOnce = true;
   }
 
