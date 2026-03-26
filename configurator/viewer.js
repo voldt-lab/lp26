@@ -368,9 +368,12 @@ export function createViewer(container, opts = {}) {
       const stemB = stemTemplate.clone(true);
       applyHouseMaterial(stemA);
       applyHouseMaterial(stemB);
-      // Offset stems from the handle's actual bounding box center, not group origin
-      stemA.position.copy(hCenter); stemA.position[axis] += half;
-      stemB.position.copy(hCenter); stemB.position[axis] -= half;
+      // Use bounding-box center ONLY for the length axis (symmetric spacing).
+      // For the two perpendicular axes use 0 — handles are exported from Rhino
+      // with their screw-hole axis through the world origin, so copying hCenter
+      // in those axes embeds the stems inconsistently for different handle lengths.
+      stemA.position.set(0, 0, 0); stemA.position[axis] = hCenter[axis] + half;
+      stemB.position.set(0, 0, 0); stemB.position[axis] = hCenter[axis] - half;
       stemB.scale[axis] = -1; // mirror so both posts face outward
       group.add(stemA, stemB);
     }
