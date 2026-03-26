@@ -93,7 +93,7 @@ function resolveModelUrl(state) {
 // ----- UI value display mappings -----
 // These are just for the *label chips* (not filenames).
 // Adjust to match your real-world intended values if you want.
-const LENGTH_LABELS  = ['3-3/4"', '5"', '6-5/16"', '7-9/16"', '10-1/16"'];
+const LENGTH_LABELS  = ['5-11/16"', '7-9/16"', '9-1/2"', '11-3/8"', '15-1/8"'];
 const TWIST_LABELS   = ['None', 'Minor', 'Max'];
 const FF_LABELS      = ['1', '2', '3', '4', '5'];
 const DENS_LABELS    = ['Low', 'Mid', 'Hi'];
