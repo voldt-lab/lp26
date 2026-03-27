@@ -121,14 +121,13 @@ Cart page also includes `<script src="js/shopify.js"></script>` between cart.js 
 ## To-Dos
 
 ### Configurator
-- [ ] **Re-export all handle GLBs** from Rhino without stems (only `mechanic/gyroid/len2_dens1.glb` done so far)
-- [ ] **Export Heat Wave Chrystal GLBs** — `heat_wave/chrystal/len{0-4}_dens{0-2}.glb` (old `rad*_tw*` knob files still in folder, need replacing)
-- [ ] **Export Heat Wave Bulb GLBs** — create `heat_wave/bulb/` folder and export `len{0-4}_dens{0-2}.glb`
+- [x] **Re-export all handle GLBs** from Rhino without stems (only `mechanic/gyroid/len2_dens1.glb` done so far)
+- [x] **Export Heat Wave Chrystal GLBs** — `heat_wave/chrystal/len{0-4}_dens{0-2}.glb` (old `rad*_tw*` knob files still in folder, need replacing)
+- [x] **Export Heat Wave Bulb GLBs** — create `heat_wave/bulb/` folder and export `len{0-4}_dens{0-2}.glb`
 - [ ] **Delete old knob files** from `heat_wave/chrystal/` (`rad*_tw*.glb` are leftover and won't load)
 - [ ] Add **screw size selector** to `configurator/main.js` + UI in `configurator/index.html`
 - [ ] Add **mounting style selector** — `resolveStemUrl()` in `main.js` already has a hook for per-style stems; add UI and additional stem GLBs
 - [x] **Cap max length at 10-1/16"** — slider max set to 4, len5 (12-5/8") removed; delete any remaining `len5_*` GLB files from all product folders
-- [ ] **Add 3" length option** — add GLB files and insert a 3" step into the length sliders
 - [x] ~~Eliminate About Us button~~ — replaced with info (ⓘ) icon + viewer disclaimer modal
 
 ### Shopify
