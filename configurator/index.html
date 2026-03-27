@@ -25,18 +25,22 @@
   <body>
     <!-- Floating "Buy" button (top-right) -->
     <button id="buyBtn" class="btn-buy">Buy</button>
-    <!-- Floating "About us" button (bottom-right) -->
-    <button id="aboutBtn" class="btn-about">About Us</button>
+    <!-- Floating info button (bottom-right) -->
+    <button id="aboutBtn" class="btn-info" aria-label="Viewer info">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="11" cy="11" r="10" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M11 10v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <circle cx="11" cy="7.5" r="1" fill="currentColor"/>
+      </svg>
+    </button>
 
     <!-- Info modal (hidden by default) -->
     <div id="aboutModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
       <div class="modal__backdrop" id="aboutBackdrop"></div>
       <div class="modal__panel" role="document">
         <button id="aboutClose" class="modal__close" aria-label="Close"></button>
-        <h2>Glad you're here!</h2>
-        <p>We want to create custom architectural hardware that blends design innovation with advanced digital fabrication. Our aim is to bridge the gap between craft and computation — bringing ideas to life through precision, creativity, and technology.</p>
-        <img src="ap25_4.JPG" style="width: 100%;"/>
-        <p>Come visit us at www.voldtlab.com, and see other things we've made.</p>
+        <h2>About This Viewer</h2>
+        <p>This 3D configurator is provided for illustrative purposes only. The models, materials, and proportions shown here are approximate representations and may not reflect the exact appearance or finish of the final product. Every order is individually reviewed and crafted with care by our team — we ensure that your piece meets our quality standards before it ships.</p>
       </div>
     </div>
 

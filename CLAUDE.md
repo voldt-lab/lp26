@@ -129,7 +129,7 @@ Cart page also includes `<script src="js/shopify.js"></script>` between cart.js 
 - [ ] Add **mounting style selector** — `resolveStemUrl()` in `main.js` already has a hook for per-style stems; add UI and additional stem GLBs
 - [x] **Cap max length at 10-1/16"** — slider max set to 4, len5 (12-5/8") removed; delete any remaining `len5_*` GLB files from all product folders
 - [ ] **Add 3" length option** — add GLB files and insert a 3" step into the length sliders
-- [ ] Eliminate About Us button once configurator is embedded in the site
+- [x] ~~Eliminate About Us button~~ — replaced with info (ⓘ) icon + viewer disclaimer modal
 
 ### Shopify
 - [ ] Add Shopify products + variant IDs for VOLDT Hardware (configurator)
