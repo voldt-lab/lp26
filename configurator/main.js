@@ -93,7 +93,7 @@ function resolveModelUrl(state) {
 // ----- UI value display mappings -----
 // These are just for the *label chips* (not filenames).
 // Adjust to match your real-world intended values if you want.
-const LENGTH_LABELS  = ['5-11/16"', '7-9/16"', '9-1/2"', '11-3/8"', '15-1/8"'];
+const LENGTH_LABELS  = ['5-11/16"', '7-9/16"', '9-1/2"', '11-3/8"', '13-3/4"'];
 const TWIST_LABELS   = ['None', 'Minor', 'Max'];
 const FF_LABELS      = ['1', '2', '3', '4', '5'];
 const DENS_LABELS    = ['Low', 'Mid', 'Hi'];
@@ -423,7 +423,7 @@ function wireUI() {
   mechTxtrSelect.addEventListener('change', onMajorChange);
 
   // Sliders: smooth drag (step=any while held), snap+load on release
-  function wireSmoothSlider(slider) {
+  function wireSmoothSlider(slider, onSnap) {
     slider.addEventListener('pointerdown', () => {
       slider.dataset.origStep = slider.step;
       slider.step = 'any';
@@ -432,12 +432,18 @@ function wireUI() {
     slider.addEventListener('change', () => {
       slider.value = Math.round(parseFloat(slider.value));
       slider.step = slider.dataset.origStep || '1';
+      if (onSnap) onSnap();
       applyValueChips();
       loadForCurrentState();
     });
   }
 
-  wireSmoothSlider(lenSlider);
+  wireSmoothSlider(lenSlider, () => {
+    // Auto-clamp CTC down when length slides below it
+    if (parseInt(spSlider.value, 10) > parseInt(lenSlider.value, 10)) {
+      spSlider.value = lenSlider.value;
+    }
+  });
   wireSmoothSlider(spSlider);
   wireSmoothSlider(twistSlider);
   wireSmoothSlider(ffSlider);
