@@ -109,7 +109,7 @@ function updateSpacingWarning() {
   const valid = isSpacingValid();
   spBadge.textContent = valid ? 'CTC' : 'CTC*';
   spBadge.classList.toggle('badge--warning', !valid);
-  spBadge.title = valid ? 'Mounting Holes Cetner-to-Center' : 'Spacing cannot exceed handle length';
+  spBadge.title = valid ? 'Mounting Holes Center-to-Center' : 'Mounting parts may be beyond the handle';
 }
 
 // ----- state + helpers -----
