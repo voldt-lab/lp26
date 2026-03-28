@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div><h3 class="text-[10px] tracking-[0.3em] uppercase mb-6 text-stone-400">Contact</h3><p class="text-sm text-stone-600 leading-relaxed">Detroit, Michigan<br />US-Based Design & Manufacturing<br /><a href="mailto:info@voldtlab.com" class="hover:text-stone-900 transition-colors">info@voldtlab.com</a></p></div>
         </div>
         <div class="mt-24 pt-8 border-t border-stone-200 text-xs text-stone-400 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p>&copy; ${new Date().getFullYear()} Voldt. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} VOLDT LAB LLC. All rights reserved.</p>
           <p>US-Based Design and Manufacturing</p>
         </div>
       </div>
