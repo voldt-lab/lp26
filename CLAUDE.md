@@ -12,9 +12,9 @@
 | File | Purpose |
 |------|---------|
 | `index.html` | Home — hero slideshow + product grid (JS-rendered) |
-| `products.html` | Products overview — 3 series with images |
-| `voldt-hardware.html` | VOLDT Hardware collection page |
-| `hardware-config.html` | Wrapper that embeds `configurator/index.html` via iframe |
+| `collections.html` | Products overview — 3 series with images |
+| `shop-all.html` | Shop All — full product listing |
+| `voldt-hardware.html` | VOLDT Hardware collection page + configurator link |
 | `polyframes.html` | PolyFrames collection overview |
 | `polyframes-floor-lamp.html` | Product detail |
 | `polyframes-table-lamp.html` | Product detail |
@@ -23,7 +23,7 @@
 | `detroit-lights.html` | Detroit Lights collection overview |
 | `detroit-pendant.html` | Detroit Pendant — ?style=A or ?style=B |
 | `detroit-table-lamp.html` | Detroit Table Lamp — ?style=A or ?style=B |
-| `custom-work.html` | Custom Projects page — Reconfigure + Bespoke inquiry |
+| `trade.html` | Studio & Trade — trade program / inquiry |
 | `cart.html` | Cart page — wired to Shopify checkout via `js/shopify.js` |
 | `about.html` | About |
 | `faq.html` | FAQ |
@@ -36,6 +36,7 @@
 | `js/cart.js` | Cart state in localStorage — `addItem`, `removeItem`, `updateQty`, `clearCart`, `getCart`, `getTotal`, `getCount`, `updateCartBadge` |
 | `js/shopify.js` | Shopify Storefront API integration — `createShopifyCheckout()` maps cart items to variant GIDs, calls `cartCreate` mutation, redirects to `checkoutUrl` |
 | `js/header.js` | Injects shared header + footer HTML into `#site-header` / `#site-footer`; wires nav dropdown + scroll shadow |
+| `js/nav.js` | Header navigation behavior |
 
 ### Configurator (iframe embed at `configurator/`)
 | File | Purpose |
@@ -48,11 +49,12 @@
 **Configurator GLB structure:**
 
 Handle GLBs (grip only, no stems — being re-exported progressively from Rhino):
-- `configurator/mechanic/{voronoi,gyroid}/len{0-4}_dens{0-2}.glb`
-- `configurator/lake_shore/simple/len{0-4}_tw{0-2}.glb`
+- `configurator/mechanic/{voronoi,gyroid}/len{0-5}_dens{0-2}.glb` ⚠️ len5 files still present (should be deleted)
+- `configurator/lake_shore/simple/len{0-5}_tw{0-2}.glb` ⚠️ len5 files still present (should be deleted)
 - `configurator/lake_shore/free_form/ff{0-4}.glb`
-- `configurator/heat_wave/chrystal/len{0-4}_dens{0-2}.glb`
+- `configurator/heat_wave/chrystal/len{0-4}_dens{0-2}.glb` ⚠️ old `rad*_tw*.glb` files also present (should be deleted)
 - `configurator/heat_wave/bulb/len{0-4}_dens{0-2}.glb`
+
 
 Shared stem GLB (one mounting stem, screw hole center at world origin):
 - `configurator/stem.glb`
@@ -127,7 +129,7 @@ Cart page also includes `<script src="js/shopify.js"></script>` between cart.js 
 - [ ] **Delete old knob files** from `heat_wave/chrystal/` (`rad*_tw*.glb` are leftover and won't load)
 - [ ] Add **screw size selector** to `configurator/main.js` + UI in `configurator/index.html`
 - [ ] Add **mounting style selector** — `resolveStemUrl()` in `main.js` already has a hook for per-style stems; add UI and additional stem GLBs
-- [x] **Cap max length at 10-1/16"** — slider max set to 4, len5 (12-5/8") removed; delete any remaining `len5_*` GLB files from all product folders
+- [ ] **Delete len5 GLBs** — `mechanic/gyroid/`, `mechanic/voronoi/`, and `lake_shore/simple/` still have `len5_*` files on disk; slider max is already capped at 4 in `main.js`
 - [x] ~~Eliminate About Us button~~ — replaced with info (ⓘ) icon + viewer disclaimer modal
 
 ### Shopify
@@ -140,6 +142,6 @@ Cart page also includes `<script src="js/shopify.js"></script>` between cart.js 
 | Page | Formspree endpoint |
 |------|-------------------|
 | `contact.html` | `https://formspree.io/f/mnjgjnlb` |
-| `custom-work.html` | `https://formspree.io/f/xzdjdndr` |
+| `trade.html` | `https://formspree.io/f/xzdjdndr` |
 
 Both use AJAX mode (`Accept: application/json`) — form replaced with inline success message on submit.
