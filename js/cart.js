@@ -1,4 +1,4 @@
-// cart.js — shared cart state via localStorage
+// cart.js -- shared cart state via localStorage
 const CART_KEY = 'voldt-cart';
 
 function getCart() {

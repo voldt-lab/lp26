@@ -1,8 +1,8 @@
-// shopify.js — Storefront API checkout integration
+// shopify.js -- Storefront API checkout integration
 const SHOPIFY_DOMAIN = 'voldt-2.myshopify.com';
 const SHOPIFY_TOKEN = '6f7494dd98f3629db5b1132b90087320';
 
-// Maps local cart item IDs → Shopify variant GIDs
+// Maps local cart item IDs -> Shopify variant GIDs
 const VARIANT_MAP = {
   // PolyFrames
   'polyframes-coat-rack':       'gid://shopify/ProductVariant/56245005484198',
@@ -43,7 +43,7 @@ function buildNote(cartItems) {
     .filter(i => i.options && Object.keys(i.options).length)
     .map(i => {
       const opts = Object.entries(i.options).map(([k, v]) => `${k}: ${v}`).join(', ');
-      return `${i.name} — ${opts}`;
+      return `${i.name} -- ${opts}`;
     });
   return lines.length ? lines.join('\n') : null;
 }

@@ -105,7 +105,7 @@ function makeGradient({
   return tex;
 }
 
-// Heuristic: apply a consistent “house” material feel to imported GLTF meshes
+// Heuristic: apply a consistent "house" material feel to imported GLTF meshes
 function pickMaterialForMesh(meshName){
   const n = String(meshName || '').toLowerCase();
   // most exported meshes don't have names so this mechanism is just a scaffold for now
@@ -128,7 +128,7 @@ export function createViewer(container, opts = {}) {
   const camera = new THREE.PerspectiveCamera(50, innerWidth / innerHeight, 0.001, 10000);
   camera.position.set(2.5, 2.0, 2.5);
 
-  // shared “house look” materials (kept from your old repo)
+  // shared "house look" materials (kept from your old repo)
   const metalMat = new THREE.MeshPhysicalMaterial({
     color: 0xB08D57,
     metalness: 1.0,
@@ -291,7 +291,7 @@ export function createViewer(container, opts = {}) {
     });
   }
 
-  // Load a GLTF/GLB and apply the “house” material style
+  // Load a GLTF/GLB and apply the "house" material style
   const gltfLoader = new GLTFLoader();
   // Draco (for GLB/GLTF with KHR_draco_mesh_compression)
   const dracoLoader = new DRACOLoader();
@@ -369,7 +369,7 @@ export function createViewer(container, opts = {}) {
       applyHouseMaterial(stemA);
       applyHouseMaterial(stemB);
       // Use bounding-box center ONLY for the length axis (symmetric spacing).
-      // For the two perpendicular axes use 0 — handles are exported from Rhino
+      // For the two perpendicular axes use 0 -- handles are exported from Rhino
       // with their screw-hole axis through the world origin, so copying hCenter
       // in those axes embeds the stems inconsistently for different handle lengths.
       stemA.position.set(0, 0, 0); stemA.position[axis] = hCenter[axis] + half;

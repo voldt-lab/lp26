@@ -1,4 +1,4 @@
-// header.js — injects shared header + footer, initializes nav behavior
+// header.js -- injects shared header + footer, initializes nav behavior
 document.addEventListener('DOMContentLoaded', () => {
 
   // --- HEADER ---
