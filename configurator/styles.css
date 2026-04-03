@@ -400,7 +400,7 @@ body{
   width: min(680px, calc(100vw - 40px));
   max-height: min(80vh, 680px);
   overflow: auto;
-  padding: 20px 18px 18px;
+  padding: 20px 36px 18px;
   border-radius: 0;
   background: linear-gradient(180deg, #2c2f33 0%, #2a2d31 100%);
   border: 1px solid rgba(255,255,255,.1);

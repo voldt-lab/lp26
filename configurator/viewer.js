@@ -380,21 +380,33 @@ export function createViewer(container, opts = {}) {
 
     // Frame camera to the assembled group WITHOUT moving any models.
     // (fitToObject also repositions obj3d, which would break the Rhino-exported positions.)
-    const aBox = new THREE.Box3().setFromObject(group, true);
-    if (!aBox.isEmpty() && !hasFramedOnce) {
-      const aSize   = new THREE.Vector3(); aBox.getSize(aSize);
-      const aCenter = new THREE.Vector3(); aBox.getCenter(aCenter);
-      const radius  = 0.5 * aSize.length() || 1;
-      camera.near = Math.max(0.01, radius / 100);
-      camera.far  = radius * 20;
-      camera.updateProjectionMatrix();
-      const dist = radius / Math.tan(THREE.MathUtils.degToRad(camera.fov * 0.5));
-      camera.position.set(aCenter.x + dist, aCenter.y + dist * 0.7, aCenter.z + dist * 1.2);
-      camera.lookAt(aCenter);
-      controls.target.copy(aCenter);
-      controls.update();
+    const aBox    = new THREE.Box3().setFromObject(group, true);
+    const aCenter = new THREE.Vector3();
+    if (!aBox.isEmpty()) {
+      aBox.getCenter(aCenter);
+      if (!hasFramedOnce) {
+        const aSize  = new THREE.Vector3(); aBox.getSize(aSize);
+        const radius = 0.5 * aSize.length() || 1;
+        camera.near = Math.max(0.01, radius / 100);
+        camera.far  = radius * 20;
+        camera.updateProjectionMatrix();
+        const dist = radius / Math.tan(THREE.MathUtils.degToRad(camera.fov * 0.5));
+        camera.position.set(aCenter.x + dist, aCenter.y + dist * 0.7, aCenter.z + dist * 1.2);
+        camera.lookAt(aCenter);
+        controls.target.copy(aCenter);
+        controls.update();
+      }
     }
     hasFramedOnce = true;
+
+    // Context panel -- door surface behind the pull (15" × 6" × 0.75")
+    const IN = 0.0254;
+    const panelGeo = axis === 'y'
+      ? new THREE.BoxGeometry(6 * IN, 15 * IN, 0.75 * IN)  // vertical handle
+      : new THREE.BoxGeometry(15 * IN, 6 * IN, 0.75 * IN); // horizontal handle (common)
+    const panelMesh = new THREE.Mesh(panelGeo, satinMat);
+    panelMesh.position.set(aCenter.x, aCenter.y, aBox.min.z - (0.75 * IN) / 2);
+    group.add(panelMesh);
   }
 
   function zoomToFit() {

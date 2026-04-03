@@ -72,10 +72,9 @@ function resolveModelUrl(state) {
   }
 
   if (product === 'lakeshore') {
-    const lstype = state.lakeType; // 'simple' | 'freeform'
-    if (lstype === 'freeform') {
-      // freeform uses form factor only
-      return `${MODEL_BASE}/lake_shore/free_form/ff${state.ff}${MODEL_EXT}`;
+    const lstype = state.lakeType; // 'simple' | 'knob'
+    if (lstype === 'knob') {
+      return `${MODEL_BASE}/lake_shore/knob/diam${state.ff}_dens${state.dens}${MODEL_EXT}`;
     }
     // simple uses length + twist
     return `${MODEL_BASE}/lake_shore/simple/len${state.len}_tw${state.tw}${MODEL_EXT}`;
@@ -95,7 +94,7 @@ function resolveModelUrl(state) {
 // Adjust to match your real-world intended values if you want.
 const LENGTH_LABELS  = ['5-11/16"', '7-9/16"', '9-1/2"', '11-3/8"', '13-3/4"'];
 const TWIST_LABELS   = ['None', 'Minor', 'Max'];
-const FF_LABELS      = ['1', '2', '3', '4', '5'];
+const DIAM_LABELS    = ['1-1/2"', '1-3/4"', '2"', '2-1/4"', '2-1/2"'];
 const DENS_LABELS    = ['Low', 'Mid', 'Hi'];
 const SPACING_LABELS = ['3-3/4"', '5"', '6-5/16"', '7-9/16"', '10-1/16"'];
 const SPACING_METERS = [0.09525, 0.127, 0.160338, 0.192088, 0.255588];
@@ -244,7 +243,7 @@ function getState() {
 
     // subtypes
     heatwaveType: vTypeSelect.value === '1' ? 'bulb' : 'chrystal',
-    lakeType: (lsTypeSelect.value === '1') ? 'freeform' : 'simple',
+    lakeType: (lsTypeSelect.value === '1') ? 'knob' : 'simple',
     mechTexture: (mechTxtrSelect.value === '1') ? 'voronoi' : 'gyroid',
   };
 
@@ -283,8 +282,10 @@ function applyVisibility() {
       show(fieldSp, true);
       show(fieldRot, true);
       show(fieldFF, false);
-    } else {
+      show(fieldDens, false);
+    } else { // knob
       show(fieldFF, true);
+      show(fieldDens, true);
       show(fieldLen, false);
       show(fieldSp, false);
       show(fieldRot, false);
@@ -308,9 +309,9 @@ function applyValueChips() {
   const ti = clampIndex(parseInt(twistSlider.value, 10), TWIST_LABELS.length);
   twistValue.textContent = TWIST_LABELS[ti];
 
-  // form factor
-  const ffi = clampIndex(parseInt(ffSlider.value, 10), FF_LABELS.length);
-  ffValue.textContent = FF_LABELS[ffi];
+  // diameter (knob) / form factor repurposed
+  const ffi = clampIndex(parseInt(ffSlider.value, 10), DIAM_LABELS.length);
+  ffValue.textContent = DIAM_LABELS[ffi];
 
   // hole spacing
   const spi = clampIndex(parseInt(spSlider.value, 10), SPACING_LABELS.length);
@@ -376,32 +377,36 @@ function wireUI() {
   const buyBtn = document.getElementById('buyBtn');
   buyBtn.addEventListener('click', () => {
     const st = getState();
-    const isFreeform = st.product === 'lakeshore' && st.lakeType === 'freeform';
-
-    if (isFreeform) {
-      alert('Free Form is available via custom order — contact us at info@voldtlab.com');
-      return;
-    }
-
-    const id    = `voldt-hardware-${st.len}`;
-    const price = [49, 59, 69, 79, 89][st.len];
+    const isKnob = st.product === 'lakeshore' && st.lakeType === 'knob';
 
     const PRODUCT_NAMES = { heatwave: 'Heat Wave', mechanic: 'Mechanic', lakeshore: 'Lake Shore' };
     const subtype = {
       heatwave:  st.heatwaveType === 'chrystal' ? 'Chrystal' : 'Bulb',
       mechanic:  st.mechTexture  === 'gyroid'   ? 'Gyroid'   : 'Voronoi',
-      lakeshore: 'Simple',
+      lakeshore: isKnob ? 'Knob' : 'Simple',
     }[st.product];
     const name = `VOLDT Hardware — ${PRODUCT_NAMES[st.product]} ${subtype}`;
 
-    const options = {
-      'Size': LENGTH_LABELS[clampIndex(st.len, LENGTH_LABELS.length)],
-      'Hole Spacing (CTC)': SPACING_LABELS[clampIndex(st.sp, SPACING_LABELS.length)],
-    };
-    if (st.product === 'lakeshore') {
-      options['Twist'] = TWIST_LABELS[clampIndex(st.tw, TWIST_LABELS.length)];
+    let id, price, options;
+    if (isKnob) {
+      id    = 'voldt-hardware-knob';
+      price = 49;
+      options = {
+        'Diameter': DIAM_LABELS[clampIndex(st.ff, DIAM_LABELS.length)],
+        'Density':  DENS_LABELS[clampIndex(st.dens, DENS_LABELS.length)],
+      };
     } else {
-      options['Density'] = DENS_LABELS[clampIndex(st.dens, DENS_LABELS.length)];
+      id    = `voldt-hardware-${st.len}`;
+      price = [49, 59, 69, 79, 89][st.len];
+      options = {
+        'Size': LENGTH_LABELS[clampIndex(st.len, LENGTH_LABELS.length)],
+        'Hole Spacing (CTC)': SPACING_LABELS[clampIndex(st.sp, SPACING_LABELS.length)],
+      };
+      if (st.product === 'lakeshore') {
+        options['Twist'] = TWIST_LABELS[clampIndex(st.tw, TWIST_LABELS.length)];
+      } else {
+        options['Density'] = DENS_LABELS[clampIndex(st.dens, DENS_LABELS.length)];
+      }
     }
 
     window.parent.postMessage({
