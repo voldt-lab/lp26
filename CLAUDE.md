@@ -118,6 +118,8 @@ Cart page also includes `<script src="js/shopify.js"></script>` between cart.js 
 | `detroit-pendant-b-standard` / `-large` | Detroit Pendant Style B, Standard/Large |
 | `detroit-table-lamp-a-standard` / `-large` | Detroit Table Lamp Style A, Standard/Large |
 | `detroit-table-lamp-b-standard` / `-large` | Detroit Table Lamp Style B, Standard/Large |
+| `voldt-hardware-0` … `voldt-hardware-4` | VOLDT Hardware by length index ($49–$89); full config as cart note |
+| `voldt-hardware-knob` | VOLDT Hardware Lake Shore Free Form ($49); form factor as cart note |
 
 ## To-Dos
 
@@ -132,8 +134,8 @@ Cart page also includes `<script src="js/shopify.js"></script>` between cart.js 
 - [x] ~~Eliminate About Us button~~ -- replaced with info icon + viewer disclaimer modal
 
 ### Shopify
-- [ ] Add Shopify products + variant IDs for VOLDT Hardware (configurator)
-- [ ] Wire configurator state -> cart item IDs -> variant GIDs
+- [x] Add Shopify products + variant IDs for VOLDT Hardware (configurator)
+- [x] Wire configurator state -> cart item IDs -> variant GIDs
 
 
 ## Forms

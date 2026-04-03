@@ -372,6 +372,44 @@ async function loadForCurrentState() {
 
 // ----- event wiring -----
 function wireUI() {
+  // Add to Cart button -- posts cart item to parent page via postMessage
+  const buyBtn = document.getElementById('buyBtn');
+  buyBtn.addEventListener('click', () => {
+    const st = getState();
+    const isFreeform = st.product === 'lakeshore' && st.lakeType === 'freeform';
+
+    if (isFreeform) {
+      alert('Free Form is available via custom order — contact us at info@voldtlab.com');
+      return;
+    }
+
+    const id    = `voldt-hardware-${st.len}`;
+    const price = [49, 59, 69, 79, 89][st.len];
+
+    const PRODUCT_NAMES = { heatwave: 'Heat Wave', mechanic: 'Mechanic', lakeshore: 'Lake Shore' };
+    const subtype = {
+      heatwave:  st.heatwaveType === 'chrystal' ? 'Chrystal' : 'Bulb',
+      mechanic:  st.mechTexture  === 'gyroid'   ? 'Gyroid'   : 'Voronoi',
+      lakeshore: 'Simple',
+    }[st.product];
+    const name = `VOLDT Hardware — ${PRODUCT_NAMES[st.product]} ${subtype}`;
+
+    const options = {
+      'Size': LENGTH_LABELS[clampIndex(st.len, LENGTH_LABELS.length)],
+      'Hole Spacing (CTC)': SPACING_LABELS[clampIndex(st.sp, SPACING_LABELS.length)],
+    };
+    if (st.product === 'lakeshore') {
+      options['Twist'] = TWIST_LABELS[clampIndex(st.tw, TWIST_LABELS.length)];
+    } else {
+      options['Density'] = DENS_LABELS[clampIndex(st.dens, DENS_LABELS.length)];
+    }
+
+    window.parent.postMessage({
+      type: 'voldt-add-to-cart',
+      item: { id, name, price, image: 'assets/ap25_2.jpg', options },
+    }, '*');
+  });
+
   // About modal (unchanged behavior)
   const aboutBtn   = document.getElementById('aboutBtn');
   const aboutModal = document.getElementById('aboutModal');

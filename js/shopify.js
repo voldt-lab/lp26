@@ -23,6 +23,14 @@ const VARIANT_MAP = {
   'detroit-table-lamp-a-large':    'gid://shopify/ProductVariant/56245930950822',
   'detroit-table-lamp-b-standard': 'gid://shopify/ProductVariant/56245930885286',
   'detroit-table-lamp-b-large':    'gid://shopify/ProductVariant/56245931016358',
+
+  // VOLDT Hardware (priced by length index; full config passed as cart note)
+  'voldt-hardware-0':    'gid://shopify/ProductVariant/56329026306214',
+  'voldt-hardware-1':    'gid://shopify/ProductVariant/56329026338982',
+  'voldt-hardware-2':    'gid://shopify/ProductVariant/56329026371750',
+  'voldt-hardware-3':    'gid://shopify/ProductVariant/56329026404518',
+  'voldt-hardware-4':    'gid://shopify/ProductVariant/56329026437286',
+  'voldt-hardware-knob': 'gid://shopify/ProductVariant/56329026470054',
 };
 
 async function shopifyFetch(query, variables) {
@@ -63,7 +71,7 @@ async function createShopifyCheckout(discountCode = '') {
   }
 
   if (lines.length === 0) {
-    alert('None of your cart items could be matched to a Shopify product. Please contact us at studio@voldt.design.');
+    alert('None of your cart items could be matched to a Shopify product. Please contact us at info@voldtlab.com.');
     return;
   }
 
@@ -87,7 +95,7 @@ async function createShopifyCheckout(discountCode = '') {
 
     if (result?.userErrors?.length) {
       console.error('Shopify cart errors:', result.userErrors);
-      alert('There was a problem creating your checkout. Please try again or contact studio@voldt.design.');
+      alert('There was a problem creating your checkout. Please try again or contact info@voldtlab.com.');
       return;
     }
 
@@ -102,6 +110,6 @@ async function createShopifyCheckout(discountCode = '') {
     }
   } catch (err) {
     console.error('Shopify checkout error:', err);
-    alert('Unable to reach checkout. Please try again or contact studio@voldt.design.');
+    alert('Unable to reach checkout. Please try again or contact info@voldtlab.com.');
   }
 }

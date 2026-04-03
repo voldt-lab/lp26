@@ -7,7 +7,7 @@
   <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','sans-serif']}}}}</script>
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body class="bg-white font-sans" data-hide-cart>
+<body class="bg-white font-sans">
   <header id="site-header" class="fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-md"></header>
   <div class="pt-16">
     <!-- Hero -->
@@ -140,8 +140,12 @@
     }
     document.addEventListener('DOMContentLoaded', () => {
       const section = document.getElementById('configurator-section');
+      let overlayTimer;
+      section.addEventListener('mouseenter', () => clearTimeout(overlayTimer));
       section.addEventListener('mouseleave', () => {
-        document.getElementById('configurator-overlay').style.display = 'flex';
+        overlayTimer = setTimeout(() => {
+          document.getElementById('configurator-overlay').style.display = 'flex';
+        }, 1000);
       });
     });
     function resizeConfigurator() {
@@ -157,6 +161,15 @@
     }
     window.addEventListener('load', resizeConfigurator);
     window.addEventListener('resize', resizeConfigurator);
+
+    // Receive add-to-cart events from configurator iframe
+    window.addEventListener('message', (e) => {
+      if (e.data?.type !== 'voldt-add-to-cart') return;
+      const item = e.data.item;
+      if (!item) return;
+      addItem(item);
+      if (typeof showCartToast === 'function') showCartToast(item.name);
+    });
   </script>
 </body>
 </html>
