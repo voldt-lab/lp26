@@ -55,7 +55,7 @@ body{
 /* heading */
 .toolbar::before{
   content: "Select a design";
-  margin: 0 15px 0;
+  margin: 0 15px -24px;
   font-style: italic;
   letter-spacing: .02em;
   color: #b8bdc3;
@@ -126,6 +126,33 @@ body{
   z-index: 9999;
 }
 .vp-tool-icon[data-tip]:hover::after { opacity: 1; }
+
+/* ---- Material picker ---- */
+.mat-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.mat-picker {
+  display: flex;
+  gap: 8px;
+}
+.mat-swatch {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  cursor: pointer;
+  box-sizing: border-box;
+  border: 2px solid transparent;
+  outline: none;
+}
+.mat-swatch.is-active {
+  border: 3px solid #ffffff;
+  box-shadow: inset 0 0 0 2px #1a1c1f;
+}
+.mat-swatch:hover:not(.is-active) {
+  border-color: rgba(255,255,255,0.35);
+}
 
 /* thin divider under the product dropdown */
 .divider{

@@ -454,6 +454,15 @@ function wireUI() {
     loadForCurrentState();
   };
 
+  // Material picker
+  document.getElementById('matPicker').addEventListener('click', e => {
+    const swatch = e.target.closest('.mat-swatch');
+    if (!swatch) return;
+    document.querySelectorAll('.mat-swatch').forEach(s => s.classList.remove('is-active'));
+    swatch.classList.add('is-active');
+    viewer.setMaterial(swatch.dataset.mat);
+  });
+
   prodSelect.addEventListener('change', onMajorChange);
   vTypeSelect.addEventListener('change', onMajorChange);
   lsTypeSelect.addEventListener('change', onMajorChange);

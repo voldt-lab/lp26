@@ -139,13 +139,24 @@ export function createViewer(container, opts = {}) {
     side: THREE.FrontSide,
   });
 
-  const satinMat = new THREE.MeshStandardMaterial({
-    color: 0x828282,
-    metalness: 0.05,
-    roughness: 0.7,
-    side: THREE.FrontSide,
-    envMapIntensity: 1.0
-  });
+  // --- selectable finish materials ---
+  const MATS = {
+    protoWhite: new THREE.MeshStandardMaterial({
+      color: 0x828282, metalness: 0.05, roughness: 0.7, envMapIntensity: 1.0,
+    }),
+    mutedGreen: new THREE.MeshStandardMaterial({
+      color: 0x3d4a42, metalness: 0.0, roughness: 0.78, envMapIntensity: 1.10,
+    }),
+    gunMetal: new THREE.MeshStandardMaterial({
+      color: 0x4a4f56, metalness: 0.0, roughness: 0.72, envMapIntensity: 1.10,
+    }),
+    briskOrange: new THREE.MeshStandardMaterial({
+      color: 0xc85a20, metalness: 0.0, roughness: 0.65, envMapIntensity: 0.90,
+    }),
+  };
+  let activeMat = MATS.protoWhite;
+
+  let panelMesh = null;
 
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
@@ -153,6 +164,8 @@ export function createViewer(container, opts = {}) {
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.25;
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   container.appendChild(renderer.domElement);
 
   // Lighting (environment does most work)
@@ -160,6 +173,15 @@ export function createViewer(container, opts = {}) {
   scene.add(hemi);
   const dir = new THREE.DirectionalLight(0xffffff, 0.6);
   dir.position.set(3, 4, 2);
+  dir.castShadow = true;
+  dir.shadow.mapSize.set(1024, 1024);
+  dir.shadow.camera.near   = 0.01;
+  dir.shadow.camera.far    = 15;
+  dir.shadow.camera.left   = -0.35;
+  dir.shadow.camera.right  =  0.35;
+  dir.shadow.camera.top    =  0.35;
+  dir.shadow.camera.bottom = -0.35;
+  dir.shadow.bias = -0.001;
   scene.add(dir);
 
   // Model root
@@ -233,12 +255,18 @@ export function createViewer(container, opts = {}) {
     container.classList.toggle('loading', !!on);
   }
 
+  const sharedMats = new Set(Object.values(MATS));
+
   function clear() {
+    panelMesh = null;
     while (group.children.length) {
       const obj = group.children.pop();
       obj.traverse(n => {
         n.geometry?.dispose?.();
-        if (n.material) (Array.isArray(n.material) ? n.material : [n.material]).forEach(m => m.dispose?.());
+        if (n.material) {
+          (Array.isArray(n.material) ? n.material : [n.material])
+            .forEach(m => { if (m && !sharedMats.has(m)) m.dispose?.(); });
+        }
       });
     }
     group.position.set(0, 0, 0);
@@ -282,12 +310,9 @@ export function createViewer(container, opts = {}) {
         o.geometry.computeVertexNormals();
       }
       if (override) {
-        o.material = satinMat;
+        o.material = activeMat;
       }
-      if (o.material && 'envMapIntensity' in o.material) {
-        o.material.envMapIntensity = 1.2;
-        o.material.needsUpdate = true;
-      }
+      o.castShadow = true;
     });
   }
 
@@ -404,9 +429,28 @@ export function createViewer(container, opts = {}) {
     const panelGeo = axis === 'y'
       ? new THREE.BoxGeometry(6 * IN, 15 * IN, 0.75 * IN)  // vertical handle
       : new THREE.BoxGeometry(15 * IN, 6 * IN, 0.75 * IN); // horizontal handle (common)
-    const panelMesh = new THREE.Mesh(panelGeo, satinMat);
+    panelMesh = new THREE.Mesh(panelGeo, MATS.protoWhite);
     panelMesh.position.set(aCenter.x, aCenter.y, aBox.min.z - (0.75 * IN) / 2);
+    panelMesh.receiveShadow = true;
     group.add(panelMesh);
+
+    // Tighten shadow camera frustum to the actual assembly bounds
+    const pad = 0.06;
+    dir.shadow.camera.left   = aCenter.x - (aBox.max.x - aBox.min.x) / 2 - pad;
+    dir.shadow.camera.right  = aCenter.x + (aBox.max.x - aBox.min.x) / 2 + pad;
+    dir.shadow.camera.top    = aCenter.y + (aBox.max.y - aBox.min.y) / 2 + pad;
+    dir.shadow.camera.bottom = aCenter.y - (aBox.max.y - aBox.min.y) / 2 - pad;
+    dir.shadow.camera.updateProjectionMatrix();
+  }
+
+  function setMaterial(key) {
+    const mat = MATS[key];
+    if (!mat) return;
+    activeMat = mat;
+    group.traverse(o => {
+      if (!o.isMesh || o === panelMesh) return;
+      o.material = mat;
+    });
   }
 
   function zoomToFit() {
@@ -450,6 +494,7 @@ export function createViewer(container, opts = {}) {
     setBloomEnabled,
     setToneExposure,
     setGridVisible,
+    setMaterial,
     zoomToFit,
   };
 }
