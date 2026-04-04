@@ -154,10 +154,20 @@ body{
   color:#d5d9de;
   opacity:.9;
 }
-.badge--warning {
-  color: #e05050;
-  opacity: 1;
+/* CTC over-limit tooltip — floats below field, no layout impact */
+#field-sp { position: relative; }
+.ctc-tip {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  display: none;
+  font-size: 11px;
+  color: rgba(255,255,255,0.45);
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 10;
 }
+.ctc-tip--visible { display: block; }
 .value{
   background: transparent !important;
   border: 0 !important;
@@ -364,6 +374,18 @@ body{
 }
 .btn-buy:hover{ background: #b07d22; }
 
+/* ---- Price tag (below Add to Cart) ---- */
+.price-tag{
+  position: fixed;
+  top: 58px; right: 16px;
+  z-index: 1400;
+  color: rgba(255,255,255,0.55);
+  font-size: 11px;
+  letter-spacing: .06em;
+  text-align: right;
+  pointer-events: none;
+}
+
 /* ---- Floating info button (bottom-right) ---- */
 .btn-info{
   position: fixed;
@@ -372,16 +394,15 @@ body{
   width: 36px; height: 36px;
   padding: 0;
   border-radius: 50%;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.18);
-  color: #c4c9d0;
-  backdrop-filter: blur(8px);
+  background: transparent;
+  border: none;
+  color: rgba(196,201,208,0.6);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.btn-info:hover{ background: rgba(255,255,255,0.14); color: #e7ecf2; }
+.btn-info:hover{ color: #e7ecf2; }
 
 /* ---- Modal scaffold ---- */
 .modal{ 

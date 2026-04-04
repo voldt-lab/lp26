@@ -41,7 +41,7 @@ const densValue  = document.getElementById('densVal');
 const spSlider = document.getElementById('sp');
 const spValue  = document.getElementById('spVal');
 const fieldSp  = document.getElementById('field-sp');
-const spBadge  = fieldSp.querySelector('.badge');
+
 
 
 // Viewer (keep your old look)
@@ -99,17 +99,6 @@ const DENS_LABELS    = ['Low', 'Mid', 'Hi'];
 const SPACING_LABELS = ['3-3/4"', '5"', '6-5/16"', '7-9/16"', '10-1/16"'];
 const SPACING_METERS = [0.09525, 0.127, 0.160338, 0.192088, 0.255588];
 
-// ----- spacing validation -----
-function isSpacingValid() {
-  return parseInt(spSlider.value, 10) <= parseInt(lenSlider.value, 10);
-}
-
-function updateSpacingWarning() {
-  const valid = isSpacingValid();
-  spBadge.textContent = valid ? 'CTC' : 'CTC*';
-  spBadge.classList.toggle('badge--warning', !valid);
-  spBadge.title = valid ? 'Mounting Holes Center-to-Center' : 'Mounting parts may be beyond the handle';
-}
 
 // ----- state + helpers -----
 let busy = false;
@@ -318,10 +307,17 @@ function applyValueChips() {
   spValue.textContent = SPACING_LABELS[spi];
 
   // density
-  //const di = clampIndex(parseInt(densSlider.value, 10), DENS_LABELS.length); 
+  //const di = clampIndex(parseInt(densSlider.value, 10), DENS_LABELS.length);
   //densValue.textContent = DENS_LABELS[di];
   //----uncomment above to revert to old slider
   densValue.textContent = DENS_LABELS[clampIndex(densIndex, DENS_LABELS.length)];
+}
+
+function updatePriceTag() {
+  const st = getState();
+  const isKnob = st.product === 'lakeshore' && st.lakeType === 'knob';
+  const dollars = isKnob ? 49 : [49, 59, 69, 79, 89][clampIndex(st.len, 5)];
+  document.getElementById('priceTag').textContent = `MSRP $${dollars}`;
 }
 
 function clampIndex(i, n) {
@@ -331,9 +327,6 @@ function clampIndex(i, n) {
 
 let loadToken = 0;
 async function loadForCurrentState() {
-  updateSpacingWarning();
-  if (!isSpacingValid()) return;
-
   const token = ++loadToken;
   const st = getState();
   const handleUrl = resolveModelUrl(st);
@@ -351,6 +344,7 @@ async function loadForCurrentState() {
     // only the latest request should update status
     if (token !== loadToken) return;
 
+    updatePriceTag();
     status.textContent = 'For illustration only';
   } catch (e) {
     console.error(`Failed to load`, e);
@@ -487,7 +481,28 @@ function wireUI() {
       spSlider.value = lenSlider.value;
     }
   });
-  wireSmoothSlider(spSlider);
+  // CTC slider: snap to len max on release; tooltip when dragging past limit
+  const spTip = document.createElement('span');
+  spTip.className = 'ctc-tip';
+  spTip.textContent = 'Will snap to max allowed';
+  fieldSp.appendChild(spTip);
+
+  spSlider.addEventListener('pointerdown', () => {
+    spSlider.dataset.origStep = spSlider.step;
+    spSlider.step = 'any';
+  });
+  spSlider.addEventListener('input', () => {
+    const over = parseFloat(spSlider.value) > parseInt(lenSlider.value, 10);
+    spTip.classList.toggle('ctc-tip--visible', over);
+    applyValueChips();
+  });
+  spSlider.addEventListener('change', () => {
+    spSlider.value = Math.min(Math.round(parseFloat(spSlider.value)), parseInt(lenSlider.value, 10));
+    spSlider.step = spSlider.dataset.origStep || '1';
+    spTip.classList.remove('ctc-tip--visible');
+    applyValueChips();
+    loadForCurrentState();
+  });
   wireSmoothSlider(twistSlider);
   wireSmoothSlider(ffSlider);
 /* uncomment below to revert to old slider
