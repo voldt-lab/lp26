@@ -454,13 +454,22 @@ function wireUI() {
     loadForCurrentState();
   };
 
-  // Material picker
+  // Finish material picker (handle + stems)
   document.getElementById('matPicker').addEventListener('click', e => {
     const swatch = e.target.closest('.mat-swatch');
     if (!swatch) return;
-    document.querySelectorAll('.mat-swatch').forEach(s => s.classList.remove('is-active'));
+    document.querySelectorAll('#matPicker .mat-swatch').forEach(s => s.classList.remove('is-active'));
     swatch.classList.add('is-active');
     viewer.setMaterial(swatch.dataset.mat);
+  });
+
+  // Base material picker (back panel)
+  document.getElementById('basePicker').addEventListener('click', e => {
+    const swatch = e.target.closest('.mat-swatch');
+    if (!swatch) return;
+    document.querySelectorAll('#basePicker .mat-swatch').forEach(s => s.classList.remove('is-active'));
+    swatch.classList.add('is-active');
+    viewer.setBaseMaterial(swatch.dataset.base);
   });
 
   prodSelect.addEventListener('change', onMajorChange);

@@ -139,7 +139,7 @@ export function createViewer(container, opts = {}) {
     side: THREE.FrontSide,
   });
 
-  // --- selectable finish materials ---
+  // --- selectable finish materials (handle + stems) ---
   const MATS = {
     protoWhite: new THREE.MeshStandardMaterial({
       color: 0x828282, metalness: 0.05, roughness: 0.7, envMapIntensity: 1.0,
@@ -148,13 +148,40 @@ export function createViewer(container, opts = {}) {
       color: 0x3d4a42, metalness: 0.0, roughness: 0.78, envMapIntensity: 1.10,
     }),
     gunMetal: new THREE.MeshStandardMaterial({
-      color: 0x4a4f56, metalness: 0.0, roughness: 0.72, envMapIntensity: 1.10,
+      color: 0x34373b, metalness: 0.0, roughness: 0.72, envMapIntensity: 1.10,
     }),
     briskOrange: new THREE.MeshStandardMaterial({
       color: 0xc85a20, metalness: 0.0, roughness: 0.65, envMapIntensity: 0.90,
     }),
   };
   let activeMat = MATS.protoWhite;
+
+  // --- base material (back panel only) ---
+  const texLoader = new THREE.TextureLoader();
+  function loadPanelTex(url) {
+    const tex = texLoader.load(url);
+    if ('colorSpace' in tex) tex.colorSpace = THREE.SRGBColorSpace;
+    else tex.encoding = THREE.sRGBEncoding;
+    tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+    tex.repeat.set(1, 1); // no tiling — texture covers the full panel face once
+    return tex;
+  }
+  const BASE_MATS = {
+    white:     MATS.protoWhite, // reuse same material
+    metallic: new THREE.MeshStandardMaterial({
+      map: loadPanelTex('./brushed_metal.jpg'),
+      roughness: 0.25, metalness: 0.0, envMapIntensity: 0.4,
+    }),
+    lightWood: new THREE.MeshStandardMaterial({
+      map: loadPanelTex('./light_wood.jpg'),
+      roughness: 0.85, metalness: 0.0, envMapIntensity: 0.55,
+    }),
+    darkWood:  new THREE.MeshStandardMaterial({
+      map: loadPanelTex('./dark_wood.jpg'),
+      roughness: 0.80, metalness: 0.0, envMapIntensity: 0.50,
+    }),
+  };
+  let activeBaseMat = BASE_MATS.white;
 
   let panelMesh = null;
 
@@ -255,7 +282,7 @@ export function createViewer(container, opts = {}) {
     container.classList.toggle('loading', !!on);
   }
 
-  const sharedMats = new Set(Object.values(MATS));
+  const sharedMats = new Set([...Object.values(MATS), ...Object.values(BASE_MATS)]);
 
   function clear() {
     panelMesh = null;
@@ -429,7 +456,7 @@ export function createViewer(container, opts = {}) {
     const panelGeo = axis === 'y'
       ? new THREE.BoxGeometry(6 * IN, 15 * IN, 0.75 * IN)  // vertical handle
       : new THREE.BoxGeometry(15 * IN, 6 * IN, 0.75 * IN); // horizontal handle (common)
-    panelMesh = new THREE.Mesh(panelGeo, MATS.protoWhite);
+    panelMesh = new THREE.Mesh(panelGeo, activeBaseMat);
     panelMesh.position.set(aCenter.x, aCenter.y, aBox.min.z - (0.75 * IN) / 2);
     panelMesh.receiveShadow = true;
     group.add(panelMesh);
@@ -441,6 +468,13 @@ export function createViewer(container, opts = {}) {
     dir.shadow.camera.top    = aCenter.y + (aBox.max.y - aBox.min.y) / 2 + pad;
     dir.shadow.camera.bottom = aCenter.y - (aBox.max.y - aBox.min.y) / 2 - pad;
     dir.shadow.camera.updateProjectionMatrix();
+  }
+
+  function setBaseMaterial(key) {
+    const mat = BASE_MATS[key];
+    if (!mat) return;
+    activeBaseMat = mat;
+    if (panelMesh) panelMesh.material = mat;
   }
 
   function setMaterial(key) {
@@ -495,6 +529,7 @@ export function createViewer(container, opts = {}) {
     setToneExposure,
     setGridVisible,
     setMaterial,
+    setBaseMaterial,
     zoomToFit,
   };
 }

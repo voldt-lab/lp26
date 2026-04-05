@@ -58,12 +58,12 @@
         <option value="2">Lake Shore</option>
       </select>
       <div class="mat-field">
-        <span class="badge">Finish</span>
-        <div class="mat-picker" id="matPicker">
-          <div class="mat-swatch is-active" data-mat="protoWhite"  title="Proto White"  style="background:#dcd8d0"></div>
-          <div class="mat-swatch"           data-mat="mutedGreen"  title="Muted Green"  style="background:#3d4a42"></div>
-          <div class="mat-swatch"           data-mat="gunMetal"    title="Gun Metal"    style="background:#4a4f56"></div>
-          <div class="mat-swatch"           data-mat="briskOrange" title="Brisk Orange" style="background:#c85a20"></div>
+        <span class="badge">Base</span>
+        <div class="mat-picker" id="basePicker">
+          <div class="mat-swatch is-active" data-base="white"     title="White"       style="background:#dcd8d0"></div>
+          <div class="mat-swatch"           data-base="metallic"  title="Metallic"    style="background:#b8bec8"></div>
+          <div class="mat-swatch"           data-base="lightWood" title="Light Wood"  style="background:#c8a464"></div>
+          <div class="mat-swatch"           data-base="darkWood"  title="Dark Wood"   style="background:#3e2810"></div>
         </div>
       </div>
       <div class="divider"></div>
@@ -121,7 +121,7 @@
         <input id="ff" class="slider ctrl" type="range" min="0" max="4" step="1" value="1"/>
       </div>
 
-      <!-- mech density-->      
+      <!-- mech density-->
       <div class="field" id="field-dens">
         <span class="badge">Density</span>
         <span id="densVal" class="value">Mid</span>
@@ -135,7 +135,17 @@
           <button type="button" class="segmented__btn" data-index="2">Hi</button>
         </div>
       </div>
-      
+
+      <div class="divider"></div>
+      <div class="mat-field">
+        <span class="badge">Finish</span>
+        <div class="mat-picker" id="matPicker">
+          <div class="mat-swatch is-active" data-mat="protoWhite"  title="Proto White"  style="background:#dcd8d0"></div>
+          <div class="mat-swatch"           data-mat="mutedGreen"  title="Muted Green"  style="background:#3d4a42"></div>
+          <div class="mat-swatch"           data-mat="gunMetal"    title="Gun Metal"    style="background:#4a4f56"></div>
+          <div class="mat-swatch"           data-mat="briskOrange" title="Brisk Orange" style="background:#c85a20"></div>
+        </div>
+      </div>
 
     </fieldset>
 
