@@ -1,6 +1,6 @@
 # Stack Migration Plan
 ## From: Shopify + Formspree + GitHub Pages
-## To: Netlify + Stripe + Airtable + Resend
+## To: Netlify + Stripe + Resend
 
 ---
 
@@ -10,7 +10,6 @@
 |---|---|---|
 | Hosting + Functions + Forms | Netlify | Free tier |
 | Payments | Stripe | 2.9% + $0.30/transaction, no monthly fee |
-| Data store | Airtable | Free tier |
 | Transactional email | Resend | Free tier (3k/month) |
 
 **Monthly fixed cost: $0** (vs ~$39/month on Shopify Basic)
@@ -19,13 +18,13 @@
 
 ## Phase 1 — Netlify Hosting
 
-- [ ] Push repo to GitHub (if not already)
-- [ ] Connect GitHub repo to Netlify
+- [x] Push repo to GitHub (if not already)
+- [x] Connect GitHub repo to Netlify
   - Build command: *(blank)*
   - Publish directory: `/`
-- [ ] Verify all pages, assets, and links serve correctly
+- [x] Verify all pages, assets, and links serve correctly
 - [ ] Add a `404.html` page
-- [ ] Point `voldt.design` domain to Netlify (replaces current setup)
+- [ ] Point `voldtlab.com` domain to Netlify (replaces current setup)
 
 ---
 
@@ -77,13 +76,15 @@ AJAX success handling may need minor adjustment (Netlify returns differently tha
 
 ## Phase 5 — Verified Purchase Reviews
 
-- [ ] Set up Airtable base: `Purchases` table (email, product, order date, review requested)
 - [ ] Create `netlify/functions/stripe-webhook.js`
   - Listens for `checkout.session.completed` events
-  - Writes purchase record to Airtable
-  - Sends review request email via Resend with a Formspree-style form link (or custom form)
+  - Sends review request email via Resend directly (no data store needed)
 - [ ] Register webhook endpoint in Stripe dashboard
-- [ ] Store `STRIPE_WEBHOOK_SECRET` + `AIRTABLE_API_KEY` + `RESEND_API_KEY` in Netlify env vars
+- [ ] Store `STRIPE_WEBHOOK_SECRET` + `RESEND_API_KEY` in Netlify env vars
+- [ ] Add review form page — use `data-netlify="true"` so submissions land in Netlify Forms dashboard
+- [ ] Manually curate approved reviews into the site (hardcoded or a JSON file)
+
+> **Deferred:** If review volume grows, introduce Airtable as a moderation layer (write submissions → Airtable, approve/reject in UI, Function reads approved rows). Not needed at launch.
 
 ---
 
@@ -91,7 +92,7 @@ AJAX success handling may need minor adjustment (Netlify returns differently tha
 
 - [ ] Verify Stripe checkout end-to-end in test mode
 - [ ] Verify Netlify Forms submissions arriving
-- [ ] Verify webhook → Airtable → email flow
+- [ ] Verify webhook → Resend email flow
 - [ ] Switch Stripe from test to live mode
 - [ ] Cancel Shopify subscription
 - [ ] Cancel Formspree (if on paid plan)
