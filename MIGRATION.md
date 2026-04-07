@@ -32,11 +32,10 @@
 
 Two forms need updating:
 
-- [ ] `contact.html` — remove Formspree endpoint, add `data-netlify="true"` to `<form>` tag
-- [ ] `trade.html` — same
+- [x] `contact.html` — form name `contact`, posts to `'/'` with `application/x-www-form-urlencoded`
+- [x] `trade.html` — form name `trade-inquiry`, same pattern
 
-Netlify Forms handles submission storage and email notifications natively.
-AJAX success handling may need minor adjustment (Netlify returns differently than Formspree).
+Netlify Forms enabled, email notifications configured. Submissions visible in Netlify dashboard → Forms.
 
 ---
 

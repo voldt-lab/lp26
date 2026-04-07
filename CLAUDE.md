@@ -140,9 +140,15 @@ Cart page also includes `<script src="js/shopify.js"></script>` between cart.js 
 
 ## Forms
 
-| Page | Formspree endpoint |
-|------|-------------------|
-| `contact.html` | `https://formspree.io/f/mnjgjnlb` |
-| `trade.html` | `https://formspree.io/f/xzdjdndr` |
+Both forms use **Netlify Forms** (Formspree removed). AJAX mode: POST to `'/'` with `Content-Type: application/x-www-form-urlencoded`, body via `URLSearchParams(new FormData(form))`. Form replaced with inline success message on submit. Email notifications configured in Netlify dashboard.
 
-Both use AJAX mode (`Accept: application/json`) -- form replaced with inline success message on submit.
+| Page | Netlify form name |
+|------|------------------|
+| `contact.html` | `contact` |
+| `trade.html` | `trade-inquiry` |
+
+## Hosting
+
+Site is hosted on **Netlify**, deploying from the `netlify` branch of the GitHub repo (repo is public). No build step — publish directory is `/`. Shopify is still active (not yet cut over).
+
+See `MIGRATION.md` for the full migration plan. **Current status: Phase 1 and Phase 2 complete. Phase 3 (Stripe checkout) is next.**
