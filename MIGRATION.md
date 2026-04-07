@@ -23,8 +23,7 @@
   - Build command: *(blank)*
   - Publish directory: `/`
 - [x] Verify all pages, assets, and links serve correctly
-- [ ] Add a `404.html` page
-- [ ] Point `voldtlab.com` domain to Netlify (replaces current setup)
+- [x] Add a `404.html` page
 
 ---
 
@@ -89,6 +88,7 @@ Netlify Forms enabled, email notifications configured. Submissions visible in Ne
 
 ## Phase 6 — Cutover
 
+- [ ] Point `voldtlab.com` domain to Netlify (replaces current setup)
 - [ ] Verify Stripe checkout end-to-end in test mode
 - [ ] Verify Netlify Forms submissions arriving
 - [ ] Verify webhook → Resend email flow
