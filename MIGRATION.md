@@ -44,7 +44,7 @@ Netlify Forms enabled, email notifications configured. Submissions visible in Ne
 - [ ] Create products in Stripe dashboard to mirror current Shopify variant map:
   - PolyFrames (coat rack, table lamp A/B, floor lamp A/B, coffee table)
   - Detroit Lights (pendant A/B standard/large, table lamp A/B standard/large)
-  - VOLDT Hardware (5 length tiers, knob variant)
+  - ~~VOLDT Hardware~~ — **deferred** (pricing model TBD, likely custom quote; configurator add-to-cart severed for now)
 - [ ] Map Stripe Price IDs to cart item IDs (mirrors current `js/shopify.js` variant GID map)
 
 ### 3b — Netlify Function: create checkout session

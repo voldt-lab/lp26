@@ -367,46 +367,10 @@ async function loadForCurrentState() {
 
 // ----- event wiring -----
 function wireUI() {
-  // Add to Cart button -- posts cart item to parent page via postMessage
+  // Add to Cart -- TODO: wire to Stripe once VOLDT Hardware pricing is finalized
   const buyBtn = document.getElementById('buyBtn');
   buyBtn.addEventListener('click', () => {
-    const st = getState();
-    const isKnob = st.product === 'lakeshore' && st.lakeType === 'knob';
-
-    const PRODUCT_NAMES = { heatwave: 'Heat Wave', mechanic: 'Mechanic', lakeshore: 'Lake Shore' };
-    const subtype = {
-      heatwave:  st.heatwaveType === 'chrystal' ? 'Chrystal' : 'Bulb',
-      mechanic:  st.mechTexture  === 'gyroid'   ? 'Gyroid'   : 'Voronoi',
-      lakeshore: isKnob ? 'Knob' : 'Simple',
-    }[st.product];
-    const name = `VOLDT Hardware — ${PRODUCT_NAMES[st.product]} ${subtype}`;
-
-    let id, price, options;
-    if (isKnob) {
-      id    = 'voldt-hardware-knob';
-      price = 49;
-      options = {
-        'Diameter': DIAM_LABELS[clampIndex(st.ff, DIAM_LABELS.length)],
-        'Density':  DENS_LABELS[clampIndex(st.dens, DENS_LABELS.length)],
-      };
-    } else {
-      id    = `voldt-hardware-${st.len}`;
-      price = [49, 59, 69, 79, 89][st.len];
-      options = {
-        'Size': LENGTH_LABELS[clampIndex(st.len, LENGTH_LABELS.length)],
-        'Hole Spacing (CTC)': SPACING_LABELS[clampIndex(st.sp, SPACING_LABELS.length)],
-      };
-      if (st.product === 'lakeshore') {
-        options['Twist'] = TWIST_LABELS[clampIndex(st.tw, TWIST_LABELS.length)];
-      } else {
-        options['Density'] = DENS_LABELS[clampIndex(st.dens, DENS_LABELS.length)];
-      }
-    }
-
-    window.parent.postMessage({
-      type: 'voldt-add-to-cart',
-      item: { id, name, price, image: 'assets/ap25_2.jpg', options },
-    }, '*');
+    alert('Online ordering for VOLDT Hardware is coming soon. To place an order, contact us at info@voldtlab.com.');
   });
 
   // About modal (unchanged behavior)
