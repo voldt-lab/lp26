@@ -24,7 +24,7 @@
 | `detroit-pendant.html` | Detroit Pendant -- ?style=A or ?style=B |
 | `detroit-table-lamp.html` | Detroit Table Lamp -- ?style=A or ?style=B |
 | `trade.html` | Studio & Trade -- trade program / inquiry |
-| `cart.html` | Cart page -- wired to Shopify checkout via `js/shopify.js` |
+| `cart.html` | Cart page -- wired to Stripe Checkout via `js/stripe.js` + Netlify Function |
 | `about.html` | About |
 | `faq.html` | FAQ |
 | `shipping-returns.html` | Shipping & Returns |
@@ -34,8 +34,14 @@
 | File | Purpose |
 |------|---------|
 | `js/cart.js` | Cart state in localStorage -- `addItem`, `removeItem`, `updateQty`, `clearCart`, `getCart`, `getTotal`, `getCount`, `updateCartBadge` |
-| `js/shopify.js` | Shopify Storefront API integration -- `createShopifyCheckout()` maps cart items to variant GIDs, calls `cartCreate` mutation, redirects to `checkoutUrl` |
+| `js/stripe.js` | Stripe Checkout -- `createStripeCheckout(discountCode)` POSTs cart to `/.netlify/functions/create-checkout`, redirects to Stripe hosted checkout page |
+| `js/shopify.js` | Shopify Storefront API integration (superseded -- kept until Shopify subscription is cancelled) |
 | `js/header.js` | Injects shared header + footer HTML into `#site-header` / `#site-footer`; wires nav dropdown + scroll shadow |
+
+### Netlify Functions
+| File | Purpose |
+|------|---------|
+| `netlify/create-checkout.js` | Creates Stripe Checkout Session server-side. Maps cart IDs → `PRICE_CENTS` (enforced server-side), builds `price_data` line items with full variant name + options string. Passes options as session `metadata.order_notes`. Handles discount code pre-lookup via `stripe.promotionCodes.list`. |
 
 ### Configurator (iframe embed at `configurator/`)
 | File | Purpose |
@@ -80,7 +86,7 @@ Every page:
 ```
 `header.js` injects all nav/footer HTML -- never edit nav links directly in pages.
 
-Cart page also includes `<script src="js/shopify.js"></script>` between cart.js and header.js.
+Cart page also includes `<script src="js/stripe.js"></script>` between cart.js and header.js.
 
 ## Design System
 
@@ -99,27 +105,25 @@ Cart page also includes `<script src="js/shopify.js"></script>` between cart.js 
 { id, name, price, qty, image, options: { key: value } }
 ```
 
-## Shopify Integration
+## Stripe Checkout
 
-- **Store**: `voldt-2.myshopify.com`
-- **Storefront API token** (public, safe client-side): `6f7494dd98f3629db5b1132b90087320`
-- **Setup**: Headless -- custom frontend + Shopify checkout only. Theme redirects storefront pages to `voldt.design` via `theme.liquid`; checkout URLs are unaffected.
-- **Cart notes**: Detroit lamp color (Black/Blue/Berry/Mint) is passed as a cart note via `buildNote()` -- not a Shopify variant.
-- **Custom work**: Handled via Shopify Draft Orders in Admin GUI -- no API needed.
+- **Approach**: `price_data` inline (not pre-created Stripe Price IDs). Each checkout session passes amount + product name dynamically. Price is enforced server-side in `PRICE_CENTS`; client only sends `item.id`.
+- **Variant names**: Built from `item.name` + formatted `item.options` (e.g. "Detroit Pendant Style A — Color: Black, Size: Standard"). Options also stored in `session.metadata.order_notes` for fulfillment reference.
+- **Discount codes**: Pre-entered code looked up via `stripe.promotionCodes.list`; falls back to Stripe's built-in promotion code field if lookup fails.
+- **Analytics note**: When exporting transactions from Stripe, include the **"Checkout line item summary"** column to get per-product breakdown. Multiple items in one order are lumped into a single transaction row without it.
+- **Custom work payments**: Use Stripe Payment Links (dashboard, no code) -- create a one-off link for any amount and send directly to client.
 
-### Variant ID Map (in `js/shopify.js`)
-| Cart ID | Product |
-|---------|---------|
-| `polyframes-coat-rack` | PolyFrame Coat Rack |
-| `polyframes-table-lamp-a` / `-b` | PolyFrame Table Lamp Style A/B |
-| `polyframes-floor-lamp-a` / `-b` | PolyFrame Floor Lamp Style A/B |
-| `polyframes-coffee-table` | PolyFrame Coffee Table |
-| `detroit-pendant-a-standard` / `-large` | Detroit Pendant Style A, Standard/Large |
-| `detroit-pendant-b-standard` / `-large` | Detroit Pendant Style B, Standard/Large |
-| `detroit-table-lamp-a-standard` / `-large` | Detroit Table Lamp Style A, Standard/Large |
-| `detroit-table-lamp-b-standard` / `-large` | Detroit Table Lamp Style B, Standard/Large |
-| `voldt-hardware-0` … `voldt-hardware-4` | VOLDT Hardware by length index ($49–$89); full config as cart note |
-| `voldt-hardware-knob` | VOLDT Hardware Lake Shore Free Form ($49); form factor as cart note |
+### Price Map (in `netlify/create-checkout.js`)
+| Cart ID | Price |
+|---------|-------|
+| `polyframes-coat-rack` | $499 |
+| `polyframes-table-lamp-a` / `-b` | $349 |
+| `polyframes-floor-lamp-a` / `-b` | $899 |
+| `detroit-pendant-a-standard` / `-b-standard` | $99 |
+| `detroit-pendant-a-large` / `-b-large` | $229 |
+| `detroit-table-lamp-a-standard` / `-b-standard` | $99 |
+| `detroit-table-lamp-a-large` / `-b-large` | $229 |
+| VOLDT Hardware | deferred -- pricing TBD |
 
 ## To-Dos
 
@@ -133,10 +137,12 @@ Cart page also includes `<script src="js/shopify.js"></script>` between cart.js 
 - [ ] **Delete len5 GLBs** -- `mechanic/gyroid/`, `mechanic/voronoi/`, and `lake_shore/simple/` still have `len5_*` files on disk; slider max is already capped at 4 in `main.js`
 - [x] ~~Eliminate About Us button~~ -- replaced with info icon + viewer disclaimer modal
 
-### Shopify
-- [x] Add Shopify products + variant IDs for VOLDT Hardware (configurator)
-- [x] Wire configurator state -> cart item IDs -> variant GIDs
-
+### Stripe / Checkout
+- [x] Netlify Function `netlify/create-checkout.js` -- session creation, price enforcement, metadata
+- [x] `js/stripe.js` -- frontend checkout trigger, replaces `js/shopify.js`
+- [x] `cart.html` -- success state, script reference updated, "Secure checkout by Stripe"
+- [x] Configurator add-to-cart severed (VOLDT Hardware pricing TBD -- shows contact alert)
+- [ ] Add VOLDT Hardware pricing to `PRICE_CENTS` once finalized
 
 ## Forms
 
@@ -151,4 +157,4 @@ Both forms use **Netlify Forms** (Formspree removed). AJAX mode: POST to `'/'` w
 
 Site is hosted on **Netlify**, deploying from the `netlify` branch of the GitHub repo (repo is public). No build step — publish directory is `/`. Shopify is still active (not yet cut over).
 
-See `MIGRATION.md` for the full migration plan. **Current status: Phase 1 and Phase 2 complete. Phase 3 (Stripe checkout) is next.**
+See `MIGRATION.md` for the full migration plan. **Current status: Phases 1–4 complete. Phase 5 (verified purchase reviews) is next. Phase 6 is domain cutover.**

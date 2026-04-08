@@ -41,48 +41,43 @@ Netlify Forms enabled, email notifications configured. Submissions visible in Ne
 ## Phase 3 — Replace Shopify Checkout with Stripe
 
 ### 3a — Stripe product/variant setup
-- [ ] Create products in Stripe dashboard to mirror current Shopify variant map:
-  - PolyFrames (coat rack, table lamp A/B, floor lamp A/B, coffee table)
-  - Detroit Lights (pendant A/B standard/large, table lamp A/B standard/large)
-  - ~~VOLDT Hardware~~ — **deferred** (pricing model TBD, likely custom quote; configurator add-to-cart severed for now)
-- [ ] Map Stripe Price IDs to cart item IDs (mirrors current `js/shopify.js` variant GID map)
+- [x] ~~VOLDT Hardware~~ — **deferred** (pricing model TBD, likely custom quote; configurator add-to-cart severed for now)
+- [x] Switched to **inline `price_data`** approach — no pre-created Stripe Price IDs needed. Amount enforced server-side via `PRICE_CENTS` map in `netlify/create-checkout.js`. Variant name + options built dynamically (e.g. "Detroit Pendant Style A — Color: Black, Size: Standard").
+  - **Analytics note**: when exporting from Stripe, include "Checkout line item summary" column for per-product breakdown.
 
 ### 3b — Netlify Function: create checkout session
-- [ ] Create `netlify/functions/create-checkout.js`
-  - Receives cart items from frontend
-  - Maps cart IDs to Stripe Price IDs
-  - Passes hardware config + lamp color as Stripe session `metadata` (replaces Shopify cart notes)
-  - Returns `session.url` → frontend redirects
-- [ ] Store `STRIPE_SECRET_KEY` in Netlify environment variables (never in client JS)
+- [x] `netlify/create-checkout.js` — receives cart items, maps IDs to prices, builds `price_data` line items, passes options as `metadata.order_notes`, handles discount code lookup
+- [x] `STRIPE_SECRET_KEY` stored in Netlify environment variables
 
 ### 3c — Frontend
-- [ ] Rewrite `js/shopify.js` → `js/stripe.js`
-  - Call `/.netlify/functions/create-checkout` instead of Shopify Storefront API
-  - Same cart shape, same redirect pattern
-- [ ] Update `cart.html` script reference
+- [x] `js/stripe.js` — calls `/.netlify/functions/create-checkout`, redirects to Stripe hosted checkout
+- [x] `cart.html` — script reference updated, success state added (`?success=true`), "Secure checkout by Stripe"
 
 ---
 
 ## Phase 4 — Replace Shopify Draft Orders (Custom Work)
 
-- [ ] Use **Stripe Payment Links** (dashboard, no code)
-  - Create a one-off link with any amount for custom commissions
-  - Send link directly to client — no API or server-side code needed
-- [ ] Remove any dependency on Shopify Admin API
+- [x] Use **Stripe Payment Links** or **Stripe Invoices** (dashboard, no code)
+  - Payment Links: reusable or one-off link for a fixed amount — send directly to client
+  - Invoices: itemized, client receives email with pay button — better for commissioned work with a scope breakdown
+  - No API or server-side code needed for either
+- [x] No Shopify Admin API dependency to remove — custom work was always handled manually
 
 ---
 
 ## Phase 5 — Verified Purchase Reviews
 
-- [ ] Create `netlify/functions/stripe-webhook.js`
-  - Listens for `checkout.session.completed` events
-  - Sends review request email via Resend directly (no data store needed)
-- [ ] Register webhook endpoint in Stripe dashboard
-- [ ] Store `STRIPE_WEBHOOK_SECRET` + `RESEND_API_KEY` in Netlify env vars
-- [ ] Add review form page — use `data-netlify="true"` so submissions land in Netlify Forms dashboard
-- [ ] Manually curate approved reviews into the site (hardcoded or a JSON file)
+**Design decision:** Reviews are brand-level, not per-product. One email per completed order; open text + star rating. Reviewer naturally mentions the product in their text. Reviews manually curated and hardcoded into the relevant collection page (`polyframes.html`, `detroit-lights.html`). No automated product-linking needed — `price_data` checkout has no persistent catalog to link against, and manual curation at this volume is trivial.
 
-> **Deferred:** If review volume grows, introduce Airtable as a moderation layer (write submissions → Airtable, approve/reject in UI, Function reads approved rows). Not needed at launch.
+### Steps
+- [ ] Create `netlify/stripe-webhook.js`
+  - Verify Stripe webhook signature (`STRIPE_WEBHOOK_SECRET`)
+  - On `checkout.session.completed`: send review request email via Resend (`RESEND_API_KEY`)
+  - Email links to the review submission page
+- [ ] Register webhook in Stripe dashboard → Webhooks → `/.netlify/functions/stripe-webhook`
+- [ ] Store `STRIPE_WEBHOOK_SECRET` + `RESEND_API_KEY` in Netlify env vars
+- [ ] Create `review.html` — star rating + open text, `data-netlify="true"`, submits to Netlify Forms
+- [ ] Manually curate approved submissions → hardcode into collection page testimonial sections
 
 ---
 

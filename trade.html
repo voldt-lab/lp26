@@ -281,6 +281,7 @@
               <textarea id="message" name="message" required rows="6" placeholder="Describe your project -- the space, what you're looking for, any reference images or specifications you have..." class="w-full px-4 py-3 border border-stone-300 rounded-sm focus:outline-none focus:border-stone-500 transition-colors text-sm resize-none"></textarea>
             </div>
             <button type="submit" class="w-full py-4 bg-stone-900 text-white text-xs tracking-[0.15em] uppercase hover:bg-[#C8922A] transition-colors">Submit Inquiry</button>
+            <p id="trade-error" class="hidden text-sm text-red-700 mt-3">Submission failed — please email us directly at <a href="mailto:info@voldtlab.com" class="underline">info@voldtlab.com</a>.</p>
           </form>
         </div>
       </div>
@@ -298,7 +299,9 @@
     document.getElementById('custom-form').addEventListener('submit', async function(e) {
       e.preventDefault();
       const btn = this.querySelector('button[type="submit"]');
+      const errorEl = document.getElementById('trade-error');
       const original = btn.textContent;
+      errorEl.classList.add('hidden');
       btn.textContent = 'Sending...';
       btn.disabled = true;
       try {
@@ -312,12 +315,12 @@
         } else {
           btn.textContent = original;
           btn.disabled = false;
-          alert('Something went wrong. Please email us directly at info@voldtlab.com.');
+          errorEl.classList.remove('hidden');
         }
       } catch {
         btn.textContent = original;
         btn.disabled = false;
-        alert('Unable to send. Please email us directly at info@voldtlab.com.');
+        errorEl.classList.remove('hidden');
       }
     });
   </script>
