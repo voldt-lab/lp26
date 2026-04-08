@@ -1,26 +1,26 @@
 // create-checkout.js -- Netlify Function: creates a Stripe Checkout Session
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
-// Maps local cart item IDs -> Stripe Price IDs
-const PRICE_MAP = {
+// Maps local cart item IDs -> price in cents (enforced server-side)
+const PRICE_CENTS = {
   // PolyFrames (Style A and B share the same price)
-  'polyframes-coat-rack':          'price_1TJvlQ2NqRwWEdh7CPPl7wd2',
-  'polyframes-table-lamp-a':       'price_1TJvjn2NqRwWEdh7oFyb4xRT',
-  'polyframes-table-lamp-b':       'price_1TJvjn2NqRwWEdh7oFyb4xRT',
-  'polyframes-floor-lamp-a':       'price_1TJvke2NqRwWEdh7Neg9voJf',
-  'polyframes-floor-lamp-b':       'price_1TJvke2NqRwWEdh7Neg9voJf',
+  'polyframes-coat-rack':          49900,  // $499
+  'polyframes-table-lamp-a':       34900,  // $349
+  'polyframes-table-lamp-b':       34900,
+  'polyframes-floor-lamp-a':       89900,  // $899
+  'polyframes-floor-lamp-b':       89900,
 
-  // Detroit Lights (pendant + table lamp, both styles, share standard/large price)
-  'detroit-pendant-a-standard':    'price_1TJvsX2NqRwWEdh75cKUXwUv',
-  'detroit-pendant-a-large':       'price_1TJvtA2NqRwWEdh77qrxzcXK',
-  'detroit-pendant-b-standard':    'price_1TJvsX2NqRwWEdh75cKUXwUv',
-  'detroit-pendant-b-large':       'price_1TJvtA2NqRwWEdh77qrxzcXK',
-  'detroit-table-lamp-a-standard': 'price_1TJvsX2NqRwWEdh75cKUXwUv',
-  'detroit-table-lamp-a-large':    'price_1TJvtA2NqRwWEdh77qrxzcXK',
-  'detroit-table-lamp-b-standard': 'price_1TJvsX2NqRwWEdh75cKUXwUv',
-  'detroit-table-lamp-b-large':    'price_1TJvtA2NqRwWEdh77qrxzcXK',
+  // Detroit Lights (pendant + table lamp, both styles, standard/large)
+  'detroit-pendant-a-standard':     9900,  // $99
+  'detroit-pendant-a-large':       22900,  // $229
+  'detroit-pendant-b-standard':     9900,
+  'detroit-pendant-b-large':       22900,
+  'detroit-table-lamp-a-standard':  9900,
+  'detroit-table-lamp-a-large':    22900,
+  'detroit-table-lamp-b-standard':  9900,
+  'detroit-table-lamp-b-large':    22900,
 
-  // VOLDT Hardware -- TODO: add Stripe Price IDs once pricing is finalized
+  // VOLDT Hardware -- TODO: add pricing once finalized
 };
 
 exports.handler = async (event) => {
@@ -37,9 +37,19 @@ exports.handler = async (event) => {
 
   const line_items = [];
   for (const item of cartItems) {
-    const priceId = PRICE_MAP[item.id];
-    if (priceId) {
-      line_items.push({ price: priceId, quantity: item.quantity });
+    const unitAmount = PRICE_CENTS[item.id];
+    if (unitAmount !== undefined) {
+      const optionStr = item.options && Object.keys(item.options).length
+        ? ' — ' + Object.entries(item.options).map(([k, v]) => `${k}: ${v}`).join(', ')
+        : '';
+      line_items.push({
+        price_data: {
+          currency: 'usd',
+          unit_amount: unitAmount,
+          product_data: { name: item.name + optionStr },
+        },
+        quantity: item.quantity,
+      });
     }
   }
 
