@@ -67,7 +67,9 @@ Netlify Forms enabled, email notifications configured. Submissions visible in Ne
 
 ## Phase 5 — Verified Purchase Reviews
 
-**Design decision:** Reviews are brand-level, not per-product. One email per completed order; open text + star rating. Reviewer naturally mentions the product in their text. Reviews manually curated and hardcoded into the relevant collection page (`polyframes.html`, `detroit-lights.html`). No automated product-linking needed — `price_data` checkout has no persistent catalog to link against, and manual curation at this volume is trivial.
+**Design decision:** Reviews are brand-level, not per-product. One email per completed order, sent via Resend 2–4 weeks after purchase (timing is critical — reviewer needs to have received and lived with the product). Email contains a unique link to the review form. Open text + star rating. Reviews manually curated and hardcoded into the relevant collection page (`polyframes.html`, `detroit-lights.html`).
+
+Resend is required (not optional): Netlify has no native outbound email API — Forms notifications only fire on form submission, not from a webhook. The follow-up email also acts as a gating mechanism; a public review URL without it would invite URL injection and low-quality submissions, adding moderation burden.
 
 ### Steps
 - [ ] Create `netlify/stripe-webhook.js`

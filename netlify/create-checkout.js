@@ -23,6 +23,15 @@ const PRICE_CENTS = {
   // VOLDT Hardware -- TODO: add pricing once finalized
 };
 
+const SHIPPING_REGULAR = 'shr_1TJyUu2NqRwWEdh7Qa9fUC3b'; // $15 -- most items
+const SHIPPING_LARGE   = 'shr_1TJyW32NqRwWEdh7Yxv9az1M'; // $25 -- coat rack, floor lamps
+
+const OVERSIZED_IDS = new Set([
+  'polyframes-coat-rack',
+  'polyframes-floor-lamp-a',
+  'polyframes-floor-lamp-b',
+]);
+
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
@@ -53,6 +62,8 @@ exports.handler = async (event) => {
     }
   }
 
+  const hasOversized = cartItems.some(item => OVERSIZED_IDS.has(item.id));
+
   if (line_items.length === 0) {
     return {
       statusCode: 400,
@@ -77,7 +88,8 @@ exports.handler = async (event) => {
     success_url: `${siteUrl}/cart.html?success=true`,
     cancel_url:  `${siteUrl}/cart.html`,
     metadata,
-    shipping_address_collection: { allowed_countries: ['US'] },
+    shipping_options: [{ shipping_rate: hasOversized ? SHIPPING_LARGE : SHIPPING_REGULAR }],
+    automatic_tax: { enabled: true },
     allow_promotion_codes: true,
   };
 
