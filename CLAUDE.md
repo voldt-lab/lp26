@@ -29,6 +29,7 @@
 | `faq.html` | FAQ |
 | `shipping-returns.html` | Shipping & Returns |
 | `contact.html` | Contact / Inquiries |
+| `review.html` | Verified purchase review form -- gated by Stripe Payment Intent ID via `verify-session.js` |
 
 ### JS
 | File | Purpose |
@@ -41,7 +42,9 @@
 ### Netlify Functions
 | File | Purpose |
 |------|---------|
-| `netlify/create-checkout.js` | Creates Stripe Checkout Session server-side. Maps cart IDs → `PRICE_CENTS` (enforced server-side), builds `price_data` line items with full variant name + options string. Passes options as session `metadata.order_notes`. Handles discount code pre-lookup via `stripe.promotionCodes.list`. |
+| `netlify/create-checkout.js` | Creates Stripe Checkout Session server-side. Maps cart IDs → `PRICE_CENTS` (enforced server-side), builds `price_data` line items with full variant name + options string. Passes options as session `metadata.order_notes`. Handles discount code pre-lookup via `stripe.promotionCodes.list`. Detects oversized items for shipping rate selection. `automatic_tax` enabled. |
+| `netlify/verify-session.js` | Validates a Stripe Payment Intent ID (`pi_...`) for the review form -- checks `status === 'succeeded'` and `metadata.review_submitted` flag. Returns `{ status: 'ok' \| 'already_submitted' \| 'invalid' }`. |
+| `netlify/mark-reviewed.js` | Sets `metadata.review_submitted = 'true'` on a PaymentIntent after review submission. Re-verifies before writing; returns 409 if already submitted. Acts as the deduplication gate. |
 
 ### Configurator (iframe embed at `configurator/`)
 | File | Purpose |
@@ -110,8 +113,11 @@ Cart page also includes `<script src="js/stripe.js"></script>` between cart.js a
 - **Approach**: `price_data` inline (not pre-created Stripe Price IDs). Each checkout session passes amount + product name dynamically. Price is enforced server-side in `PRICE_CENTS`; client only sends `item.id`.
 - **Variant names**: Built from `item.name` + formatted `item.options` (e.g. "Detroit Pendant Style A — Color: Black, Size: Standard"). Options also stored in `session.metadata.order_notes` for fulfillment reference.
 - **Discount codes**: Pre-entered code looked up via `stripe.promotionCodes.list`; falls back to Stripe's built-in promotion code field if lookup fails.
+- **Shipping**: Two flat rates selected server-side based on cart contents. Oversized items (`polyframes-coat-rack`, `polyframes-floor-lamp-a/b`) → Large rate ($25, `shr_1TJyW32NqRwWEdh7Yxv9az1M`); all others → Regular ($15, `shr_1TJyUu2NqRwWEdh7Qa9fUC3b`).
+- **Tax**: `automatic_tax: { enabled: true }` — activates once Stripe account is verified; no-op until then.
 - **Analytics note**: When exporting transactions from Stripe, include the **"Checkout line item summary"** column to get per-product breakdown. Multiple items in one order are lumped into a single transaction row without it.
 - **Custom work payments**: Use Stripe Payment Links (dashboard, no code) -- create a one-off link for any amount and send directly to client.
+- **Review invitations**: After an order ships, copy the Payment Intent ID (`pi_...`) from Stripe dashboard and email `voldtlab.com/review.html?payment=pi_...` to the customer ~2–4 weeks post-delivery.
 
 ### Price Map (in `netlify/create-checkout.js`)
 | Cart ID | Price |
@@ -157,4 +163,6 @@ Both forms use **Netlify Forms** (Formspree removed). AJAX mode: POST to `'/'` w
 
 Site is hosted on **Netlify**, deploying from the `netlify` branch of the GitHub repo (repo is public). No build step — publish directory is `/`. Shopify is still active (not yet cut over).
 
-See `MIGRATION.md` for the full migration plan. **Current status: Phases 1–4 complete. Phase 5 (verified purchase reviews) is next. Phase 6 is domain cutover.**
+See `MIGRATION.md` for the full migration plan. **Current status: Phases 1–4 complete. Phase 5 code complete (verify-session, mark-reviewed, review.html) — needs one production deploy to register Netlify Form, then end-to-end test on live site. Phase 6 is domain cutover.**
+
+**Local dev:** `npx netlify-cli dev` at `localhost:8888`. Requires `.env` with `STRIPE_SECRET_KEY=sk_test_...`. Functions run fully locally; Netlify Forms simulate a 200 but data doesn't reach the cloud dashboard.

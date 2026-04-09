@@ -53,6 +53,13 @@ Netlify Forms enabled, email notifications configured. Submissions visible in Ne
 - [x] `js/stripe.js` — calls `/.netlify/functions/create-checkout`, redirects to Stripe hosted checkout
 - [x] `cart.html` — script reference updated, success state added (`?success=true`), "Secure checkout by Stripe"
 
+### 3d — Shipping & Tax
+- [x] Two flat-rate shipping options created in Stripe dashboard (Products → Shipping rates):
+  - Regular: `shr_1TJyUu2NqRwWEdh7Qa9fUC3b` — $15 — all items except oversized
+  - Large: `shr_1TJyW32NqRwWEdh7Yxv9az1M` — $25 — coat rack + floor lamps A/B
+- [x] `create-checkout.js` detects oversized items in cart, passes appropriate `shipping_options` to session
+- [x] `automatic_tax: { enabled: true }` added to session — activates once Stripe account is verified (no-op in sandbox)
+
 ---
 
 ## Phase 4 — Replace Shopify Draft Orders (Custom Work)
@@ -69,17 +76,21 @@ Netlify Forms enabled, email notifications configured. Submissions visible in Ne
 
 **Design decision:** Reviews are brand-level, not per-product. One invitation email per completed order — timing is critical (reviewer needs to have received and lived with the product, ~2-4 weeks out). Open text + star rating. Reviews manually curated and hardcoded into the relevant collection page (`polyframes.html`, `detroit-lights.html`).
 
-**Token / gating:** The Stripe Checkout Session ID (`cs_live_...`) serves as the review invitation token. Included in the manual email as a URL parameter (`review.html?session=cs_live_...`). A Netlify Function (`verify-session.js`) calls `stripe.checkout.sessions.retrieve()` to confirm the session is real and `payment_status === 'paid'` before revealing the form. Session IDs are long cryptographic strings — not guessable.
+**Token / gating:** The Stripe **Payment Intent ID** (`pi_...`) serves as the review token — visible directly in the Stripe dashboard (Transactions → click payment → Payment ID). Manually copied and included in the invitation email as `review.html?payment=pi_...`. `verify-session.js` calls `stripe.paymentIntents.retrieve()`, checks `status === 'succeeded'` and `metadata.review_submitted` flag.
 
-**Deduplication:** On submission, a second Netlify Function (`mark-reviewed.js`) sets `metadata.review_submitted = 'true'` on the session's PaymentIntent via `stripe.paymentIntents.update()`. The verify function checks this flag on every visit — subsequent attempts to use the same link return "already submitted." Stripe is the record; no external data store needed.
+**Deduplication:** `mark-reviewed.js` is called first on form submit. It re-verifies the PaymentIntent, checks the flag, then sets `metadata.review_submitted = 'true'` via `stripe.paymentIntents.update()`. Returns 409 if already submitted. Stripe is the record — no external data store needed.
 
-**Resend: on hold.** At current volume, review invitations are sent manually by VOLDT after checking the Stripe dashboard. Resend (or similar) would automate the send via a `checkout.session.completed` webhook — worth adding if order volume grows. Not a blocker for launch.
+**Resend: on hold.** Invitations sent manually by VOLDT — look up the Payment Intent ID in Stripe after an order, include in a personal follow-up email ~2–4 weeks post-delivery. Resend + webhook would automate this if volume grows.
+
+**Local dev note:** `mark-reviewed` and `verify-session` functions test fully with `npx netlify-cli dev`. Netlify Forms POST (final step of submit) cannot be tested locally — CLI doesn't pre-register forms. Will work on first production deploy.
 
 ### Steps
-- [ ] Create `netlify/verify-session.js` — retrieves Stripe session + PaymentIntent, checks `review_submitted` flag, returns valid/invalid/already-reviewed
-- [ ] Create `netlify/mark-reviewed.js` — sets `metadata.review_submitted = 'true'` on the PaymentIntent after form submission
-- [ ] Create `review.html` — form hidden by default; JS calls verify-session on load, reveals form if valid; on submit calls mark-reviewed then posts to Netlify Forms
-- [ ] Manually curate approved Netlify Forms submissions → hardcode into collection page testimonial sections
+- [x] `netlify/verify-session.js` — retrieves PaymentIntent, checks `status === 'succeeded'` and `review_submitted` flag
+- [x] `netlify/mark-reviewed.js` — re-verifies, sets `review_submitted: true` on PaymentIntent metadata, returns 409 if duplicate
+- [x] `review.html` — verifies token on load, reveals form if valid, calls mark-reviewed before Netlify Forms POST
+- [ ] **Next: trigger a production deploy** → Netlify auto-registers the `review` form on first deploy
+- [ ] Test full flow on live site with a real sandbox `pi_...` ID
+- [ ] Manually curate approved submissions → hardcode into collection page testimonial sections
 - [ ] *(Future)* Add Resend + Stripe webhook to automate invitation emails if volume grows
 
 ---
@@ -87,8 +98,21 @@ Netlify Forms enabled, email notifications configured. Submissions visible in Ne
 ## Phase 6 — Cutover
 
 - [ ] Point `voldtlab.com` domain to Netlify (replaces current setup)
-- [ ] Verify Stripe checkout end-to-end in test mode
+- [x] Verify Stripe checkout end-to-end in test mode (sandbox tested successfully)
 - [x] Verify Netlify Forms submissions arriving
-- [ ] Switch Stripe from test to live mode
+- [ ] Verify review flow end-to-end on live Netlify URL (trigger one deploy first)
+- [ ] Switch Stripe from test to live mode (requires Stripe account verification)
 - [ ] Cancel Shopify subscription
 - [ ] Cancel Formspree (if on paid plan)
+
+---
+
+## Operational Notes
+
+to launch netlify local server `npx netlify-cli dev`
+
+**Netlify credits (free tier):** 300 credits/month. Production deploys cost 15 credits each (~20 deploys/month max). Keep builds stopped in Netlify dashboard and trigger manually only when ready. Branch/preview deploys are free. Form submissions cost 1 credit each.
+
+**Review invitation workflow:** After an order ships (~2–4 weeks), go to Stripe dashboard → Transactions, click the payment, copy the Payment Intent ID (`pi_...`), and email the customer: `voldtlab.com/review.html?payment=pi_...`. The page verifies the purchase and prevents duplicate submissions automatically.
+
+**Stripe analytics:** When exporting transactions, include the "Checkout line item summary" column for per-product breakdown. Multi-item orders appear as one row without it.
