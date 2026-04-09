@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <a href="about.html" class="block w-full py-3 text-center text-xs text-stone-700 hover:text-stone-900 hover:bg-stone-50 border-b border-yellow-600/10">About</a>
               <a href="faq.html" class="block w-full py-3 text-center text-xs text-stone-700 hover:text-stone-900 hover:bg-stone-50 border-b border-yellow-600/10">FAQ</a>
               <a href="shipping-returns.html" class="block w-full py-3 text-center text-xs text-stone-700 hover:text-stone-900 hover:bg-stone-50 border-b border-yellow-600/10">Shipping</a>
-              <a href="contact.html" class="block w-full py-3 text-center text-xs text-stone-700 hover:text-stone-900 hover:bg-stone-50">Inquiries</a>
+              <a href="contact.html" class="block w-full py-3 text-center text-xs text-stone-700 hover:text-stone-900 hover:bg-stone-50">Contact Us</a>
             </div>
           </div>
         </nav>

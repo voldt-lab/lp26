@@ -67,19 +67,20 @@ Netlify Forms enabled, email notifications configured. Submissions visible in Ne
 
 ## Phase 5 — Verified Purchase Reviews
 
-**Design decision:** Reviews are brand-level, not per-product. One email per completed order, sent via Resend 2–4 weeks after purchase (timing is critical — reviewer needs to have received and lived with the product). Email contains a unique link to the review form. Open text + star rating. Reviews manually curated and hardcoded into the relevant collection page (`polyframes.html`, `detroit-lights.html`).
+**Design decision:** Reviews are brand-level, not per-product. One invitation email per completed order — timing is critical (reviewer needs to have received and lived with the product, ~2-4 weeks out). Open text + star rating. Reviews manually curated and hardcoded into the relevant collection page (`polyframes.html`, `detroit-lights.html`).
 
-Resend is required (not optional): Netlify has no native outbound email API — Forms notifications only fire on form submission, not from a webhook. The follow-up email also acts as a gating mechanism; a public review URL without it would invite URL injection and low-quality submissions, adding moderation burden.
+**Token / gating:** The Stripe Checkout Session ID (`cs_live_...`) serves as the review invitation token. Included in the manual email as a URL parameter (`review.html?session=cs_live_...`). A Netlify Function (`verify-session.js`) calls `stripe.checkout.sessions.retrieve()` to confirm the session is real and `payment_status === 'paid'` before revealing the form. Session IDs are long cryptographic strings — not guessable.
+
+**Deduplication:** On submission, a second Netlify Function (`mark-reviewed.js`) sets `metadata.review_submitted = 'true'` on the session's PaymentIntent via `stripe.paymentIntents.update()`. The verify function checks this flag on every visit — subsequent attempts to use the same link return "already submitted." Stripe is the record; no external data store needed.
+
+**Resend: on hold.** At current volume, review invitations are sent manually by VOLDT after checking the Stripe dashboard. Resend (or similar) would automate the send via a `checkout.session.completed` webhook — worth adding if order volume grows. Not a blocker for launch.
 
 ### Steps
-- [ ] Create `netlify/stripe-webhook.js`
-  - Verify Stripe webhook signature (`STRIPE_WEBHOOK_SECRET`)
-  - On `checkout.session.completed`: send review request email via Resend (`RESEND_API_KEY`)
-  - Email links to the review submission page
-- [ ] Register webhook in Stripe dashboard → Webhooks → `/.netlify/functions/stripe-webhook`
-- [ ] Store `STRIPE_WEBHOOK_SECRET` + `RESEND_API_KEY` in Netlify env vars
-- [ ] Create `review.html` — star rating + open text, `data-netlify="true"`, submits to Netlify Forms
-- [ ] Manually curate approved submissions → hardcode into collection page testimonial sections
+- [ ] Create `netlify/verify-session.js` — retrieves Stripe session + PaymentIntent, checks `review_submitted` flag, returns valid/invalid/already-reviewed
+- [ ] Create `netlify/mark-reviewed.js` — sets `metadata.review_submitted = 'true'` on the PaymentIntent after form submission
+- [ ] Create `review.html` — form hidden by default; JS calls verify-session on load, reveals form if valid; on submit calls mark-reviewed then posts to Netlify Forms
+- [ ] Manually curate approved Netlify Forms submissions → hardcode into collection page testimonial sections
+- [ ] *(Future)* Add Resend + Stripe webhook to automate invitation emails if volume grows
 
 ---
 
@@ -87,8 +88,7 @@ Resend is required (not optional): Netlify has no native outbound email API — 
 
 - [ ] Point `voldtlab.com` domain to Netlify (replaces current setup)
 - [ ] Verify Stripe checkout end-to-end in test mode
-- [ ] Verify Netlify Forms submissions arriving
-- [ ] Verify webhook → Resend email flow
+- [x] Verify Netlify Forms submissions arriving
 - [ ] Switch Stripe from test to live mode
 - [ ] Cancel Shopify subscription
 - [ ] Cancel Formspree (if on paid plan)

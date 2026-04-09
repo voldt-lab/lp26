@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Leave a Review -- VOLDT</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','sans-serif']}}}}</script>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="bg-white font-sans">
+  <header id="site-header" class="fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-md"></header>
+  <div class="pt-20 min-h-screen">
+    <div class="max-w-2xl mx-auto px-8 py-16">
+
+      <!-- Loading -->
+      <div id="state-loading">
+        <p class="text-sm text-stone-400">Verifying your purchase...</p>
+      </div>
+
+      <!-- Invalid -->
+      <div id="state-invalid" class="hidden">
+        <p class="text-[10px] tracking-[0.2em] uppercase text-stone-400 mb-6">Review</p>
+        <h1 class="text-2xl font-bold text-stone-900 mb-4">Invalid link</h1>
+        <p class="text-sm text-stone-500">This review link is not valid or has expired. If you believe this is an error, email us at <a href="mailto:info@voldtlab.com" class="underline hover:text-stone-900">info@voldtlab.com</a>.</p>
+      </div>
+
+      <!-- Already submitted -->
+      <div id="state-done" class="hidden">
+        <p class="text-[10px] tracking-[0.2em] uppercase text-stone-400 mb-6">Review</p>
+        <h1 class="text-2xl font-bold text-stone-900 mb-4">Already submitted</h1>
+        <p class="text-sm text-stone-500">You've already left a review for this order. Thank you — we appreciate it.</p>
+      </div>
+
+      <!-- Form -->
+      <div id="state-form" class="hidden">
+        <div class="mb-12">
+          <p class="text-[10px] tracking-[0.2em] uppercase text-stone-400 mb-6">Verified Purchase</p>
+          <h1 class="text-3xl font-bold text-stone-900 mb-4">Leave a Review</h1>
+          <p class="text-sm text-stone-500 leading-relaxed">How was your experience with VOLDT? Your feedback helps us improve and helps others discover our work.</p>
+        </div>
+
+        <form id="review-form" name="review" data-netlify="true" class="space-y-8">
+          <input type="hidden" name="form-name" value="review" />
+          <input type="hidden" name="session_id" id="session-id-field" />
+
+          <!-- Star rating -->
+          <div>
+            <label class="block text-xs tracking-[0.1em] uppercase text-stone-700 mb-4">Rating</label>
+            <div id="star-rating" class="flex gap-3"></div>
+            <input type="hidden" name="rating" id="rating-value" />
+          </div>
+
+          <!-- Name -->
+          <div>
+            <label for="reviewer-name" class="block text-xs tracking-[0.1em] uppercase text-stone-700 mb-2">Your Name</label>
+            <input type="text" id="reviewer-name" name="name" required
+              class="w-full px-4 py-3 border border-stone-300 rounded-sm focus:outline-none focus:border-stone-500 transition-colors text-sm"
+              placeholder="First name or initials" />
+          </div>
+
+          <!-- Review text -->
+          <div>
+            <label for="review-text" class="block text-xs tracking-[0.1em] uppercase text-stone-700 mb-2">Your Review</label>
+            <textarea id="review-text" name="review" required rows="6"
+              class="w-full px-4 py-3 border border-stone-300 rounded-sm focus:outline-none focus:border-stone-500 transition-colors text-sm resize-none"
+              placeholder="Tell us about your experience — the product, the process, anything that stood out..."></textarea>
+          </div>
+
+          <button type="submit" class="w-full py-4 bg-stone-900 text-white text-xs tracking-[0.15em] uppercase hover:bg-[#C8922A] transition-colors">Submit Review</button>
+          <p id="review-error" class="hidden text-sm text-red-700">Submission failed — please email us at <a href="mailto:info@voldtlab.com" class="underline">info@voldtlab.com</a>.</p>
+        </form>
+      </div>
+
+      <!-- Success -->
+      <div id="state-success" class="hidden py-16">
+        <p class="text-[10px] tracking-[0.2em] uppercase text-stone-400 mb-6">Review</p>
+        <h1 class="text-2xl font-bold text-stone-900 mb-4">Thank you.</h1>
+        <p class="text-sm text-stone-500 leading-relaxed">We read every submission and appreciate the time you took to share your experience.</p>
+      </div>
+
+    </div>
+  </div>
+  <footer id="site-footer" class="border-t border-stone-200 bg-white"></footer>
+  <script src="js/cart.js"></script><script src="js/header.js"></script>
+  <script>
+    function showState(id) {
+      ['loading', 'invalid', 'done', 'form', 'success'].forEach(s => {
+        document.getElementById('state-' + s).classList.add('hidden');
+      });
+      document.getElementById('state-' + id).classList.remove('hidden');
+    }
+
+    // Star rating
+    let selectedRating = 0;
+    const starsEl = document.getElementById('star-rating');
+    for (let i = 1; i <= 5; i++) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.textContent = '★';
+      btn.dataset.value = i;
+      btn.className = 'text-4xl text-stone-200 hover:text-stone-900 transition-colors leading-none';
+      btn.addEventListener('click', () => {
+        selectedRating = i;
+        document.getElementById('rating-value').value = i;
+        starsEl.querySelectorAll('button').forEach((b, idx) => {
+          b.className = 'text-4xl transition-colors leading-none ' +
+            (idx < i ? 'text-stone-900' : 'text-stone-200 hover:text-stone-900');
+        });
+      });
+      starsEl.appendChild(btn);
+    }
+
+    // Verify payment on load
+    const paymentIntentId = new URLSearchParams(window.location.search).get('payment');
+
+    if (!paymentIntentId) {
+      showState('invalid');
+    } else {
+      document.getElementById('session-id-field').value = paymentIntentId;
+      fetch('/.netlify/functions/verify-session?id=' + encodeURIComponent(paymentIntentId))
+        .then(r => r.json())
+        .then(data => {
+          if (data.status === 'ok') showState('form');
+          else if (data.status === 'already_submitted') showState('done');
+          else showState('invalid');
+        })
+        .catch(() => showState('invalid'));
+    }
+
+    // Form submit
+    document.getElementById('review-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      if (!selectedRating) {
+        alert('Please select a star rating.');
+        return;
+      }
+
+      const btn = this.querySelector('button[type="submit"]');
+      const errorEl = document.getElementById('review-error');
+      btn.textContent = 'Submitting...';
+      btn.disabled = true;
+      errorEl.classList.add('hidden');
+
+      try {
+        // Gate: mark reviewed first to prevent duplicates
+        const markRes = await fetch('/.netlify/functions/mark-reviewed', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ paymentIntentId }),
+        });
+
+        if (markRes.status === 409) { showState('done'); return; }
+        if (!markRes.ok) throw new Error('mark failed');
+
+        // Submit to Netlify Forms
+        const formRes = await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(new FormData(this)).toString(),
+        });
+
+        if (!formRes.ok) throw new Error('form failed');
+
+        showState('success');
+      } catch (err) {
+        console.error('Review submit error:', err);
+        btn.textContent = 'Submit Review';
+        btn.disabled = false;
+        errorEl.classList.remove('hidden');
+      }
+    });
+  </script>
+</body>
+</html>
