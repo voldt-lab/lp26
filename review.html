@@ -93,22 +93,30 @@
     // Star rating
     let selectedRating = 0;
     const starsEl = document.getElementById('star-rating');
+
+    function setStarColors(upTo, activeColor) {
+      starsEl.querySelectorAll('button').forEach((b, idx) => {
+        b.style.color = idx < upTo ? activeColor : '#e7e5e4';
+      });
+    }
+
     for (let i = 1; i <= 5; i++) {
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.textContent = '★';
       btn.dataset.value = i;
-      btn.className = 'text-4xl text-stone-200 hover:text-stone-900 transition-colors leading-none';
+      btn.className = 'text-4xl transition-colors leading-none';
+      btn.style.color = '#e7e5e4';
+      btn.addEventListener('mouseenter', () => setStarColors(i, '#C8922A'));
       btn.addEventListener('click', () => {
         selectedRating = i;
         document.getElementById('rating-value').value = i;
-        starsEl.querySelectorAll('button').forEach((b, idx) => {
-          b.className = 'text-4xl transition-colors leading-none ' +
-            (idx < i ? 'text-stone-900' : 'text-stone-200 hover:text-stone-900');
-        });
+        setStarColors(i, '#1c1917');
       });
       starsEl.appendChild(btn);
     }
+
+    starsEl.addEventListener('mouseleave', () => setStarColors(selectedRating, '#1c1917'));
 
     // Verify payment on load
     const paymentIntentId = new URLSearchParams(window.location.search).get('payment');

@@ -23,9 +23,17 @@
     </script>
   </head>
   <body>
-    <!-- Floating "Buy" button (top-right) -->
-    <button id="buyBtn" class="btn-buy">Add to Cart</button>
-    <div id="priceTag" class="price-tag">MSRP $49</div>
+    <div class="quote-actions">
+      <button id="sendBtn" class="btn-send" style="display:none">Send</button>
+      <button id="buyBtn" class="btn-buy">Add to Quote</button>
+    </div>
+    <div id="quoteList" class="quote-list"></div>
+    <form name="quote-request" data-netlify="true" hidden>
+      <input type="hidden" name="form-name" value="quote-request" />
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <textarea name="items"></textarea>
+    </form>
     <!-- Floating info button (bottom-right) -->
     <button id="aboutBtn" class="btn-info" aria-label="Viewer info">
       <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -45,6 +53,30 @@
       </div>
     </div>
 
+    <!-- Quote request modal -->
+    <div id="quoteModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
+      <div class="modal__backdrop" id="quoteBackdrop"></div>
+      <div class="modal__panel" role="document">
+        <button id="quoteClose" class="modal__close" aria-label="Close"></button>
+        <h2>Request for Quote</h2>
+        <p>Leave your details and we'll follow up with pricing for your selection.</p>
+        <div class="quote-form">
+          <div class="quote-field">
+            <label for="quoteName">Name</label>
+            <input type="text" id="quoteName" placeholder="Your name" autocomplete="name" />
+          </div>
+          <div class="quote-field">
+            <label for="quoteEmail">Email</label>
+            <input type="email" id="quoteEmail" placeholder="your@email.com" autocomplete="email" />
+          </div>
+          <div class="quote-form__actions">
+            <button id="quoteCancelBtn" type="button" class="btn-modal-cancel">Cancel</button>
+            <button id="quoteSubmitBtn" type="button" class="btn-modal-submit">Request for Quote</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
     <!-- status texts -->
     <span id="status" class="badge"></span>
@@ -57,15 +89,6 @@
         <option value="1">Mechanic</option>
         <option value="2">Lake Shore</option>
       </select>
-      <div class="mat-field">
-        <span class="badge">Base</span>
-        <div class="mat-picker" id="basePicker">
-          <div class="mat-swatch is-active" data-base="white"     title="White"       style="background:#dcd8d0"></div>
-          <div class="mat-swatch"           data-base="metallic"  title="Metallic"    style="background:#b8bec8"></div>
-          <div class="mat-swatch"           data-base="lightWood" title="Light Wood"  style="background:#c8a464"></div>
-          <div class="mat-swatch"           data-base="darkWood"  title="Dark Wood"   style="background:#3e2810"></div>
-        </div>
-      </div>
       <div class="divider"></div>
 
       <!-- heat wave Type -->
@@ -151,12 +174,35 @@
 
     <!-- Viewport overlay tools -- positioned by JS relative to actual panel right edge -->
     <div id="viewport-tools">
-      <button id="gridToggle" class="vp-tool-btn" type="button" title='1 square is roughly 1"'>3D Markers: On</button>
+      <button id="gridToggle" class="vp-tool-btn vp-tool-icon active" type="button" aria-label="3D Markers" data-tip="3D Markers">
+        <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10 5L16 8L10 11L4 8Z"/>
+          <path d="M16 8V14L10 17V11Z"/>
+          <path d="M4 8V14L10 17V11Z"/>
+          <line x1="10" y1="5" x2="10" y2="2"/>
+          <polyline points="8.5,3.5 10,2 11.5,3.5"/>
+          <line x1="4" y1="14" x2="1.5" y2="16.5"/>
+          <polyline points="1.5,14 1.5,16.5 4,16.5"/>
+          <line x1="16" y1="14" x2="18.5" y2="16.5"/>
+          <polyline points="16,16.5 18.5,16.5 18.5,14"/>
+        </svg>
+      </button>
       <button id="zoomFitBtn" class="vp-tool-btn vp-tool-icon" type="button" aria-label="Zoom to fit" data-tip="Zoom to fit">
         <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M1 6V1h5M15 6V1h-5M1 10v5h5M15 10v5h-5"/>
         </svg>
       </button>
+      <div id="backboardWrap" class="vp-tool-dropdown-wrap">
+        <button id="backboardBtn" class="vp-tool-btn" type="button">
+          Backboard <span id="backboardSwatch" class="vp-swatch-inline" style="background:#dcd8d0"></span>
+        </button>
+        <div id="backboardMenu" class="vp-dropdown-menu" style="display:none">
+          <div class="vp-dropdown-item is-active" data-base="white"     style="background:#dcd8d0" title="White"></div>
+          <div class="vp-dropdown-item"            data-base="metallic"  style="background:#b8bec8" title="Metallic"></div>
+          <div class="vp-dropdown-item"            data-base="lightWood" style="background:#c8a464" title="Light Wood"></div>
+          <div class="vp-dropdown-item"            data-base="darkWood"  style="background:#815729" title="Dark Wood"></div>
+        </div>
+      </div>
     </div>
 
     <div id="viewport" class="viewer"></div>

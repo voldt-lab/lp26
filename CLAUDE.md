@@ -132,15 +132,17 @@ Cart page also includes `<script src="js/stripe.js"></script>` between cart.js a
 | VOLDT Hardware | deferred -- pricing TBD |
 
 ## To-Dos
+- [ ] link spec to the download spec sheet button
+
 
 ### Configurator
 - [x] **Re-export all handle GLBs** from Rhino without stems (only `mechanic/gyroid/len2_dens1.glb` done so far)
 - [x] **Export Heat Wave Chrystal GLBs** -- `heat_wave/chrystal/len{0-4}_dens{0-2}.glb` (old `rad*_tw*` knob files still in folder, need replacing)
 - [x] **Export Heat Wave Bulb GLBs** -- create `heat_wave/bulb/` folder and export `len{0-4}_dens{0-2}.glb`
-- [ ] **Delete old knob files** from `heat_wave/chrystal/` (`rad*_tw*.glb` are leftover and won't load)
+- [x] **Delete old knob files** from `heat_wave/chrystal/` (`rad*_tw*.glb` are leftover and won't load)
 - [ ] Add **screw size selector** to `configurator/main.js` + UI in `configurator/index.html`
 - [ ] Add **mounting style selector** -- `resolveStemUrl()` in `main.js` already has a hook for per-style stems; add UI and additional stem GLBs
-- [ ] **Delete len5 GLBs** -- `mechanic/gyroid/`, `mechanic/voronoi/`, and `lake_shore/simple/` still have `len5_*` files on disk; slider max is already capped at 4 in `main.js`
+- [x] **Delete len5 GLBs** -- `mechanic/gyroid/`, `mechanic/voronoi/`, and `lake_shore/simple/` still have `len5_*` files on disk; slider max is already capped at 4 in `main.js`
 - [x] ~~Eliminate About Us button~~ -- replaced with info icon + viewer disclaimer modal
 
 ### Stripe / Checkout
@@ -148,7 +150,7 @@ Cart page also includes `<script src="js/stripe.js"></script>` between cart.js a
 - [x] `js/stripe.js` -- frontend checkout trigger, replaces `js/shopify.js`
 - [x] `cart.html` -- success state, script reference updated, "Secure checkout by Stripe"
 - [x] Configurator add-to-cart severed (VOLDT Hardware pricing TBD -- shows contact alert)
-- [ ] Add VOLDT Hardware pricing to `PRICE_CENTS` once finalized
+- [ ] Add to quote rather than individual pricing for voldt hardware
 
 ## Forms
 

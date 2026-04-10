@@ -118,6 +118,7 @@ function setBusy(on, text = '') {
 
 // --- Density segmented control (replaces dens slider) ---
 let densIndex = 1; // default "Mid"
+let renderDensToggle = () => {}; // set by initDensityToggle, used by restoreState
 function initDensityToggle() {
   if (!densToggle) return;
   /*begin defining click-slide*/
@@ -198,6 +199,8 @@ function initDensityToggle() {
 
     if (reload) loadForCurrentState();
   }
+
+  renderDensToggle = render;
 
   btns.forEach((b) => {
     b.addEventListener('click', () => {
@@ -313,11 +316,71 @@ function applyValueChips() {
   densValue.textContent = DENS_LABELS[clampIndex(densIndex, DENS_LABELS.length)];
 }
 
-function updatePriceTag() {
-  const st = getState();
-  const isKnob = st.product === 'lakeshore' && st.lakeType === 'knob';
-  const dollars = isKnob ? 49 : [49, 59, 69, 79, 89][clampIndex(st.len, 5)];
-  document.getElementById('priceTag').textContent = `MSRP $${dollars}`;
+// ----- quote list -----
+let quoteItems = [];
+
+function buildLabel(st) {
+  const names = { heatwave: 'HeatWave', mechanic: 'Mechanic', lakeshore: 'LakeShore' };
+  const parts = [names[st.product]];
+  if (st.product === 'heatwave') {
+    parts.push(st.heatwaveType === 'bulb' ? 'Bulb' : 'Chrystal');
+    parts.push(LENGTH_LABELS[clampIndex(st.len, LENGTH_LABELS.length)]);
+    parts.push('CTC' + SPACING_LABELS[clampIndex(st.sp, SPACING_LABELS.length)]);
+    parts.push(DENS_LABELS[clampIndex(st.dens, DENS_LABELS.length)]);
+  } else if (st.product === 'mechanic') {
+    parts.push(st.mechTexture === 'voronoi' ? 'Voronoi' : 'Gyroid');
+    parts.push(LENGTH_LABELS[clampIndex(st.len, LENGTH_LABELS.length)]);
+    parts.push('CTC' + SPACING_LABELS[clampIndex(st.sp, SPACING_LABELS.length)]);
+    parts.push(DENS_LABELS[clampIndex(st.dens, DENS_LABELS.length)]);
+  } else {
+    parts.push(st.lakeType === 'knob' ? 'Knob' : 'Simple');
+    if (st.lakeType === 'knob') {
+      parts.push(DIAM_LABELS[clampIndex(st.ff, DIAM_LABELS.length)]);
+      parts.push(DENS_LABELS[clampIndex(st.dens, DENS_LABELS.length)]);
+    } else {
+      parts.push(LENGTH_LABELS[clampIndex(st.len, LENGTH_LABELS.length)]);
+      parts.push('CTC' + SPACING_LABELS[clampIndex(st.sp, SPACING_LABELS.length)]);
+      parts.push(TWIST_LABELS[clampIndex(st.tw, TWIST_LABELS.length)]);
+    }
+  }
+  const finishEl = document.querySelector('#matPicker .mat-swatch.is-active');
+  if (finishEl) parts.push(finishEl.title.replace(/ /g, ''));
+  return parts.join('.');
+}
+
+function renderQuoteList() {
+  const list    = document.getElementById('quoteList');
+  const sendBtn = document.getElementById('sendBtn');
+  list.innerHTML = '';
+  quoteItems.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'quote-item';
+    div.innerHTML = `<span class="quote-item__label" data-index="${i}">${item.label}</span><button class="quote-item__remove" data-index="${i}" title="Remove">×</button>`;
+    list.appendChild(div);
+  });
+  sendBtn.style.display = quoteItems.length > 0 ? '' : 'none';
+}
+
+function restoreState(snapshot) {
+  prodSelect.value     = { heatwave: '0', mechanic: '1', lakeshore: '2' }[snapshot.product];
+  vTypeSelect.value    = snapshot.heatwaveType === 'bulb'     ? '1' : '0';
+  lsTypeSelect.value   = snapshot.lakeType     === 'knob'    ? '1' : '0';
+  mechTxtrSelect.value = snapshot.mechTexture  === 'voronoi' ? '1' : '0';
+  lenSlider.value   = snapshot.len;
+  twistSlider.value = snapshot.tw;
+  ffSlider.value    = snapshot.ff;
+  spSlider.value    = snapshot.sp;
+  densIndex = snapshot.dens;
+  renderDensToggle();
+  if (snapshot.mat) {
+    document.querySelectorAll('#matPicker .mat-swatch').forEach(s =>
+      s.classList.toggle('is-active', s.dataset.mat === snapshot.mat)
+    );
+    viewer.setMaterial(snapshot.mat);
+  }
+  applyVisibility();
+  applyValueChips();
+  loadForCurrentState();
 }
 
 function clampIndex(i, n) {
@@ -344,7 +407,6 @@ async function loadForCurrentState() {
     // only the latest request should update status
     if (token !== loadToken) return;
 
-    updatePriceTag();
     status.textContent = 'For illustration only';
   } catch (e) {
     console.error(`Failed to load`, e);
@@ -367,13 +429,83 @@ async function loadForCurrentState() {
 
 // ----- event wiring -----
 function wireUI() {
-  // Add to Cart -- TODO: wire to Stripe once VOLDT Hardware pricing is finalized
-  const buyBtn = document.getElementById('buyBtn');
+  const buyBtn  = document.getElementById('buyBtn');
+  const sendBtn = document.getElementById('sendBtn');
+
   buyBtn.addEventListener('click', () => {
-    alert('Online ordering for VOLDT Hardware is coming soon. To place an order, contact us at info@voldtlab.com.');
+    const st = getState();
+    const finishEl = document.querySelector('#matPicker .mat-swatch.is-active');
+    quoteItems.push({ label: buildLabel(st), state: { ...st, mat: finishEl?.dataset.mat || null } });
+    renderQuoteList();
   });
 
-  // About modal (unchanged behavior)
+  document.getElementById('quoteList').addEventListener('click', e => {
+    const removeBtn = e.target.closest('.quote-item__remove');
+    if (removeBtn) {
+      quoteItems.splice(parseInt(removeBtn.dataset.index, 10), 1);
+      renderQuoteList();
+      return;
+    }
+    const labelEl = e.target.closest('.quote-item__label');
+    if (labelEl) restoreState(quoteItems[parseInt(labelEl.dataset.index, 10)].state);
+  });
+
+  sendBtn.addEventListener('click', () => {
+    if (!quoteItems.length) return;
+    openQuoteModal();
+  });
+
+  // Quote modal
+  const quoteModal      = document.getElementById('quoteModal');
+  const quoteBackdrop   = document.getElementById('quoteBackdrop');
+  const quoteClose      = document.getElementById('quoteClose');
+  const quoteCancelBtn  = document.getElementById('quoteCancelBtn');
+  const quoteSubmitBtn  = document.getElementById('quoteSubmitBtn');
+  const quoteNameInput  = document.getElementById('quoteName');
+  const quoteEmailInput = document.getElementById('quoteEmail');
+
+  function openQuoteModal() {
+    quoteNameInput.value = '';
+    quoteEmailInput.value = '';
+    quoteModal.classList.add('is-open');
+    quoteModal.setAttribute('aria-hidden', 'false');
+    quoteNameInput.focus();
+  }
+  function closeQuoteModal() {
+    quoteModal.classList.remove('is-open');
+    quoteModal.setAttribute('aria-hidden', 'true');
+    quoteSubmitBtn.textContent = 'Request for Quote';
+    quoteSubmitBtn.disabled = false;
+  }
+
+  quoteClose.addEventListener('click', closeQuoteModal);
+  quoteCancelBtn.addEventListener('click', closeQuoteModal);
+  quoteBackdrop.addEventListener('click', closeQuoteModal);
+
+  quoteSubmitBtn.addEventListener('click', async () => {
+    const name  = quoteNameInput.value.trim();
+    const email = quoteEmailInput.value.trim();
+    if (!name || !email) { alert('Please enter your name and email.'); return; }
+    quoteSubmitBtn.textContent = 'Sending...';
+    quoteSubmitBtn.disabled = true;
+    try {
+      const res = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ 'form-name': 'quote-request', name, email, items: quoteItems.map(i => i.label).join('\n') }).toString(),
+      });
+      if (!res.ok) throw new Error('failed');
+      quoteItems = [];
+      renderQuoteList();
+      closeQuoteModal();
+    } catch {
+      quoteSubmitBtn.textContent = 'Request for Quote';
+      quoteSubmitBtn.disabled = false;
+      alert('Submission failed — please email us at info@voldtlab.com.');
+    }
+  });
+
+  // About modal
   const aboutBtn   = document.getElementById('aboutBtn');
   const aboutModal = document.getElementById('aboutModal');
   const aboutClose = document.getElementById('aboutClose');
@@ -385,7 +517,7 @@ function wireUI() {
   aboutBtn.addEventListener('click', openAbout);
   aboutClose.addEventListener('click', closeAbout);
   aboutBackdrop.addEventListener('click', closeAbout);
-  document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeAbout(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeAbout(); closeQuoteModal(); } });
 
   // Position viewport-tools flush against the panel's actual right edge
   const viewportTools = document.getElementById('viewport-tools');
@@ -403,7 +535,6 @@ function wireUI() {
     gridOn = !gridOn;
     viewer.setGridVisible(gridOn);
     gridBtn.classList.toggle('active', gridOn);
-    gridBtn.textContent = gridOn ? '3D Markers: On' : '3D Markers: Off';
   });
 
   // Zoom to fit
@@ -427,14 +558,27 @@ function wireUI() {
     viewer.setMaterial(swatch.dataset.mat);
   });
 
-  // Base material picker (back panel)
-  document.getElementById('basePicker').addEventListener('click', e => {
-    const swatch = e.target.closest('.mat-swatch');
-    if (!swatch) return;
-    document.querySelectorAll('#basePicker .mat-swatch').forEach(s => s.classList.remove('is-active'));
-    swatch.classList.add('is-active');
-    viewer.setBaseMaterial(swatch.dataset.base);
+  // Backboard picker
+  const backboardBtn    = document.getElementById('backboardBtn');
+  const backboardMenu   = document.getElementById('backboardMenu');
+  const backboardSwatch = document.getElementById('backboardSwatch');
+
+  backboardBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    backboardMenu.style.display = backboardMenu.style.display === 'none' ? '' : 'none';
   });
+
+  backboardMenu.addEventListener('click', e => {
+    const item = e.target.closest('.vp-dropdown-item');
+    if (!item) return;
+    backboardMenu.querySelectorAll('.vp-dropdown-item').forEach(i => i.classList.remove('is-active'));
+    item.classList.add('is-active');
+    backboardSwatch.style.background = item.style.background;
+    viewer.setBaseMaterial(item.dataset.base);
+    backboardMenu.style.display = 'none';
+  });
+
+  document.addEventListener('click', () => { backboardMenu.style.display = 'none'; });
 
   prodSelect.addEventListener('change', onMajorChange);
   vTypeSelect.addEventListener('change', onMajorChange);

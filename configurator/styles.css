@@ -100,6 +100,7 @@ body{
   justify-content: center;
 }
 .vp-tool-btn:hover { background: rgba(255,255,255,0.14); }
+.vp-tool-btn svg, .btn-info svg { overflow: visible; }
 .vp-tool-btn.active {
   background: rgba(110,200,255,0.18);
   border-color: rgba(110,200,255,.35);
@@ -126,6 +127,47 @@ body{
   z-index: 9999;
 }
 .vp-tool-icon[data-tip]:hover::after { opacity: 1; }
+
+/* ---- Backboard dropdown ---- */
+.vp-tool-dropdown-wrap {
+  position: relative;
+  display: flex;
+}
+.vp-swatch-inline {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border: 1px solid rgba(255,255,255,0.3);
+  vertical-align: middle;
+  margin-left: 5px;
+  flex-shrink: 0;
+}
+.vp-dropdown-menu {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 0;
+  background: rgba(20,22,26,0.95);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(8px);
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  z-index: 1500;
+}
+.vp-dropdown-item {
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  box-sizing: border-box;
+  border: 2px solid transparent;
+  flex-shrink: 0;
+}
+.vp-dropdown-item:hover { border-color: rgba(255,255,255,0.5); }
+.vp-dropdown-item.is-active {
+  border: 3px solid #ffffff;
+  box-shadow: inset 0 0 0 2px rgba(12,14,18,0.8);
+}
 
 /* ---- Material picker ---- */
 .mat-field {
@@ -385,11 +427,16 @@ body{
   opacity: .6;            /* keep your existing look */
   pointer-events: none;   /* won’t block interactions */
 }
-/* ---- Floating "Buy" button (top-right) ---- */
-.btn-buy{
+/* ---- Quote actions wrapper (top-right) ---- */
+.quote-actions {
   position: fixed;
   top: 14px; right: 16px;
   z-index: 1400;
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+.btn-buy{
   padding: 10px 18px;
   border-radius: 0;
   background: #C8922A;
@@ -400,18 +447,50 @@ body{
   letter-spacing: .04em;
 }
 .btn-buy:hover{ background: #b07d22; }
+.btn-send {
+  padding: 10px 18px;
+  border-radius: 0;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.4);
+  color: rgba(255,255,255,0.8);
+  cursor: pointer;
+  font-weight: 600;
+  letter-spacing: .04em;
+}
+.btn-send:hover { border-color: rgba(255,255,255,0.75); color: #fff; }
 
-/* ---- Price tag (below Add to Cart) ---- */
-.price-tag{
+/* ---- Quote list (below buttons) ---- */
+.quote-list {
   position: fixed;
   top: 58px; right: 16px;
   z-index: 1400;
+  text-align: right;
+  max-width: 300px;
+}
+.quote-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
   color: rgba(255,255,255,0.55);
   font-size: 11px;
   letter-spacing: .06em;
-  text-align: right;
-  pointer-events: none;
+  line-height: 1.8;
 }
+.quote-item__label {
+  cursor: pointer;
+}
+.quote-item__label:hover { color: rgba(255,255,255,0.9); }
+.quote-item__remove {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.3);
+  cursor: pointer;
+  padding: 0;
+  font-size: 14px;
+  line-height: 1;
+}
+.quote-item__remove:hover { color: rgba(255,255,255,0.75); }
 
 /* ---- Floating info button (bottom-right) ---- */
 .btn-info{
@@ -476,6 +555,70 @@ body{
   outline: 2px solid rgba(255,255,255,.35);
   outline-offset: 2px;
 }
+
+/* ---- Quote modal form ---- */
+.quote-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 20px;
+}
+.quote-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.quote-field label {
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: rgba(232,234,237,.6);
+}
+.quote-field input {
+  padding: 10px 12px;
+  background:
+    linear-gradient(#2a2e34, #242527) padding-box,
+    linear-gradient(180deg,#3a4047,#2b2f35) border-box;
+  border: 1px solid rgba(255,255,255,.12);
+  color: #e6e8eb;
+  font-size: 13px;
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  outline: none;
+  border-radius: 0;
+}
+.quote-field input:focus { border-color: rgba(255,255,255,.28); }
+.quote-form__actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+.btn-modal-cancel {
+  padding: 10px 16px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.2);
+  color: rgba(255,255,255,.6);
+  cursor: pointer;
+  font-size: 13px;
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: .04em;
+  border-radius: 0;
+}
+.btn-modal-cancel:hover { border-color: rgba(255,255,255,.4); color: rgba(255,255,255,.9); }
+.btn-modal-submit {
+  padding: 10px 18px;
+  background: #C8922A;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: .04em;
+  border-radius: 0;
+}
+.btn-modal-submit:hover { background: #b07d22; }
+.btn-modal-submit:disabled { opacity: .6; cursor: not-allowed; }
 
 /* Optional: compact on small screens */
 @media (max-width: 520px){
