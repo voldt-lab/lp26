@@ -89,7 +89,7 @@ exports.handler = async (event) => {
     cancel_url:  `${siteUrl}/cart.html`,
     metadata,
     shipping_options: [{ shipping_rate: hasOversized ? SHIPPING_LARGE : SHIPPING_REGULAR }],
-    automatic_tax: { enabled: true },
+    // automatic_tax: { enabled: true },  // requires head office address in Stripe dashboard -- enable post-verification
     allow_promotion_codes: true,
   };
 

@@ -146,10 +146,13 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
   }
 
-  // Hide cart on trade-track pages
+  // Hide cart on opted-out pages, but only when cart is empty
   if (document.body.hasAttribute('data-hide-cart')) {
-    const cartLink = headerEl ? headerEl.querySelector('a[href="cart.html"]') : null;
-    if (cartLink) cartLink.style.display = 'none';
+    const cartEmpty = typeof getCount === 'function' ? getCount() === 0 : true;
+    if (cartEmpty) {
+      const cartLink = headerEl ? headerEl.querySelector('a[href="cart.html"]') : null;
+      if (cartLink) cartLink.style.display = 'none';
+    }
   }
 
   // Update cart badge
