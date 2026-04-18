@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="px-8 py-2">
         <div class="flex items-center justify-between">
           <a href="index.html" class="flex items-center">
-            <img src="assets/3a774a1b3058523e9f5d0495ad6d5e47ad4be5da.jpg" alt="Voldt" class="h-4" />
+            <img src="assets/3a774a1b3058523e9f5d0495ad6d5e47ad4be5da.png" alt="Voldt" class="h-4" />
           </a>
           <div class="flex items-center gap-4">
             <button id="menu-btn" class="p-2 hover:bg-stone-50 rounded transition-colors" aria-label="Menu">
