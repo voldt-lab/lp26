@@ -1,4 +1,6 @@
 // header.js -- injects shared header + footer, initializes nav behavior
+(function() { const s = document.createElement('script'); s.type = 'module'; s.src = '/js/analytics.js'; document.head.appendChild(s); })();
+
 document.addEventListener('DOMContentLoaded', () => {
 
   // --- HEADER ---
