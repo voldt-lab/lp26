@@ -82,7 +82,8 @@ function resolveModelUrl(state) {
   if (product === 'lakeshore') {
     const lstype = state.lakeType; // 'simple' | 'knob'
     if (lstype === 'knob') {
-      return `${MODEL_BASE}/lake_shore/knob/diam${state.ff}_dens${state.dens}${MODEL_EXT}`;
+      const d = KNOB_DENS_MAP[clampIndex(densIndex, KNOB_DENS_MAP.length)];
+      return `${MODEL_BASE}/lake_shore/knob/rad${state.rad}_dens${d}${MODEL_EXT}`;
     }
     // simple uses length + twist
     return `${MODEL_BASE}/lake_shore/simple/len${state.len}_tw${state.tw}${MODEL_EXT}`;
@@ -107,7 +108,7 @@ const DENS_LABELS    = ['Low', 'Mid', 'Hi'];
 const SPACING_LABELS = ['3-3/4"', '5"', '6-5/16"', '7-9/16"', '10-1/16"'];
 const SPACING_METERS = [0.09525, 0.127, 0.160338, 0.192088, 0.255588];
 const DIAMETER_LABELS = ['1-1/4"', '1-9/16"', '2"', '2-1/2"'];
-const KNOB_DENS_MAP   = [0, 2, 4]; // densIndex 0/1/2 → dens file suffix for knob
+const KNOB_DENS_MAP   = [1, 2, 4]; // densIndex 0/1/2 → dens file suffix for knob
 
 
 // ----- state + helpers -----
@@ -298,7 +299,7 @@ function applyVisibility() {
       show(fieldFF, false);
       show(fieldDens, false);
     } else { // knob
-      show(fieldFF, true);
+      show(fieldRad, true);
       show(fieldDens, true);
       show(fieldLen, false);
       show(fieldSp, false);
@@ -367,7 +368,7 @@ function buildLabel(st) {
   } else {
     parts.push(st.lakeType === 'knob' ? 'Knob' : 'Simple');
     if (st.lakeType === 'knob') {
-      parts.push(DIAM_LABELS[clampIndex(st.ff, DIAM_LABELS.length)]);
+      parts.push(DIAMETER_LABELS[clampIndex(st.rad, DIAMETER_LABELS.length)]);
       parts.push(DENS_LABELS[clampIndex(st.dens, DENS_LABELS.length)]);
     } else {
       parts.push(LENGTH_LABELS[clampIndex(st.len, LENGTH_LABELS.length)]);
@@ -434,7 +435,8 @@ async function loadForCurrentState() {
   const stemUrl = resolveStemUrl();
 
   try {
-    if (st.product === 'heatwave' && st.heatwaveType === 'knob') {
+    if ((st.product === 'heatwave' && st.heatwaveType === 'knob') ||
+        (st.product === 'lakeshore' && st.lakeType === 'knob')) {
       await viewer.loadSingle(handleUrl, stemUrl);
     } else {
       const spacingM = SPACING_METERS[clampIndex(st.sp, SPACING_METERS.length)];
