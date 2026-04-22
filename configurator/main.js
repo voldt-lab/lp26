@@ -42,6 +42,10 @@ const spSlider = document.getElementById('sp');
 const spValue  = document.getElementById('spVal');
 const fieldSp  = document.getElementById('field-sp');
 
+const radSlider = document.getElementById('rad');
+const radValue  = document.getElementById('radVal');
+const fieldRad  = document.getElementById('field-rad');
+
 
 
 // Viewer (keep your old look)
@@ -67,6 +71,10 @@ function resolveModelUrl(state) {
   const { product } = state;
 
   if (product === 'heatwave') {
+    if (state.heatwaveType === 'knob') {
+      const d = KNOB_DENS_MAP[clampIndex(densIndex, KNOB_DENS_MAP.length)];
+      return `${MODEL_BASE}/heat_wave/knob/rad${state.rad}_dens${d}${MODEL_EXT}`;
+    }
     const vtype = state.heatwaveType; // 'chrystal' | 'bulb'
     return `${MODEL_BASE}/heat_wave/${vtype}/len${state.len}_dens${state.dens}${MODEL_EXT}`;
   }
@@ -98,6 +106,8 @@ const DIAM_LABELS    = ['1-1/2"', '1-3/4"', '2"', '2-1/4"', '2-1/2"'];
 const DENS_LABELS    = ['Low', 'Mid', 'Hi'];
 const SPACING_LABELS = ['3-3/4"', '5"', '6-5/16"', '7-9/16"', '10-1/16"'];
 const SPACING_METERS = [0.09525, 0.127, 0.160338, 0.192088, 0.255588];
+const DIAMETER_LABELS = ['1-1/4"', '1-9/16"', '2"', '2-1/2"'];
+const KNOB_DENS_MAP   = [0, 2, 4]; // densIndex 0/1/2 → dens file suffix for knob
 
 
 // ----- state + helpers -----
@@ -233,8 +243,14 @@ function getState() {
     //dens: parseInt(densSlider.value, 10), //----uncomment to revert to old slider
     dens: densIndex, // from segmented control
 
+    // slider indices
+    rad: parseInt(radSlider.value, 10),
+
     // subtypes
-    heatwaveType: vTypeSelect.value === '1' ? 'bulb' : 'chrystal',
+    heatwaveType:
+      vTypeSelect.value === '1' ? 'bulb' :
+      vTypeSelect.value === '2' ? 'knob' :
+      'chrystal',
     lakeType: (lsTypeSelect.value === '1') ? 'knob' : 'simple',
     mechTexture: (mechTxtrSelect.value === '1') ? 'voronoi' : 'gyroid',
   };
@@ -257,12 +273,18 @@ function applyVisibility() {
   show(fieldRot, false);
   show(fieldFF, false);
   show(fieldDens, false);
+  show(fieldRad, false);
 
   if (st.product === 'heatwave') {
     show(fieldVType, true);
-    show(fieldLen, true);
-    show(fieldSp, true);
-    show(fieldDens, true);
+    if (st.heatwaveType === 'knob') {
+      show(fieldRad, true);
+      show(fieldDens, true);
+    } else {
+      show(fieldLen, true);
+      show(fieldSp, true);
+      show(fieldDens, true);
+    }
     return;
   }
 
@@ -305,6 +327,10 @@ function applyValueChips() {
   const ffi = clampIndex(parseInt(ffSlider.value, 10), DIAM_LABELS.length);
   ffValue.textContent = DIAM_LABELS[ffi];
 
+  // heat wave knob diameter
+  const ri = clampIndex(parseInt(radSlider.value, 10), DIAMETER_LABELS.length);
+  radValue.textContent = DIAMETER_LABELS[ri];
+
   // hole spacing
   const spi = clampIndex(parseInt(spSlider.value, 10), SPACING_LABELS.length);
   spValue.textContent = SPACING_LABELS[spi];
@@ -323,10 +349,16 @@ function buildLabel(st) {
   const names = { heatwave: 'HeatWave', mechanic: 'Mechanic', lakeshore: 'LakeShore' };
   const parts = [names[st.product]];
   if (st.product === 'heatwave') {
-    parts.push(st.heatwaveType === 'bulb' ? 'Bulb' : 'Chrystal');
-    parts.push(LENGTH_LABELS[clampIndex(st.len, LENGTH_LABELS.length)]);
-    parts.push('CTC' + SPACING_LABELS[clampIndex(st.sp, SPACING_LABELS.length)]);
-    parts.push(DENS_LABELS[clampIndex(st.dens, DENS_LABELS.length)]);
+    if (st.heatwaveType === 'knob') {
+      parts.push('Knob');
+      parts.push(DIAMETER_LABELS[clampIndex(st.rad, DIAMETER_LABELS.length)]);
+      parts.push(DENS_LABELS[clampIndex(st.dens, DENS_LABELS.length)]);
+    } else {
+      parts.push(st.heatwaveType === 'bulb' ? 'Bulb' : 'Chrystal');
+      parts.push(LENGTH_LABELS[clampIndex(st.len, LENGTH_LABELS.length)]);
+      parts.push('CTC' + SPACING_LABELS[clampIndex(st.sp, SPACING_LABELS.length)]);
+      parts.push(DENS_LABELS[clampIndex(st.dens, DENS_LABELS.length)]);
+    }
   } else if (st.product === 'mechanic') {
     parts.push(st.mechTexture === 'voronoi' ? 'Voronoi' : 'Gyroid');
     parts.push(LENGTH_LABELS[clampIndex(st.len, LENGTH_LABELS.length)]);
@@ -363,13 +395,14 @@ function renderQuoteList() {
 
 function restoreState(snapshot) {
   prodSelect.value     = { heatwave: '0', mechanic: '1', lakeshore: '2' }[snapshot.product];
-  vTypeSelect.value    = snapshot.heatwaveType === 'bulb'     ? '1' : '0';
+  vTypeSelect.value    = snapshot.heatwaveType === 'bulb' ? '1' : snapshot.heatwaveType === 'knob' ? '2' : '0';
   lsTypeSelect.value   = snapshot.lakeType     === 'knob'    ? '1' : '0';
   mechTxtrSelect.value = snapshot.mechTexture  === 'voronoi' ? '1' : '0';
   lenSlider.value   = snapshot.len;
   twistSlider.value = snapshot.tw;
   ffSlider.value    = snapshot.ff;
   spSlider.value    = snapshot.sp;
+  radSlider.value   = snapshot.rad ?? 0;
   densIndex = snapshot.dens;
   renderDensToggle();
   if (snapshot.mat) {
@@ -398,11 +431,15 @@ async function loadForCurrentState() {
 
   setBusy(true, 'Loading model...');
 
-  const stemUrl  = resolveStemUrl();
-  const spacingM = SPACING_METERS[clampIndex(st.sp, SPACING_METERS.length)];
+  const stemUrl = resolveStemUrl();
 
   try {
-    await viewer.loadComposite(handleUrl, stemUrl, spacingM);
+    if (st.product === 'heatwave' && st.heatwaveType === 'knob') {
+      await viewer.loadSingle(handleUrl, stemUrl);
+    } else {
+      const spacingM = SPACING_METERS[clampIndex(st.sp, SPACING_METERS.length)];
+      await viewer.loadComposite(handleUrl, stemUrl, spacingM);
+    }
 
     // only the latest request should update status
     if (token !== loadToken) return;
@@ -631,6 +668,7 @@ function wireUI() {
   });
   wireSmoothSlider(twistSlider);
   wireSmoothSlider(ffSlider);
+  wireSmoothSlider(radSlider);
 /* uncomment below to revert to old slider
   densSlider.addEventListener('input', applyValueChips);
   densSlider.addEventListener('change', loadForCurrentState);*/

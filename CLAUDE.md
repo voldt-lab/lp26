@@ -133,7 +133,9 @@ Cart page also includes `<script src="js/stripe.js"></script>` between cart.js a
 
 ## To-Dos
 - [ ] link spec to the download spec sheet button
-- [ ] add Goose on Trade page
+- [x] add Goose on Trade page
+- [ ] swap stripe secret key to live from test, on netlify env variables
+- [ ] replace test shipping IDs with live ones
 
 ### Analytics (Firebase / reCAPTCHA)
 - [ ] **After domain cutover**: test that visit records appear in Firebase Realtime DB (`voldt-fb` → `visits`) from `voldtlab.com`
@@ -143,7 +145,6 @@ Cart page also includes `<script src="js/stripe.js"></script>` between cart.js a
 
 ### Configurator
 - [ ] Add **screw size selector** to `configurator/main.js` + UI in `configurator/index.html`
-- [ ] Add **mounting style selector** -- `resolveStemUrl()` in `main.js` already has a hook for per-style stems; add UI and additional stem GLBs
 
 
 ### Stripe / Checkout

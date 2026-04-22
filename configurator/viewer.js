@@ -470,6 +470,69 @@ export function createViewer(container, opts = {}) {
     dir.shadow.camera.updateProjectionMatrix();
   }
 
+  async function loadSingle(handleUrl, stemUrl) {
+    if (!handleUrl) throw new Error('loadSingle requires a handleUrl');
+
+    const gen = ++loadGen;
+    lastUrl = null;
+
+    const [handleGltf, stemGltf] = await Promise.all([
+      gltfLoader.loadAsync(handleUrl),
+      gltfLoader.loadAsync(stemUrl),
+    ]);
+    if (gen !== loadGen) return;
+
+    const handle = handleGltf.scene || handleGltf.scenes?.[0];
+    const stemTemplate = stemGltf.scene || stemGltf.scenes?.[0];
+    if (!handle) throw new Error(`No scene in handle glTF: ${handleUrl}`);
+
+    applyHouseMaterial(handle);
+
+    clear();
+    lastUrl = handleUrl;
+    group.add(handle);
+
+    if (stemTemplate) {
+      const stem = stemTemplate.clone(true);
+      applyHouseMaterial(stem);
+      stem.position.set(0, 0, 0);
+      group.add(stem);
+    }
+
+    const aBox    = new THREE.Box3().setFromObject(group, true);
+    const aCenter = new THREE.Vector3();
+    if (!aBox.isEmpty()) {
+      aBox.getCenter(aCenter);
+      if (!hasFramedOnce) {
+        const aSize  = new THREE.Vector3(); aBox.getSize(aSize);
+        const radius = 0.5 * aSize.length() || 1;
+        camera.near = Math.max(0.01, radius / 100);
+        camera.far  = radius * 20;
+        camera.updateProjectionMatrix();
+        const dist = radius / Math.tan(THREE.MathUtils.degToRad(camera.fov * 0.5));
+        camera.position.set(aCenter.x + dist, aCenter.y + dist * 0.7, aCenter.z + dist * 1.2);
+        camera.lookAt(aCenter);
+        controls.target.copy(aCenter);
+        controls.update();
+      }
+    }
+    hasFramedOnce = true;
+
+    const IN = 0.0254;
+    const panelGeo = new THREE.BoxGeometry(6 * IN, 6 * IN, 0.75 * IN);
+    panelMesh = new THREE.Mesh(panelGeo, activeBaseMat);
+    panelMesh.position.set(aCenter.x, aCenter.y, aBox.min.z - (0.75 * IN) / 2);
+    panelMesh.receiveShadow = true;
+    group.add(panelMesh);
+
+    const pad = 0.06;
+    dir.shadow.camera.left   = aCenter.x - (aBox.max.x - aBox.min.x) / 2 - pad;
+    dir.shadow.camera.right  = aCenter.x + (aBox.max.x - aBox.min.x) / 2 + pad;
+    dir.shadow.camera.top    = aCenter.y + (aBox.max.y - aBox.min.y) / 2 + pad;
+    dir.shadow.camera.bottom = aCenter.y - (aBox.max.y - aBox.min.y) / 2 - pad;
+    dir.shadow.camera.updateProjectionMatrix();
+  }
+
   function setBaseMaterial(key) {
     const mat = BASE_MATS[key];
     if (!mat) return;
@@ -524,6 +587,7 @@ export function createViewer(container, opts = {}) {
     clear,
     loadModel,
     loadComposite,
+    loadSingle,
     setEnvironment,
     setBloomEnabled,
     setToneExposure,
