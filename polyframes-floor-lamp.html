@@ -9,65 +9,67 @@
 </head>
 <body class="bg-white font-sans">
   <header id="site-header" class="fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-md"></header>
-
   <div class="pt-16">
-    <!-- Back -->
-    <div class="max-w-[1800px] mx-auto px-12 lg:px-20 py-12">
-      <a href="polyframes.html" class="inline-flex items-center gap-2 text-[11px] tracking-[0.2em] uppercase text-stone-500 hover:text-stone-900 transition-colors">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-        Back to Collection
-      </a>
+    <div class="border-b border-black/5">
+      <div class="max-w-[1600px] mx-auto px-8 lg:px-16 py-6">
+        <a href="polyframes.html" class="inline-flex items-center gap-2 text-sm text-black/60 hover:text-black transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Back to PolyFrames</a>
+      </div>
     </div>
-
-    <section class="pb-32">
-      <div class="max-w-[1800px] mx-auto px-12 lg:px-20">
-        <div class="grid lg:grid-cols-2 gap-20">
-          <!-- Images -->
-          <div>
-            <div class="bg-stone-100 mb-6" style="aspect-ratio:4/5">
+    <div class="max-w-[1600px] mx-auto px-8 lg:px-16 py-16">
+      <div class="grid lg:grid-cols-2 gap-16 lg:gap-24">
+        <div>
+          <div class="sticky top-8">
+            <div class="bg-black/5 mb-6 overflow-hidden" style="aspect-ratio:4/5">
               <img id="main-img" src="assets/29da261fae11e8815506ffcaee809b2fcbd34bfe.jpg" alt="PolyFrame Floor Lamp" class="w-full h-full object-cover" />
             </div>
-            <div class="grid grid-cols-3 gap-4" id="thumbs"></div>
+            <div class="grid grid-cols-3 gap-3" id="thumbs"></div>
           </div>
-
-          <!-- Info -->
-          <div class="lg:pt-12">
-            <p class="text-[10px] tracking-[0.3em] uppercase text-stone-400 mb-6">PolyFrame Collection</p>
-            <h1 class="text-4xl lg:text-5xl mb-8 text-stone-900">PolyFrame Floor Lamp</h1>
-            <p class="text-2xl mb-12 text-stone-900">$899</p>
-
-            <div class="space-y-10 mb-14 pb-14 border-b border-stone-200">
-              <div>
-                <p class="text-base text-stone-600 leading-relaxed font-light mb-6">1" thick solid black walnut with 3D-printed nylon and brass details. Comes with our larger Detroit Pendant but pairs well with your own, too!</p>
-                <p class="text-sm text-stone-500 leading-relaxed">Designed and crafted in Michigan. </p>
-              </div>
-              <div>
-                <h3 class="text-[10px] tracking-[0.3em] uppercase text-stone-400 mb-4">Shade Style</h3>
-                <div class="grid grid-cols-2 gap-3">
-                  <button onclick="setStyle('B')" id="btn-style-B" class="px-6 py-4 text-sm border border-stone-900 bg-stone-900 text-white transition-all">Style B</button>
-                  <button onclick="setStyle('A')" id="btn-style-A" class="px-6 py-4 text-sm border border-stone-200 hover:border-stone-900 transition-all">Style A</button>
-                </div>
-              </div>
-              <div>
-                <h3 class="text-[10px] tracking-[0.3em] uppercase text-stone-400 mb-4">Dimensions</h3>
-                <p class="text-sm text-stone-600">12.75"Diam x 62.25"H</p>
+        </div>
+        <div>
+          <h1 class="text-4xl tracking-tight mb-4">PolyFrame Floor Lamp</h1>
+          <p class="text-2xl mb-8">$899</p>
+          <div class="mb-12 pb-12 border-b border-black/5">
+            <p class="text-sm text-black/70 leading-relaxed mb-4">1" thick solid black walnut with 3D-printed nylon and brass details. Comes with our larger Detroit Pendant but pairs well with your own, too!</p>
+            <p class="text-sm text-black/70 leading-relaxed mb-4">Designed and crafted in Michigan.</p>
+            <p class="text-sm text-black/70 leading-relaxed">All designs are made to order — please allow 3–5 weeks for shipping.</p>
+          </div>
+          <div class="mb-12 pb-12 border-b border-black/5">
+            <h3 class="text-xs tracking-[0.15em] uppercase mb-6 opacity-40">Dimensions</h3>
+            <div class="text-sm text-black/70">
+              <p>As shown ~ 30"W x 62"H</p>
+            </div>
+          </div>
+          <div class="space-y-8 mb-12">
+            <div>
+              <label class="text-xs tracking-[0.15em] uppercase mb-4 block opacity-40">Shade Style</label>
+              <div class="grid grid-cols-2 gap-3">
+                <button onclick="setStyle('B')" id="btn-style-B" class="px-6 py-4 text-sm border border-black bg-black text-white transition-all">Style B</button>
+                <button onclick="setStyle('A')" id="btn-style-A" class="px-6 py-4 text-sm border border-black/20 hover:border-black transition-all">Style A</button>
               </div>
             </div>
-
-            <button onclick="addToCart()" class="w-full bg-stone-900 text-white px-9 py-5 hover:bg-[#C8922A] transition-colors text-[11px] tracking-[0.2em] uppercase mb-8">Add to Cart</button>
-
-            <div class="mt-12 pt-12 border-t border-stone-200 space-y-6">
-              <div><h3 class="text-[10px] tracking-[0.3em] uppercase text-stone-400 mb-3">Lead Time</h3><p class="text-sm text-stone-600">Made to order: 3-5 weeks</p></div>
-              <div><h3 class="text-[10px] tracking-[0.3em] uppercase text-stone-400 mb-3">Manufacturing</h3><p class="text-sm text-stone-600">Designed and crafted in Michigan</p></div>
+          </div>
+          <button onclick="addToCart()" class="w-full bg-black text-white px-8 py-5 hover:bg-[#C8922A] transition-all text-xs tracking-[0.15em] uppercase mb-12">Add to Cart</button>
+          <div class="mb-12 pb-12 border-b border-black/5">
+            <h3 class="text-xs tracking-[0.15em] uppercase mb-6 opacity-40">About the Design</h3>
+            <div class="space-y-4 text-sm text-black/70 leading-relaxed">
+              <p>[placeholder]</p>
             </div>
+          </div>
+          <div class="mb-12 pb-12 border-b border-black/5">
+            <h3 class="text-xs tracking-[0.15em] uppercase mb-6 opacity-40">Materials and Finish</h3>
+            <p class="text-sm text-black/70 leading-relaxed">[placeholder]</p>
+          </div>
+          <div>
+            <h3 class="text-xs tracking-[0.15em] uppercase mb-6 opacity-40">Specifications</h3>
+            <ul class="space-y-2 text-sm text-black/70 leading-relaxed">
+              <li>[placeholder]</li>
+            </ul>
           </div>
         </div>
       </div>
-    </section>
-
-    <!-- Related -->
+    </div>
     <section class="py-32 bg-stone-50">
-      <div class="max-w-[1800px] mx-auto px-12 lg:px-20">
+      <div class="max-w-[1600px] mx-auto px-8 lg:px-16">
         <h2 class="text-2xl mb-16 text-stone-900">More from PolyFrames</h2>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           <a href="polyframes-table-lamp.html" class="group"><div class="bg-stone-200 mb-6 overflow-hidden" style="aspect-ratio:3/4"><img src="assets/1967efac521aba866dc207ed580f4382af241561.jpg" alt="PolyFrame Table Lamp" class="w-full h-full object-cover transition-opacity duration-700 group-hover:opacity-70" /></div><h3 class="text-lg text-stone-900 mb-2">PolyFrame Table Lamp</h3><p class="text-sm text-stone-600">$349</p></a>
@@ -79,10 +81,8 @@
         </div>
       </div>
     </section>
-
     <footer id="site-footer" class="border-t border-stone-200 bg-white"></footer>
   </div>
-
   <script src="js/cart.js"></script>
   <script src="js/header.js"></script>
   <script>
@@ -98,7 +98,7 @@
       thumbsEl.innerHTML = '';
       IMAGES[style].forEach((src, i) => {
         const btn = document.createElement('div');
-        btn.className = 'bg-stone-100 cursor-pointer overflow-hidden' + (i === 0 ? ' ring-selected' : '');
+        btn.className = 'bg-black/5 cursor-pointer overflow-hidden' + (i === 0 ? ' ring-selected' : '');
         btn.style.aspectRatio = '1';
         btn.innerHTML = `<img src="${src}" class="w-full h-full object-cover" />`;
         btn.addEventListener('click', () => { mainImg.src = src; thumbsEl.querySelectorAll('div').forEach(d => d.classList.remove('ring-selected')); btn.classList.add('ring-selected'); });
@@ -112,14 +112,14 @@
       ['A','B'].forEach(x => {
         const b = document.getElementById('btn-style-' + x);
         b.className = x === style
-          ? 'px-6 py-4 text-sm border border-stone-900 bg-stone-900 text-white transition-all'
-          : 'px-6 py-4 text-sm border border-stone-200 hover:border-stone-900 transition-all';
+          ? 'px-6 py-4 text-sm border border-black bg-black text-white transition-all'
+          : 'px-6 py-4 text-sm border border-black/20 hover:border-black transition-all';
       });
       renderThumbs();
     }
 
     renderThumbs();
-    function addToCart() { const item={ id:'polyframes-floor-lamp-'+style.toLowerCase(), name:'PolyFrame Floor Lamp '+style, price:899, image:IMAGES[style][0] }; addItem(item); showCartToast(item.name); }
+    function addToCart() { const item = { id:'polyframes-floor-lamp-'+style.toLowerCase(), name:'PolyFrame Floor Lamp Style '+style, price:899, image:IMAGES[style][0] }; addItem(item); showCartToast(item.name); }
   </script>
 </body>
 </html>
