@@ -13,7 +13,7 @@
 
   <!-- Hero -->
   <div class="relative h-screen w-full overflow-hidden">
-    <div class="absolute inset-0 bg-stone-900">
+    <div id="hero-slides" class="absolute inset-0 bg-stone-900" style="opacity:0;transition:opacity 600ms ease-in-out">
       <img id="hero-0" src="assets/5bb378fa3b6cbb00f861024bfca2927100ba3f88.jpg" alt="Studio" class="absolute inset-0 w-full h-full object-cover" style="opacity:1;transition:opacity 1500ms ease-in-out" />
       <img id="hero-1" src="assets/9938ab6682fc63e127dee83e1088543f4df50ad1.jpg" alt="Studio" class="absolute inset-0 w-full h-full object-cover" style="opacity:0;transition:opacity 1500ms ease-in-out" />
       <img id="hero-2" src="assets/dec5396a8cc6e83670576a5d0a288c74f3074e6b.jpg" alt="Studio" class="absolute inset-0 w-full h-full object-cover" style="opacity:0;transition:opacity 1500ms ease-in-out" />
@@ -97,7 +97,13 @@
         document.getElementById('hero-2'),
         document.getElementById('hero-3')
       ];
-      let current = 0;
+      let current = Math.floor(Date.now() / 5000) % heroImgs.length;
+      heroImgs.forEach(img => img.style.transition = 'none');
+      heroImgs.forEach((img, i) => img.style.opacity = i === current ? '1' : '0');
+      setTimeout(() => {
+        document.getElementById('hero-slides').style.opacity = '1';
+        heroImgs.forEach(img => img.style.transition = 'opacity 1500ms ease-in-out');
+      }, 300);
       setInterval(() => {
         heroImgs[current].style.opacity = '0';
         current = (current + 1) % heroImgs.length;

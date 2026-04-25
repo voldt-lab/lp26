@@ -11,7 +11,7 @@
 ### Pages
 | File | Purpose |
 |------|---------|
-| `index.html` | Home -- hero slideshow + product grid (JS-rendered) |
+| `index.html` | Home -- hero slideshow (time-seeded start image, 5s interval, 600ms fade-in on load) + product grid (JS-rendered) |
 | `collections.html` | Products overview -- 3 series with images |
 | `shop-all.html` | Shop All -- full product listing |
 | `voldt-hardware.html` | VOLDT Hardware collection page + configurator link |
@@ -42,7 +42,7 @@
 ### Netlify Functions
 | File | Purpose |
 |------|---------|
-| `netlify/create-checkout.js` | Creates Stripe Checkout Session server-side. Maps cart IDs → `PRICE_CENTS` (enforced server-side), builds `price_data` line items with full variant name + options string. Passes options as session `metadata.order_notes`. Handles discount code pre-lookup via `stripe.promotionCodes.list`. Detects oversized items for shipping rate selection. `automatic_tax` enabled. |
+| `netlify/create-checkout.js` | Creates Stripe Checkout Session server-side. Maps cart IDs → `PRICE_CENTS` (enforced server-side), builds `price_data` line items with full variant name + options string. Passes options as session `metadata.order_notes`. Handles discount code pre-lookup via `stripe.promotionCodes.list`. Selects one of 3 flat shipping rates (Regular / Large / Combo) based on cart composition. **Shipping rate IDs at lines 27–29 — update all 3 when switching test ↔ live.** |
 | `netlify/verify-session.js` | Validates a Stripe Payment Intent ID (`pi_...`) for the review form -- checks `status === 'succeeded'` and `metadata.review_submitted` flag. Returns `{ status: 'ok' \| 'already_submitted' \| 'invalid' }`. |
 | `netlify/mark-reviewed.js` | Sets `metadata.review_submitted = 'true'` on a PaymentIntent after review submission. Re-verifies before writing; returns 409 if already submitted. Acts as the deduplication gate. |
 
@@ -75,8 +75,6 @@ Loads handle GLB + `stem.glb` in parallel. Auto-detects the handle's longest bou
 SPACING_LABELS = ['3-3/4"', '5"', '6-5/16"', '7-9/16"', '10-1/16"']
 SPACING_METERS = [0.09525, 0.127, 0.160338, 0.192088, 0.255588]
 ```
-
-**GLB re-export status:** Only `mechanic/gyroid/len2_dens1.glb` has been re-exported without stems. All other handle GLBs still have baked-in stems and will look wrong until re-exported from Rhino.
 
 ## Shared Layout Pattern
 Every page:
@@ -113,7 +111,12 @@ Cart page also includes `<script src="js/stripe.js"></script>` between cart.js a
 - **Approach**: `price_data` inline (not pre-created Stripe Price IDs). Each checkout session passes amount + product name dynamically. Price is enforced server-side in `PRICE_CENTS`; client only sends `item.id`.
 - **Variant names**: Built from `item.name` + formatted `item.options` (e.g. "Detroit Pendant Style A — Color: Black, Size: Standard"). Options also stored in `session.metadata.order_notes` for fulfillment reference.
 - **Discount codes**: Pre-entered code looked up via `stripe.promotionCodes.list`; falls back to Stripe's built-in promotion code field if lookup fails.
-- **Shipping**: Two flat rates selected server-side based on cart contents. Oversized items (`polyframes-coat-rack`, `polyframes-floor-lamp-a/b`) → Large rate ($25, `shr_1TJyW32NqRwWEdh7Yxv9az1M`); all others → Regular ($15, `shr_1TJyUu2NqRwWEdh7Qa9fUC3b`).
+- **Shipping**: 3 flat rates selected server-side in `netlify/create-checkout.js` (lines 27–29). Logic based on item quantities, respecting `item.quantity`:
+  - **Regular** — exactly 1 small item, no oversized
+  - **Large** — 2 smalls (no oversized), or exactly 1 oversized item alone
+  - **Combo** — 3+ smalls, 2+ oversized, or any oversized + any small (mixed order)
+  - Oversized items: `polyframes-coat-rack`, `polyframes-floor-lamp-a`, `polyframes-floor-lamp-b`
+  - **⚠️ Shipping rate IDs must be updated when switching test ↔ live mode** — recreate all 3 rates in Stripe live mode dashboard (Products → Shipping rates), then paste the new `shr_...` IDs into the three constants at the top of `create-checkout.js`.
 - **Tax**: `automatic_tax: { enabled: true }` — activates once Stripe account is verified; no-op until then.
 - **Analytics note**: When exporting transactions from Stripe, include the **"Checkout line item summary"** column to get per-product breakdown. Multiple items in one order are lumped into a single transaction row without it.
 - **Custom work payments**: Use Stripe Payment Links (dashboard, no code) -- create a one-off link for any amount and send directly to client.
@@ -135,7 +138,7 @@ Cart page also includes `<script src="js/stripe.js"></script>` between cart.js a
 - [ ] link spec to the download spec sheet button
 - [x] add Goose on Trade page
 - [ ] swap stripe secret key to live from test, on netlify env variables
-- [ ] replace test shipping IDs with live ones
+- [ ] replace test shipping IDs with live ones — all 3 constants in `netlify/create-checkout.js` lines 27–29 (`SHIPPING_REGULAR`, `SHIPPING_LARGE`, `SHIPPING_COMBO`)
 
 ### Analytics (Firebase / reCAPTCHA)
 - [ ] **After domain cutover**: test that visit records appear in Firebase Realtime DB (`voldt-fb` → `visits`) from `voldtlab.com`
@@ -148,7 +151,7 @@ Cart page also includes `<script src="js/stripe.js"></script>` between cart.js a
 
 
 ### Stripe / Checkout
-
+- [ ] *(Future)* Add Resend + Stripe webhook to automate invitation emails if volume grows
 
 ## Forms
 

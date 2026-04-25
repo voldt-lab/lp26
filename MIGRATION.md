@@ -54,10 +54,12 @@ Netlify Forms enabled, email notifications configured. Submissions visible in Ne
 - [x] `cart.html` — script reference updated, success state added (`?success=true`), "Secure checkout by Stripe"
 
 ### 3d — Shipping & Tax
-- [x] Two flat-rate shipping options created in Stripe dashboard (Products → Shipping rates):
-  - Regular: `shr_1TJyUu2NqRwWEdh7Qa9fUC3b` — $15 — all items except oversized
-  - Large: `shr_1TJyW32NqRwWEdh7Yxv9az1M` — $25 — coat rack + floor lamps A/B
-- [x] `create-checkout.js` detects oversized items in cart, passes appropriate `shipping_options` to session
+- [x] Three flat-rate shipping options created in Stripe dashboard (Products → Shipping rates):
+  - Regular: `shr_1TJyUu2NqRwWEdh7Qa9fUC3b` — $15 — exactly 1 small item
+  - Large: `shr_1TJyW32NqRwWEdh7Yxv9az1M` — $25 — 2 smalls, or 1 oversized alone
+  - Combo: `shr_1TQBRt2NqRwWEdh7ulcEsgkl` — 3+ smalls, 2+ oversized, or mixed orders
+  - **⚠️ All 3 IDs must be recreated in Stripe live mode and updated in `create-checkout.js` lines 27–29**
+- [x] `create-checkout.js` selects shipping tier based on oversized/small item counts (respects `item.quantity`)
 - [x] `automatic_tax: { enabled: true }` added to session — activates once Stripe account is verified (no-op in sandbox)
 
 ---
@@ -91,7 +93,7 @@ Netlify Forms enabled, email notifications configured. Submissions visible in Ne
 - [ ] **Next: trigger a production deploy** → Netlify auto-registers the `review` form on first deploy
 - [ ] Test full flow on live site with a real sandbox `pi_...` ID
 - [ ] Manually curate approved submissions → hardcode into collection page testimonial sections
-- [ ] *(Future)* Add Resend + Stripe webhook to automate invitation emails if volume grows
+
 
 ---
 
@@ -102,14 +104,14 @@ Netlify Forms enabled, email notifications configured. Submissions visible in Ne
 - [x] Verify Netlify Forms submissions arriving
 - [ ] Verify review flow end-to-end on live Netlify URL (trigger one deploy first)
 - [ ] Switch Stripe from test to live mode (requires Stripe account verification)
-- [ ] Cancel Shopify subscription
+- [x] Cancel Shopify subscription
 - [ ] Cancel Formspree (if on paid plan)
 
 ---
 
 ## Operational Notes
 
-to launch netlify local server `npx netlify-cli dev`
+to launch netlify local server `npx netlify-cli dev` in VSC or `netlify dev` in native terminal
 
 **Netlify credits (free tier):** 300 credits/month. Production deploys cost 15 credits each (~20 deploys/month max). Keep builds stopped in Netlify dashboard and trigger manually only when ready. Branch/preview deploys are free. Form submissions cost 1 credit each.
 

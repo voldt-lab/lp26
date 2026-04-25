@@ -23,8 +23,10 @@ const PRICE_CENTS = {
   // VOLDT Hardware -- TODO: add pricing once finalized
 };
 
-const SHIPPING_REGULAR = 'shr_1TJyUu2NqRwWEdh7Qa9fUC3b'; // $15 -- most items
-const SHIPPING_LARGE   = 'shr_1TJyW32NqRwWEdh7Yxv9az1M'; // $25 -- coat rack, floor lamps
+// ⚠️ SHIPPING RATE IDs -- update all three when switching test ↔ live mode
+const SHIPPING_REGULAR = 'shr_1TJyUu2NqRwWEdh7Qa9fUC3b'; // $15 -- single small item
+const SHIPPING_LARGE   = 'shr_1TJyW32NqRwWEdh7Yxv9az1M'; // $25 -- 2 smalls or single oversized
+const SHIPPING_COMBO   = 'shr_1TQBRt2NqRwWEdh7ulcEsgkl';                 // $?? -- 3+ smalls, 2+ oversized, or mixed
 
 const OVERSIZED_IDS = new Set([
   'polyframes-coat-rack',
@@ -62,7 +64,18 @@ exports.handler = async (event) => {
     }
   }
 
-  const hasOversized = cartItems.some(item => OVERSIZED_IDS.has(item.id));
+  const oversizedCount = cartItems.reduce((n, item) => n + (OVERSIZED_IDS.has(item.id) ? item.quantity : 0), 0);
+  const smallCount     = cartItems.reduce((n, item) => n + (OVERSIZED_IDS.has(item.id) ? 0 : item.quantity), 0);
+
+  let shippingRate;
+  if (oversizedCount === 0 && smallCount === 1) {
+    shippingRate = SHIPPING_REGULAR;
+  } else if (oversizedCount >= 2 || (oversizedCount >= 1 && smallCount >= 1) || smallCount >= 3) {
+    shippingRate = SHIPPING_COMBO;
+  } else {
+    // 2 smalls, or exactly 1 oversized alone
+    shippingRate = SHIPPING_LARGE;
+  }
 
   if (line_items.length === 0) {
     return {
@@ -88,7 +101,7 @@ exports.handler = async (event) => {
     success_url: `${siteUrl}/cart.html?success=true`,
     cancel_url:  `${siteUrl}/cart.html`,
     metadata,
-    shipping_options: [{ shipping_rate: hasOversized ? SHIPPING_LARGE : SHIPPING_REGULAR }],
+    shipping_options: [{ shipping_rate: shippingRate }],
     // automatic_tax: { enabled: true },  // requires head office address in Stripe dashboard -- enable post-verification
     allow_promotion_codes: true,
   };
