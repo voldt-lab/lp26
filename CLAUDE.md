@@ -142,7 +142,7 @@ Cart page also includes `<script src="js/stripe.js"></script>` between cart.js a
 
 ### Analytics (Firebase / reCAPTCHA)
 - [ ] **After domain cutover**: test that visit records appear in Firebase Realtime DB (`voldt-fb` → `visits`) from `voldtlab.com`
-- [ ] **After cutover confirmed working**: clean up reCAPTCHA domain allowlist -- remove `localhost` and the Netlify preview URL, keep only `voldtlab.com`. Key: `6Lc6Pz4rAAAAADVQu-X0eNcV8ioy1o1olVuU-3hi` in Google reCAPTCHA Admin Console.
+- [ ] **After cutover confirmed working**: clean up reCAPTCHA domain allowlist -- remove `localhost` and the Netlify preview URL, keep only `voldtlab.com`. Public Key: `6Lc6Pz4rAAAAADVQu-X0eNcV8ioy1o1olVuU-3hi` in Google reCAPTCHA Admin Console.
 - [ ] at cutover take note of the last sessionId. this can help distinguish old site visits from new
 
 

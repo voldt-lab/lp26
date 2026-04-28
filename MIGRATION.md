@@ -90,9 +90,9 @@ Netlify Forms enabled, email notifications configured. Submissions visible in Ne
 - [x] `netlify/verify-session.js` — retrieves PaymentIntent, checks `status === 'succeeded'` and `review_submitted` flag
 - [x] `netlify/mark-reviewed.js` — re-verifies, sets `review_submitted: true` on PaymentIntent metadata, returns 409 if duplicate
 - [x] `review.html` — verifies token on load, reveals form if valid, calls mark-reviewed before Netlify Forms POST
-- [ ] **Next: trigger a production deploy** → Netlify auto-registers the `review` form on first deploy
-- [ ] Test full flow on live site with a real sandbox `pi_...` ID
-- [ ] Manually curate approved submissions → hardcode into collection page testimonial sections
+- [x] **Next: trigger a production deploy** → Netlify auto-registers the `review` form on first deploy
+- [x] Test full flow on live site with a real sandbox `pi_...` ID
+- [x] Manually curate approved submissions → hardcode into collection page testimonial sections
 
 
 ---
@@ -100,6 +100,7 @@ Netlify Forms enabled, email notifications configured. Submissions visible in Ne
 ## Phase 6 — Cutover
 
 - [ ] Point `voldtlab.com` domain to Netlify (replaces current setup)
+- [ ] Update Stripe Secret key to live account from sandbox
 - [x] Verify Stripe checkout end-to-end in test mode (sandbox tested successfully)
 - [x] Verify Netlify Forms submissions arriving
 - [ ] Verify review flow end-to-end on live Netlify URL (trigger one deploy first)
