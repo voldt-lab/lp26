@@ -90,8 +90,12 @@ function resolveModelUrl(state) {
   }
 
   if (product === 'mechanic') {
-    const tx = state.mechTexture; // 'gyroid' | 'voronoi'
-    // both use length + density
+    const tx = state.mechTexture;
+    if (tx === 'gyroid-knob' || tx === 'voronoi-knob') {
+      const folder = tx === 'gyroid-knob' ? 'g_knob' : 'v_knob';
+      const d = KNOB_DENS_MAP[clampIndex(densIndex, KNOB_DENS_MAP.length)];
+      return `${MODEL_BASE}/mechanic/${folder}/rad${state.rad}_dens${d}${MODEL_EXT}`;
+    }
     return `${MODEL_BASE}/mechanic/${tx}/len${state.len}_dens${state.dens}${MODEL_EXT}`;
   }
 
@@ -253,7 +257,11 @@ function getState() {
       vTypeSelect.value === '2' ? 'knob' :
       'chrystal',
     lakeType: (lsTypeSelect.value === '1') ? 'knob' : 'simple',
-    mechTexture: (mechTxtrSelect.value === '1') ? 'voronoi' : 'gyroid',
+    mechTexture:
+      mechTxtrSelect.value === '1' ? 'voronoi' :
+      mechTxtrSelect.value === '2' ? 'gyroid-knob' :
+      mechTxtrSelect.value === '3' ? 'voronoi-knob' :
+      'gyroid',
   };
 
   return state;
@@ -310,9 +318,15 @@ function applyVisibility() {
 
   // mechanic
   show(fieldHwTxtr, true);
-  show(fieldLen, true);
-  show(fieldSp, true);
-  show(fieldDens, true);
+  const mechTx = st.mechTexture;
+  if (mechTx === 'gyroid-knob' || mechTx === 'voronoi-knob') {
+    show(fieldRad, true);
+    show(fieldDens, true);
+  } else {
+    show(fieldLen, true);
+    show(fieldSp, true);
+    show(fieldDens, true);
+  }
 }
 
 function applyValueChips() {
@@ -361,10 +375,16 @@ function buildLabel(st) {
       parts.push(DENS_LABELS[clampIndex(st.dens, DENS_LABELS.length)]);
     }
   } else if (st.product === 'mechanic') {
-    parts.push(st.mechTexture === 'voronoi' ? 'Voronoi' : 'Gyroid');
-    parts.push(LENGTH_LABELS[clampIndex(st.len, LENGTH_LABELS.length)]);
-    parts.push('CTC' + SPACING_LABELS[clampIndex(st.sp, SPACING_LABELS.length)]);
-    parts.push(DENS_LABELS[clampIndex(st.dens, DENS_LABELS.length)]);
+    if (st.mechTexture === 'gyroid-knob' || st.mechTexture === 'voronoi-knob') {
+      parts.push(st.mechTexture === 'voronoi-knob' ? 'Voronoi Knob' : 'Gyroid Knob');
+      parts.push(DIAMETER_LABELS[clampIndex(st.rad, DIAMETER_LABELS.length)]);
+      parts.push(DENS_LABELS[clampIndex(st.dens, DENS_LABELS.length)]);
+    } else {
+      parts.push(st.mechTexture === 'voronoi' ? 'Voronoi' : 'Gyroid');
+      parts.push(LENGTH_LABELS[clampIndex(st.len, LENGTH_LABELS.length)]);
+      parts.push('CTC' + SPACING_LABELS[clampIndex(st.sp, SPACING_LABELS.length)]);
+      parts.push(DENS_LABELS[clampIndex(st.dens, DENS_LABELS.length)]);
+    }
   } else {
     parts.push(st.lakeType === 'knob' ? 'Knob' : 'Simple');
     if (st.lakeType === 'knob') {
@@ -398,7 +418,10 @@ function restoreState(snapshot) {
   prodSelect.value     = { heatwave: '0', mechanic: '1', lakeshore: '2' }[snapshot.product];
   vTypeSelect.value    = snapshot.heatwaveType === 'bulb' ? '1' : snapshot.heatwaveType === 'knob' ? '2' : '0';
   lsTypeSelect.value   = snapshot.lakeType     === 'knob'    ? '1' : '0';
-  mechTxtrSelect.value = snapshot.mechTexture  === 'voronoi' ? '1' : '0';
+  mechTxtrSelect.value =
+    snapshot.mechTexture === 'voronoi'      ? '1' :
+    snapshot.mechTexture === 'gyroid-knob'  ? '2' :
+    snapshot.mechTexture === 'voronoi-knob' ? '3' : '0';
   lenSlider.value   = snapshot.len;
   twistSlider.value = snapshot.tw;
   ffSlider.value    = snapshot.ff;
@@ -436,7 +459,8 @@ async function loadForCurrentState() {
 
   try {
     if ((st.product === 'heatwave' && st.heatwaveType === 'knob') ||
-        (st.product === 'lakeshore' && st.lakeType === 'knob')) {
+        (st.product === 'lakeshore' && st.lakeType === 'knob') ||
+        (st.product === 'mechanic' && (st.mechTexture === 'gyroid-knob' || st.mechTexture === 'voronoi-knob'))) {
       await viewer.loadSingle(handleUrl, stemUrl);
     } else {
       const spacingM = SPACING_METERS[clampIndex(st.sp, SPACING_METERS.length)];
@@ -589,12 +613,17 @@ function wireUI() {
   };
 
   // Finish material picker (handle + stems)
-  document.getElementById('matPicker').addEventListener('click', e => {
+  const matPicker = document.getElementById('matPicker');
+  matPicker.addEventListener('click', e => {
     const swatch = e.target.closest('.mat-swatch');
     if (!swatch) return;
-    document.querySelectorAll('#matPicker .mat-swatch').forEach(s => s.classList.remove('is-active'));
+    matPicker.querySelectorAll('.mat-swatch').forEach(s => s.classList.remove('is-active'));
     swatch.classList.add('is-active');
     viewer.setMaterial(swatch.dataset.mat);
+  });
+  document.getElementById('matExpandBtn').addEventListener('click', e => {
+    e.stopPropagation();
+    matPicker.classList.toggle('is-expanded');
   });
 
   // Backboard picker

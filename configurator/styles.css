@@ -177,8 +177,41 @@ body{
 }
 .mat-picker {
   display: flex;
-  gap: 8px;
+  flex-direction: column;
+  gap: 0;
 }
+.mat-picker__row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.mat-expand-btn {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.14);
+  color: rgba(255,255,255,0.45);
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.15s, background 0.15s;
+}
+.mat-expand-btn:hover {
+  background: rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.75);
+}
+.mat-expand-btn svg { transition: transform 0.2s ease; }
+.mat-picker.is-expanded .mat-expand-btn svg { transform: rotate(180deg); }
+.mat-picker__custom {
+  display: none;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+.mat-picker.is-expanded .mat-picker__custom { display: flex; }
 .mat-swatch {
   width: 26px;
   height: 26px;

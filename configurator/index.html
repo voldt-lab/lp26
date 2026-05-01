@@ -116,6 +116,8 @@
         <select class="dropdown ctrl" id="mechtype">
           <option value="0">Gyroid</option>
           <option value="1">Voronoi</option>
+          <option value="2">Gyroid Knob</option>
+          <option value="3">Voronoi Knob</option>
         </select>
       </div>
 
@@ -170,10 +172,25 @@
       <div class="mat-field">
         <span class="badge">Finish</span>
         <div class="mat-picker" id="matPicker">
-          <div class="mat-swatch is-active" data-mat="protoWhite"  title="Proto White"  style="background:#dcd8d0"></div>
-          <div class="mat-swatch"           data-mat="mutedGreen"  title="Muted Green"  style="background:#3d4a42"></div>
-          <div class="mat-swatch"           data-mat="gunMetal"    title="Gun Metal"    style="background:#4a4f56"></div>
-          <div class="mat-swatch"           data-mat="briskOrange" title="Brisk Orange" style="background:#c85a20"></div>
+          <div class="mat-picker__row">
+            <div class="mat-swatch is-active" data-mat="anthracite" title="Anthracite"  style="background:#343840"></div>
+            <div class="mat-swatch"           data-mat="navy"       title="Navy"        style="background:#1a2d4a"></div>
+            <div class="mat-swatch"           data-mat="mutedGreen" title="Muted Green" style="background:#3d4a42"></div>
+            <div class="mat-swatch"           data-mat="gunMetal"   title="Gun Metal"   style="background:#4a4f56"></div>
+            <button class="mat-expand-btn" id="matExpandBtn" type="button" aria-label="More finishes" title="Custom finishes">
+              <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1l4 4 4-4"/></svg>
+            </button>
+          </div>
+          <div class="mat-picker__custom" id="matCustom">
+            <div class="mat-swatch" data-mat="protoWhite"  title="Proto White"  style="background:#dcd8d0"></div>
+            <div class="mat-swatch" data-mat="briskOrange" title="Brisk Orange" style="background:#c85a20"></div>
+            <div class="mat-swatch" data-mat="blue"        title="Blue"         style="background:#1e3e80"></div>
+            <div class="mat-swatch" data-mat="fire"        title="Fire"         style="background:#c82020"></div>
+            <div class="mat-swatch" data-mat="sunBeam"     title="Sun Beam"     style="background:#d4961e"></div>
+            <div class="mat-swatch" data-mat="bordeaux"    title="Bordeaux"     style="background:#6a1428"></div>
+            <div class="mat-swatch" data-mat="leaf"        title="Leaf"         style="background:#2e6e30"></div>
+            <div class="mat-swatch" data-mat="bark"        title="Bark"         style="background:#5a3010"></div>
+          </div>
         </div>
       </div>
 
