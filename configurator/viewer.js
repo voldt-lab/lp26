@@ -180,7 +180,7 @@ export function createViewer(container, opts = {}) {
       color: 0x4a280c, metalness: 0.0, roughness: 0.78, envMapIntensity: 1.05,
     }),
   };
-  let activeMat = MATS.anthracite;
+  let activeMat = MATS.gunMetal;
 
   // --- base material (back panel only) ---
   const texLoader = new THREE.TextureLoader();

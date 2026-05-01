@@ -192,17 +192,14 @@ body{
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.14);
-  color: rgba(255,255,255,0.45);
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.35);
   cursor: pointer;
   padding: 0;
-  transition: color 0.15s, background 0.15s;
+  transition: color 0.15s;
 }
-.mat-expand-btn:hover {
-  background: rgba(255,255,255,0.12);
-  color: rgba(255,255,255,0.75);
-}
+.mat-expand-btn:hover { color: rgba(255,255,255,0.7); }
 .mat-expand-btn svg { transition: transform 0.2s ease; }
 .mat-picker.is-expanded .mat-expand-btn svg { transform: rotate(180deg); }
 .mat-picker__custom {
