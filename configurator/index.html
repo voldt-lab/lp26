@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <title>VOLDT</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/png" href="../assets/3a774a1b3058523e9f5d0495ad6d5e47ad4be5da.png" />
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
     <link rel="stylesheet" href="styles.css" />
 
     <!-- ES modules for three / rhino3dm / rhinocompute -->
@@ -199,6 +199,16 @@
 
     <!-- Viewport overlay tools -- positioned by JS relative to actual panel right edge -->
     <div id="viewport-tools">
+      <button id="fsBtn" class="vp-tool-btn vp-tool-icon" type="button" aria-label="Full screen" data-tip="Full screen">
+        <svg class="icon-expand" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 6V1h5"/><line x1="1" y1="1" x2="6.5" y2="6.5"/>
+          <path d="M15 10v5h-5"/><line x1="15" y1="15" x2="9.5" y2="9.5"/>
+        </svg>
+        <svg class="icon-compress" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 1v5H1"/><line x1="1" y1="1" x2="6" y2="6"/>
+          <path d="M10 15v-5h5"/><line x1="15" y1="15" x2="10" y2="10"/>
+        </svg>
+      </button>
       <button id="gridToggle" class="vp-tool-btn vp-tool-icon active" type="button" aria-label="3D Markers" data-tip="3D Markers">
         <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M10 5L16 8L10 11L4 8Z"/>

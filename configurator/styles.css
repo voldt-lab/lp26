@@ -107,6 +107,9 @@ body{
 }
 /* icon-only button — same size as text button; position: relative for tooltip */
 .vp-tool-icon { position: relative; }
+.vp-tool-btn .icon-compress { display: none; }
+.vp-tool-btn.is-fullscreen .icon-expand { display: none; }
+.vp-tool-btn.is-fullscreen .icon-compress { display: flex; }
 /* tooltip */
 .vp-tool-icon[data-tip]::after {
   content: attr(data-tip);

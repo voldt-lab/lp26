@@ -591,6 +591,21 @@ function wireUI() {
   positionViewportTools();
   window.addEventListener('resize', positionViewportTools);
 
+  // Fullscreen toggle
+  const fsBtn = document.getElementById('fsBtn');
+  fsBtn.addEventListener('click', () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+    } else {
+      document.exitFullscreen();
+    }
+  });
+  document.addEventListener('fullscreenchange', () => {
+    fsBtn.classList.toggle('is-fullscreen', !!document.fullscreenElement);
+    fsBtn.setAttribute('data-tip', document.fullscreenElement ? 'Exit full screen' : 'Full screen');
+    fsBtn.setAttribute('aria-label', document.fullscreenElement ? 'Exit full screen' : 'Full screen');
+  });
+
   // Grid & Axis toggle
   const gridBtn = document.getElementById('gridToggle');
   let gridOn = true;
