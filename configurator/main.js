@@ -70,33 +70,36 @@ function resolveModelUrl(state) {
   // That makes it easy to pre-bake without worrying about decimal formatting.
   const { product } = state;
 
-  if (product === 'heatwave') {
-    if (state.heatwaveType === 'knob') {
+  if (product === 'arroyo') {
+    if (state.arroyoType === 'knob') {
       const d = KNOB_DENS_MAP[clampIndex(densIndex, KNOB_DENS_MAP.length)];
-      return `${MODEL_BASE}/heat_wave/knob/rad${state.rad}_dens${d}${MODEL_EXT}`;
+      return `${MODEL_BASE}/arroyo/knob/rad${state.rad}_dens${d}${MODEL_EXT}`;
     }
-    const vtype = state.heatwaveType; // 'chrystal' | 'bulb'
-    return `${MODEL_BASE}/heat_wave/${vtype}/len${state.len}_dens${state.dens}${MODEL_EXT}`;
+    return `${MODEL_BASE}/arroyo/${state.arroyoType}/len${state.len}_dens${state.dens}${MODEL_EXT}`;
   }
 
-  if (product === 'lakeshore') {
-    const lstype = state.lakeType; // 'simple' | 'knob'
-    if (lstype === 'knob') {
+  if (product === 'basin') {
+    if (state.basinType === 'knob') {
       const d = KNOB_DENS_MAP[clampIndex(densIndex, KNOB_DENS_MAP.length)];
-      return `${MODEL_BASE}/lake_shore/knob/rad${state.rad}_dens${d}${MODEL_EXT}`;
+      return `${MODEL_BASE}/basin/knob/rad${state.rad}_dens${d}${MODEL_EXT}`;
     }
-    // simple uses length + twist
-    return `${MODEL_BASE}/lake_shore/simple/len${state.len}_tw${state.tw}${MODEL_EXT}`;
+    return `${MODEL_BASE}/basin/simple/len${state.len}_tw${state.tw}${MODEL_EXT}`;
   }
 
-  if (product === 'mechanic') {
-    const tx = state.mechTexture;
-    if (tx === 'gyroid-knob' || tx === 'voronoi-knob') {
-      const folder = tx === 'gyroid-knob' ? 'g_knob' : 'v_knob';
+  if (product === 'cella') {
+    if (state.infillType === 'knob') {
       const d = KNOB_DENS_MAP[clampIndex(densIndex, KNOB_DENS_MAP.length)];
-      return `${MODEL_BASE}/mechanic/${folder}/rad${state.rad}_dens${d}${MODEL_EXT}`;
+      return `${MODEL_BASE}/cella/knob/rad${state.rad}_dens${d}${MODEL_EXT}`;
     }
-    return `${MODEL_BASE}/mechanic/${tx}/len${state.len}_dens${state.dens}${MODEL_EXT}`;
+    return `${MODEL_BASE}/cella/len${state.len}_dens${state.dens}${MODEL_EXT}`;
+  }
+
+  if (product === 'dune') {
+    if (state.infillType === 'knob') {
+      const d = KNOB_DENS_MAP[clampIndex(densIndex, KNOB_DENS_MAP.length)];
+      return `${MODEL_BASE}/dune/knob/rad${state.rad}_dens${d}${MODEL_EXT}`;
+    }
+    return `${MODEL_BASE}/dune/len${state.len}_dens${state.dens}${MODEL_EXT}`;
   }
 
   return null;
@@ -231,37 +234,28 @@ function initDensityToggle() {
 }
 
 function getState() {
-  const product = prodSelect.value; // "0" | "1" | "2"
+  const product = prodSelect.value; // "0" | "1" | "2" | "3"
 
   const state = {
-    // normalized product key
     product:
-      product === '0' ? 'heatwave' :
-      product === '1' ? 'mechanic' :
-      'lakeshore',
+      product === '0' ? 'arroyo' :
+      product === '1' ? 'basin'  :
+      product === '2' ? 'cella'  :
+      'dune',
 
-    // slider indices
     len:  parseInt(lenSlider.value, 10),
     tw:   parseInt(twistSlider.value, 10),
     ff:   parseInt(ffSlider.value, 10),
     sp:   parseInt(spSlider.value, 10),
-    //dens: parseInt(densSlider.value, 10), //----uncomment to revert to old slider
-    dens: densIndex, // from segmented control
+    dens: densIndex,
+    rad:  parseInt(radSlider.value, 10),
 
-    // slider indices
-    rad: parseInt(radSlider.value, 10),
-
-    // subtypes
-    heatwaveType:
+    arroyoType:
       vTypeSelect.value === '1' ? 'bulb' :
       vTypeSelect.value === '2' ? 'knob' :
       'chrystal',
-    lakeType: (lsTypeSelect.value === '1') ? 'knob' : 'simple',
-    mechTexture:
-      mechTxtrSelect.value === '1' ? 'voronoi' :
-      mechTxtrSelect.value === '2' ? 'gyroid-knob' :
-      mechTxtrSelect.value === '3' ? 'voronoi-knob' :
-      'gyroid',
+    basinType:  lsTypeSelect.value  === '1' ? 'knob' : 'simple',
+    infillType: mechTxtrSelect.value === '1' ? 'knob' : 'bar',
   };
 
   return state;
@@ -284,9 +278,9 @@ function applyVisibility() {
   show(fieldDens, false);
   show(fieldRad, false);
 
-  if (st.product === 'heatwave') {
+  if (st.product === 'arroyo') {
     show(fieldVType, true);
-    if (st.heatwaveType === 'knob') {
+    if (st.arroyoType === 'knob') {
       show(fieldRad, true);
       show(fieldDens, true);
     } else {
@@ -297,29 +291,22 @@ function applyVisibility() {
     return;
   }
 
-  if (st.product === 'lakeshore') {
+  if (st.product === 'basin') {
     show(fieldLsType, true);
-
-    if (st.lakeType === 'simple') {
+    if (st.basinType === 'simple') {
       show(fieldLen, true);
       show(fieldSp, true);
       show(fieldRot, true);
-      show(fieldFF, false);
-      show(fieldDens, false);
     } else { // knob
       show(fieldRad, true);
       show(fieldDens, true);
-      show(fieldLen, false);
-      show(fieldSp, false);
-      show(fieldRot, false);
     }
     return;
   }
 
-  // mechanic
+  // cella / dune
   show(fieldHwTxtr, true);
-  const mechTx = st.mechTexture;
-  if (mechTx === 'gyroid-knob' || mechTx === 'voronoi-knob') {
+  if (st.infillType === 'knob') {
     show(fieldRad, true);
     show(fieldDens, true);
   } else {
@@ -361,41 +348,43 @@ function applyValueChips() {
 let quoteItems = [];
 
 function buildLabel(st) {
-  const names = { heatwave: 'HeatWave', mechanic: 'Mechanic', lakeshore: 'LakeShore' };
-  const parts = [names[st.product]];
-  if (st.product === 'heatwave') {
-    if (st.heatwaveType === 'knob') {
+  const parts = [{ arroyo: 'Arroyo', basin: 'Basin', cella: 'Cella', dune: 'Dune' }[st.product]];
+
+  if (st.product === 'arroyo') {
+    if (st.arroyoType === 'knob') {
       parts.push('Knob');
       parts.push(DIAMETER_LABELS[clampIndex(st.rad, DIAMETER_LABELS.length)]);
       parts.push(DENS_LABELS[clampIndex(st.dens, DENS_LABELS.length)]);
     } else {
-      parts.push(st.heatwaveType === 'bulb' ? 'Bulb' : 'Chrystal');
+      parts.push(st.arroyoType === 'bulb' ? 'Bulb' : 'Chrystal');
       parts.push(LENGTH_LABELS[clampIndex(st.len, LENGTH_LABELS.length)]);
       parts.push('CTC' + SPACING_LABELS[clampIndex(st.sp, SPACING_LABELS.length)]);
       parts.push(DENS_LABELS[clampIndex(st.dens, DENS_LABELS.length)]);
     }
-  } else if (st.product === 'mechanic') {
-    if (st.mechTexture === 'gyroid-knob' || st.mechTexture === 'voronoi-knob') {
-      parts.push(st.mechTexture === 'voronoi-knob' ? 'Voronoi Knob' : 'Gyroid Knob');
+  } else if (st.product === 'basin') {
+    if (st.basinType === 'knob') {
+      parts.push('Knob');
       parts.push(DIAMETER_LABELS[clampIndex(st.rad, DIAMETER_LABELS.length)]);
       parts.push(DENS_LABELS[clampIndex(st.dens, DENS_LABELS.length)]);
     } else {
-      parts.push(st.mechTexture === 'voronoi' ? 'Voronoi' : 'Gyroid');
-      parts.push(LENGTH_LABELS[clampIndex(st.len, LENGTH_LABELS.length)]);
-      parts.push('CTC' + SPACING_LABELS[clampIndex(st.sp, SPACING_LABELS.length)]);
-      parts.push(DENS_LABELS[clampIndex(st.dens, DENS_LABELS.length)]);
-    }
-  } else {
-    parts.push(st.lakeType === 'knob' ? 'Knob' : 'Simple');
-    if (st.lakeType === 'knob') {
-      parts.push(DIAMETER_LABELS[clampIndex(st.rad, DIAMETER_LABELS.length)]);
-      parts.push(DENS_LABELS[clampIndex(st.dens, DENS_LABELS.length)]);
-    } else {
+      parts.push('Simple');
       parts.push(LENGTH_LABELS[clampIndex(st.len, LENGTH_LABELS.length)]);
       parts.push('CTC' + SPACING_LABELS[clampIndex(st.sp, SPACING_LABELS.length)]);
       parts.push(TWIST_LABELS[clampIndex(st.tw, TWIST_LABELS.length)]);
     }
+  } else { // cella / dune
+    if (st.infillType === 'knob') {
+      parts.push('Knob');
+      parts.push(DIAMETER_LABELS[clampIndex(st.rad, DIAMETER_LABELS.length)]);
+      parts.push(DENS_LABELS[clampIndex(st.dens, DENS_LABELS.length)]);
+    } else {
+      parts.push('Bar');
+      parts.push(LENGTH_LABELS[clampIndex(st.len, LENGTH_LABELS.length)]);
+      parts.push('CTC' + SPACING_LABELS[clampIndex(st.sp, SPACING_LABELS.length)]);
+      parts.push(DENS_LABELS[clampIndex(st.dens, DENS_LABELS.length)]);
+    }
   }
+
   const finishEl = document.querySelector('#matPicker .mat-swatch.is-active');
   if (finishEl) parts.push(finishEl.title.replace(/ /g, ''));
   return parts.join('.');
@@ -415,13 +404,10 @@ function renderQuoteList() {
 }
 
 function restoreState(snapshot) {
-  prodSelect.value     = { heatwave: '0', mechanic: '1', lakeshore: '2' }[snapshot.product];
-  vTypeSelect.value    = snapshot.heatwaveType === 'bulb' ? '1' : snapshot.heatwaveType === 'knob' ? '2' : '0';
-  lsTypeSelect.value   = snapshot.lakeType     === 'knob'    ? '1' : '0';
-  mechTxtrSelect.value =
-    snapshot.mechTexture === 'voronoi'      ? '1' :
-    snapshot.mechTexture === 'gyroid-knob'  ? '2' :
-    snapshot.mechTexture === 'voronoi-knob' ? '3' : '0';
+  prodSelect.value     = { arroyo: '0', basin: '1', cella: '2', dune: '3' }[snapshot.product];
+  vTypeSelect.value    = snapshot.arroyoType === 'bulb' ? '1' : snapshot.arroyoType === 'knob' ? '2' : '0';
+  lsTypeSelect.value   = snapshot.basinType  === 'knob' ? '1' : '0';
+  mechTxtrSelect.value = snapshot.infillType === 'knob' ? '1' : '0';
   lenSlider.value   = snapshot.len;
   twistSlider.value = snapshot.tw;
   ffSlider.value    = snapshot.ff;
@@ -458,9 +444,12 @@ async function loadForCurrentState() {
   const stemUrl = resolveStemUrl();
 
   try {
-    if ((st.product === 'heatwave' && st.heatwaveType === 'knob') ||
-        (st.product === 'lakeshore' && st.lakeType === 'knob') ||
-        (st.product === 'mechanic' && (st.mechTexture === 'gyroid-knob' || st.mechTexture === 'voronoi-knob'))) {
+    const isKnob =
+      (st.product === 'arroyo' && st.arroyoType === 'knob') ||
+      (st.product === 'basin'  && st.basinType  === 'knob') ||
+      (st.product === 'cella'  && st.infillType === 'knob') ||
+      (st.product === 'dune'   && st.infillType === 'knob');
+    if (isKnob) {
       await viewer.loadSingle(handleUrl, stemUrl);
     } else {
       const spacingM = SPACING_METERS[clampIndex(st.sp, SPACING_METERS.length)];
