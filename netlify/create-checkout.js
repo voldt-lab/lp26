@@ -24,9 +24,9 @@ const PRICE_CENTS = {
 };
 
 // ⚠️ SHIPPING RATE IDs -- update all three when switching test ↔ live mode
-const SHIPPING_REGULAR = 'shr_1TJyUu2NqRwWEdh7Qa9fUC3b'; // $15 -- single small item
-const SHIPPING_LARGE   = 'shr_1TJyW32NqRwWEdh7Yxv9az1M'; // $25 -- 2 smalls or single oversized
-const SHIPPING_COMBO   = 'shr_1TQBRt2NqRwWEdh7ulcEsgkl';                 // $?? -- 3+ smalls, 2+ oversized, or mixed
+const SHIPPING_REGULAR = 'shr_1TOpVCRzSEMboF2806PQbamY'; // $15 -- single small item
+const SHIPPING_LARGE   = 'shr_1TOpVuRzSEMboF28Msyms2np'; // $25 -- 2 smalls or single oversized
+const SHIPPING_COMBO   = 'shr_1TUtPbRzSEMboF280PPMIcyV'; // $?? -- 3+ smalls, 2+ oversized, or mixed
 
 const OVERSIZED_IDS = new Set([
   'polyframes-coat-rack',
