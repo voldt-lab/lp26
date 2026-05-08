@@ -8,28 +8,32 @@ const panel  = document.getElementById('ctrlpanel');
 // Product select
 const prodSelect = document.getElementById('prodtype');
 
-// Heat Wave controls
-const vTypeSelect = document.getElementById('vtype');
+// Arroyo controls
 const fieldVType  = document.getElementById('field-vtype');
 const fieldRot    = document.getElementById('field-rot');
 const fieldLen    = document.getElementById('field-len');
 
-// Lake Shore controls
-const lsTypeSelect = document.getElementById('lstype');
+// Basin controls
 const fieldLsType  = document.getElementById('field-lstype');
 const fieldFF      = document.getElementById('field-ff');
 
-// Heat Wave controls
-const mechTxtrSelect = document.getElementById('mechtype');
+// Cella / Dune controls
 const fieldHwTxtr  = document.getElementById('field-mechtype');
 const fieldDens    = document.getElementById('field-dens');
+
+function getRadioValue(name) {
+  return document.querySelector(`input[name="${name}"]:checked`)?.value ?? '0';
+}
+function setRadioValue(name, value) {
+  const el = document.querySelector(`input[name="${name}"][value="${value}"]`);
+  if (el) el.checked = true;
+}
 
 // Sliders + their value chips (simplified now that IDs are unique)
 const lenSlider = document.getElementById('len');
 const lenValue  = document.getElementById('lenVal');
 
-const twistSlider = document.getElementById('rot');
-const twistValue  = document.getElementById('rotVal');
+let twistCtrl = { getIndex: () => 2, setIndex: () => {} };
 
 const ffSlider  = document.getElementById('ff');
 const ffValue   = document.getElementById('ffVal');
@@ -244,18 +248,18 @@ function getState() {
       'dune',
 
     len:  parseInt(lenSlider.value, 10),
-    tw:   parseInt(twistSlider.value, 10),
+    tw:   twistCtrl.getIndex(),
     ff:   parseInt(ffSlider.value, 10),
     sp:   parseInt(spSlider.value, 10),
     dens: densIndex,
     rad:  parseInt(radSlider.value, 10),
 
     arroyoType:
-      vTypeSelect.value === '1' ? 'bulb' :
-      vTypeSelect.value === '2' ? 'knob' :
-      'chrystal',
-    basinType:  lsTypeSelect.value  === '1' ? 'knob' : 'simple',
-    infillType: mechTxtrSelect.value === '1' ? 'knob' : 'bar',
+      getRadioValue('vtype') === '1' ? 'bulb' :
+      getRadioValue('vtype') === '2' ? 'knob' :
+      'ridges',
+    basinType:  getRadioValue('lstype')   === '1' ? 'knob' : 'simple',
+    infillType: getRadioValue('mechtype') === '1' ? 'knob' : 'bar',
   };
 
   return state;
@@ -321,10 +325,6 @@ function applyValueChips() {
   const li = clampIndex(parseInt(lenSlider.value, 10), LENGTH_LABELS.length);
   lenValue.textContent = LENGTH_LABELS[li];
 
-  // twist
-  const ti = clampIndex(parseInt(twistSlider.value, 10), TWIST_LABELS.length);
-  twistValue.textContent = TWIST_LABELS[ti];
-
   // diameter (knob) / form factor repurposed
   const ffi = clampIndex(parseInt(ffSlider.value, 10), DIAM_LABELS.length);
   ffValue.textContent = DIAM_LABELS[ffi];
@@ -356,7 +356,7 @@ function buildLabel(st) {
       parts.push(DIAMETER_LABELS[clampIndex(st.rad, DIAMETER_LABELS.length)]);
       parts.push(DENS_LABELS[clampIndex(st.dens, DENS_LABELS.length)]);
     } else {
-      parts.push(st.arroyoType === 'bulb' ? 'Bulb' : 'Chrystal');
+      parts.push(st.arroyoType === 'bulb' ? 'Bar-Bulbs' : 'Bar-Ridges');
       parts.push(LENGTH_LABELS[clampIndex(st.len, LENGTH_LABELS.length)]);
       parts.push('CTC' + SPACING_LABELS[clampIndex(st.sp, SPACING_LABELS.length)]);
       parts.push(DENS_LABELS[clampIndex(st.dens, DENS_LABELS.length)]);
@@ -404,12 +404,12 @@ function renderQuoteList() {
 }
 
 function restoreState(snapshot) {
-  prodSelect.value     = { arroyo: '0', basin: '1', cella: '2', dune: '3' }[snapshot.product];
-  vTypeSelect.value    = snapshot.arroyoType === 'bulb' ? '1' : snapshot.arroyoType === 'knob' ? '2' : '0';
-  lsTypeSelect.value   = snapshot.basinType  === 'knob' ? '1' : '0';
-  mechTxtrSelect.value = snapshot.infillType === 'knob' ? '1' : '0';
+  prodSelect.value = { arroyo: '0', basin: '1', cella: '2', dune: '3' }[snapshot.product];
+  setRadioValue('vtype',   snapshot.arroyoType === 'bulb' ? '1' : snapshot.arroyoType === 'knob' ? '2' : '0');
+  setRadioValue('lstype',  snapshot.basinType  === 'knob' ? '1' : '0');
+  setRadioValue('mechtype', snapshot.infillType === 'knob' ? '1' : '0');
   lenSlider.value   = snapshot.len;
-  twistSlider.value = snapshot.tw;
+  twistCtrl.setIndex(snapshot.tw ?? 2);
   ffSlider.value    = snapshot.ff;
   spSlider.value    = snapshot.sp;
   radSlider.value   = snapshot.rad ?? 0;
@@ -477,6 +477,38 @@ async function loadForCurrentState() {
       setBusy(false, status.textContent);
     }
   }
+}
+
+function initSimpleToggle(elementId, defaultIndex, onChange) {
+  const el = document.getElementById(elementId);
+  if (!el) return { getIndex: () => defaultIndex, setIndex: () => {} };
+  const btns  = Array.from(el.querySelectorAll('.segmented__btn'));
+  const thumb = el.querySelector('.segmented__thumb');
+  let idx = parseInt(el.getAttribute('data-active-index') || String(defaultIndex), 10);
+
+  function render() {
+    btns.forEach((b, i) => b.setAttribute('aria-pressed', i === idx ? 'true' : 'false'));
+    const cs = getComputedStyle(el);
+    const pad = parseFloat(cs.getPropertyValue('--pad')) || 0;
+    const rootRect = el.getBoundingClientRect();
+    const btnRect  = btns[idx].getBoundingClientRect();
+    let left = (btnRect.left - rootRect.left) - pad;
+    const maxLeft = (rootRect.width - pad * 2) - btnRect.width;
+    thumb.style.width     = `${btnRect.width}px`;
+    thumb.style.transform = `translateX(${Math.max(0, Math.min(left, maxLeft))}px)`;
+  }
+
+  btns.forEach(b => b.addEventListener('click', () => {
+    const i = parseInt(b.dataset.index, 10);
+    if (i === idx) return;
+    idx = i;
+    render();
+    onChange(idx);
+  }));
+
+  new ResizeObserver(render).observe(el);
+  render();
+  return { getIndex: () => idx, setIndex: (i) => { idx = i; render(); } };
 }
 
 // ----- event wiring -----
@@ -653,9 +685,9 @@ function wireUI() {
   document.addEventListener('click', () => { backboardMenu.style.display = 'none'; });
 
   prodSelect.addEventListener('change', onMajorChange);
-  vTypeSelect.addEventListener('change', onMajorChange);
-  lsTypeSelect.addEventListener('change', onMajorChange);
-  mechTxtrSelect.addEventListener('change', onMajorChange);
+  fieldVType.addEventListener('change', onMajorChange);
+  fieldLsType.addEventListener('change', onMajorChange);
+  fieldHwTxtr.addEventListener('change', onMajorChange);
 
   // Sliders: smooth drag (step=any while held), snap+load on release
   function wireSmoothSlider(slider, onSnap) {
@@ -701,7 +733,7 @@ function wireUI() {
     applyValueChips();
     loadForCurrentState();
   });
-  wireSmoothSlider(twistSlider);
+  twistCtrl = initSimpleToggle('twistToggle', 2, loadForCurrentState);
   wireSmoothSlider(ffSlider);
   wireSmoothSlider(radSlider);
 /* uncomment below to revert to old slider

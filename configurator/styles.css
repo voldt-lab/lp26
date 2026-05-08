@@ -229,6 +229,50 @@ body{
   border-color: rgba(255,255,255,0.35);
 }
 
+/* ---- Radio group (type / shape / style selectors) ---- */
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin-top: 2px;
+}
+.radio-opt {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 5px 0;
+  cursor: pointer;
+  color: rgba(232,234,237,.45);
+  font-size: 13px;
+  line-height: 1;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.radio-opt:hover { color: rgba(232,234,237,.72); }
+.radio-opt:has(input:checked) { color: #e8eaed; }
+.radio-opt input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,.28);
+  flex-shrink: 0;
+  cursor: pointer;
+  margin: 0;
+  transition: border-color 0.15s, background 0.15s;
+}
+.radio-opt input[type="radio"]:checked {
+  border-color: var(--accent);
+  background: var(--accent);
+  box-shadow: 0 0 0 2px rgba(200,146,42,.2);
+}
+.radio-opt input[type="radio"]:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(216,109,26,.25);
+}
+.toolbar.busy .radio-opt { pointer-events: none; }
+
 /* thin divider under the product dropdown */
 .divider{
   flex: 0 0 auto;

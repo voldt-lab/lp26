@@ -93,31 +93,30 @@
       </select>
       <div class="divider"></div>
 
-      <!-- heat wave Type -->
+      <!-- arroyo type -->
       <div class="field" id="field-vtype">
         <span class="badge">Type</span>
-        <select class="dropdown ctrl" id="vtype">
-          <option value="0" selected>Chrystal</option>
-          <option value="1">Bulb</option>
-          <option value="2">Knob</option>
-        </select>
+        <div class="radio-group ctrl">
+          <label class="radio-opt"><input type="radio" name="vtype" value="0" checked> Bar - Ridges</label>
+          <label class="radio-opt"><input type="radio" name="vtype" value="1"> Bar - Bulbs</label>
+          <label class="radio-opt"><input type="radio" name="vtype" value="2"> Knob</label>
+        </div>
       </div>
-      <!-- lake shape picker-->
+      <!-- basin shape -->
       <div class="field" id="field-lstype">
         <span class="badge">Shape</span>
-        <!-- no value chip for Type -->
-        <select class="dropdown ctrl" id="lstype">
-          <option value="0">Simple</option>
-          <option value="1">Knob</option>
-        </select>
+        <div class="radio-group ctrl">
+          <label class="radio-opt"><input type="radio" name="lstype" value="0" checked> Simple</label>
+          <label class="radio-opt"><input type="radio" name="lstype" value="1"> Knob</label>
+        </div>
       </div>
-      <!-- cella / dune style picker -->
+      <!-- cella / dune style -->
       <div class="field" id="field-mechtype">
         <span class="badge">Style</span>
-        <select class="dropdown ctrl" id="mechtype">
-          <option value="0">Bar</option>
-          <option value="1">Knob</option>
-        </select>
+        <div class="radio-group ctrl">
+          <label class="radio-opt"><input type="radio" name="mechtype" value="0" checked> Bar</label>
+          <label class="radio-opt"><input type="radio" name="mechtype" value="1"> Knob</label>
+        </div>
       </div>
 
       <!-- heat wave + lakeshore + mechanic length -->
@@ -141,8 +140,12 @@
       <!-- lake shore twist -->
       <div class="field" id="field-rot">
         <span class="badge">Twist</span>
-        <span id="rotVal" class="value">Minor</span>
-        <input id="rot" class="slider ctrl" type="range" min="0" max="2" step="1" value="2" />
+        <div class="segmented ctrl" id="twistToggle" data-active-index="2">
+          <div class="segmented__thumb" aria-hidden="true"></div>
+          <button type="button" class="segmented__btn" data-index="0">None</button>
+          <button type="button" class="segmented__btn" data-index="1">Minor</button>
+          <button type="button" class="segmented__btn" data-index="2">Max</button>
+        </div>
       </div>
 
       <!-- lake form Factor -->
