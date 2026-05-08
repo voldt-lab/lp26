@@ -89,7 +89,7 @@
         <div class="flex flex-wrap items-center justify-between gap-4">
           <div><p class="text-sm text-neutral-400">VOLDT Hardware</p><p class="text-neutral-50">Custom quotes, 3-4 week lead time</p></div>
           <div class="flex flex-wrap gap-3">
-            <a href="#" class="inline-flex items-center gap-2 border border-neutral-50 text-neutral-50 px-6 py-3 hover:bg-neutral-800 transition-colors text-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download Spec Sheet</a>
+            <button onclick="document.getElementById('spec-modal').classList.remove('hidden')" class="inline-flex items-center gap-2 border border-neutral-50 text-neutral-50 px-6 py-3 hover:bg-neutral-800 transition-colors text-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download Spec Sheet</button>
           </div>
         </div>
       </div>
@@ -97,6 +97,17 @@
 
     <footer id="site-footer" class="border-t border-stone-200 bg-white"></footer>
   </div>
+  <!-- Spec sheet modal -->
+  <div id="spec-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center px-6" onclick="if(event.target===this)this.classList.add('hidden')">
+    <div class="absolute inset-0 bg-black/50"></div>
+    <div class="relative bg-white max-w-md w-full p-10">
+      <button onclick="document.getElementById('spec-modal').classList.add('hidden')" class="absolute top-4 right-4 text-stone-400 hover:text-stone-900 transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <p class="text-sm text-stone-700 leading-relaxed">Please <a href="trade.html#inquiry-form-section" class="underline hover:text-[#C8922A] transition-colors">submit an inquiry</a> directly to request specs. Include the hardware type you're interested in. We're thrilled to work with you on your project's needs!</p>
+    </div>
+  </div>
+
   <script src="js/cart.js"></script><script src="js/header.js"></script>
   <script>
     // --- Gallery slideshow ---
