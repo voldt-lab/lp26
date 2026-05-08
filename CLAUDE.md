@@ -36,7 +36,7 @@
 |------|---------|
 | `js/cart.js` | Cart state in localStorage -- `addItem`, `removeItem`, `updateQty`, `clearCart`, `getCart`, `getTotal`, `getCount`, `updateCartBadge` |
 | `js/stripe.js` | Stripe Checkout -- `createStripeCheckout(discountCode)` POSTs cart to `/.netlify/functions/create-checkout`, redirects to Stripe hosted checkout page |
-| `js/shopify.js` | Shopify Storefront API integration (superseded -- kept until Shopify subscription is cancelled) |
+| `js/shopify.js` | Shopify Storefront API integration (superseded -- can be deleted) |
 | `js/header.js` | Injects shared header + footer HTML into `#site-header` / `#site-footer`; wires nav dropdown + scroll shadow |
 
 ### Netlify Functions
@@ -117,7 +117,7 @@ Cart page also includes `<script src="js/stripe.js"></script>` between cart.js a
   - **Combo** — 3+ smalls, 2+ oversized, or any oversized + any small (mixed order)
   - Oversized items: `polyframes-coat-rack`, `polyframes-floor-lamp-a`, `polyframes-floor-lamp-b`
   - **⚠️ Shipping rate IDs must be updated when switching test ↔ live mode** — recreate all 3 rates in Stripe live mode dashboard (Products → Shipping rates), then paste the new `shr_...` IDs into the three constants at the top of `create-checkout.js`.
-- **Tax**: `automatic_tax: { enabled: true }` — activates once Stripe account is verified; no-op until then.
+- **Tax**: `automatic_tax: { enabled: true }` — active.
 - **Analytics note**: When exporting transactions from Stripe, include the **"Checkout line item summary"** column to get per-product breakdown. Multiple items in one order are lumped into a single transaction row without it.
 - **Custom work payments**: Use Stripe Payment Links (dashboard, no code) -- create a one-off link for any amount and send directly to client.
 - **Review invitations**: After an order ships, copy the Payment Intent ID (`pi_...`) from Stripe dashboard and email `voldtlab.com/review.html?payment=pi_...` to the customer ~2–4 weeks post-delivery.
@@ -136,19 +136,8 @@ Cart page also includes `<script src="js/stripe.js"></script>` between cart.js a
 
 ## To-Dos
 - [ ] link spec to the download spec sheet button
-- [x] add Goose on Trade page
-- [ ] swap stripe secret key to live from test, on netlify env variables
-- [ ] replace test shipping IDs with live ones — all 3 constants in `netlify/create-checkout.js` lines 27–29 (`SHIPPING_REGULAR`, `SHIPPING_LARGE`, `SHIPPING_COMBO`)
-
-### Analytics (Firebase / reCAPTCHA)
-- [ ] **After domain cutover**: test that visit records appear in Firebase Realtime DB (`voldt-fb` → `visits`) from `voldtlab.com`
-- [ ] **After cutover confirmed working**: clean up reCAPTCHA domain allowlist -- remove `localhost` and the Netlify preview URL, keep only `voldtlab.com`. Public Key: `6Lc6Pz4rAAAAADVQu-X0eNcV8ioy1o1olVuU-3hi` in Google reCAPTCHA Admin Console.
-- [ ] at cutover take note of the last sessionId. this can help distinguish old site visits from new
-
-
 ### Configurator
 - [ ] Add **screw size selector** to `configurator/main.js` + UI in `configurator/index.html`
-
 
 ### Stripe / Checkout
 - [ ] *(Future)* Add Resend + Stripe webhook to automate invitation emails if volume grows
@@ -164,8 +153,8 @@ Both forms use **Netlify Forms** (Formspree removed). AJAX mode: POST to `'/'` w
 
 ## Hosting
 
-Site is hosted on **Netlify**, deploying from the `netlify` branch of the GitHub repo (repo is public). No build step — publish directory is `/`. Shopify is still active (not yet cut over).
+Site is hosted on **Netlify**, deploying from the `netlify` branch of the GitHub repo (repo is public). No build step — publish directory is `/`. Domain `voldtlab.com` points to Netlify. Shopify cancelled.
 
-See `MIGRATION.md` for the full migration plan. **Current status: Phases 1–4 complete. Phase 5 code complete (verify-session, mark-reviewed, review.html) — needs one production deploy to register Netlify Form, then end-to-end test on live site. Phase 6 is domain cutover.**
+**Local dev:** `npx netlify-cli dev` at `localhost:8888`. Requires `.env` with `STRIPE_SECRET_KEY=sk_live_...`. Functions run fully locally; Netlify Forms simulate a 200 but data doesn't reach the cloud dashboard.
 
-**Local dev:** `npx netlify-cli dev` at `localhost:8888`. Requires `.env` with `STRIPE_SECRET_KEY=sk_test_...`. Functions run fully locally; Netlify Forms simulate a 200 but data doesn't reach the cloud dashboard.
+**Netlify credits (free tier):** 300 credits/month. Production deploys cost 15 credits each (~20 deploys/month max). Keep builds stopped in Netlify dashboard and trigger manually only when ready. Branch/preview deploys are free. Form submissions cost 1 credit each.

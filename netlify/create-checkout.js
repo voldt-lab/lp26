@@ -23,7 +23,6 @@ const PRICE_CENTS = {
   // VOLDT Hardware -- TODO: add pricing once finalized
 };
 
-// ⚠️ SHIPPING RATE IDs -- update all three when switching test ↔ live mode
 const SHIPPING_REGULAR = 'shr_1TOpVCRzSEMboF2806PQbamY'; // $15 -- single small item
 const SHIPPING_LARGE   = 'shr_1TOpVuRzSEMboF28Msyms2np'; // $25 -- 2 smalls or single oversized
 const SHIPPING_COMBO   = 'shr_1TUtPbRzSEMboF280PPMIcyV'; // $?? -- 3+ smalls, 2+ oversized, or mixed
@@ -102,7 +101,7 @@ exports.handler = async (event) => {
     cancel_url:  `${siteUrl}/cart.html`,
     metadata,
     shipping_options: [{ shipping_rate: shippingRate }],
-    // automatic_tax: { enabled: true },  // requires head office address in Stripe dashboard -- enable post-verification
+    automatic_tax: { enabled: true },
     allow_promotion_codes: true,
   };
 
