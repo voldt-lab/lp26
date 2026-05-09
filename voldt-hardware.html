@@ -55,7 +55,7 @@
             </button>
           </div>
           <div class="space-y-8">
-            <div><h3 class="text-sm tracking-widest text-neutral-600 mb-3">MATERIALS & FINISHES</h3><ul class="space-y-2 text-neutral-900"><li>Gun Metal Grey</li><li>Muted Green</li><li>Brisk Orange</li></ul></div>
+            <div><h3 class="text-sm tracking-widest text-neutral-600 mb-3">MATERIALS & FINISHES</h3><ul class="space-y-2 text-neutral-900"><li>Durable polyamide</li><li>Mirco-textured matte</li><li>Standard & custom colors</li></ul></div>
             <div><h3 class="text-sm tracking-widest text-neutral-600 mb-3">INSTALLATION</h3><ul class="space-y-2 text-neutral-900"><li>Surface mount or through-bolt</li><li>Compatible with 3/4" to 2" door thickness</li><li>Mounting hardware included</li></ul></div>
             <div><h3 class="text-sm tracking-widest text-neutral-600 mb-3">LEAD TIME</h3><ul class="space-y-2 text-neutral-900"><li>US-based manufacturing</li><li>3-4 weeks production</li><li>Standard & expedited shipping</li></ul></div>
             <div><h3 class="text-sm tracking-widest text-neutral-600 mb-3">AWARDS & EXHIBITIONS</h3><ul class="space-y-2 text-neutral-900"><li>ArtPrize 2025 Design Winner</li><li>ICFF 2026 Launchpad</li></ul></div>
@@ -65,11 +65,13 @@
     </section>
 
     <!-- Configurator -->
-    <section id="configurator-section" class="w-full border-t border-b border-neutral-200 relative" style="scroll-margin-top:64px">
-      <div id="configurator-overlay" style="position:absolute;inset:0;z-index:5;cursor:pointer;display:flex;align-items:center;justify-content:center;" onclick="activateConfigurator()">
-        <span style="background:#fff;color:#171717;font-family:Inter,sans-serif;font-size:14px;letter-spacing:0.08em;text-transform:uppercase;padding:12px 24px;border:1px solid #e5e5e5;pointer-events:none;">Click to interact</span>
+    <section id="configurator-section" class="w-full border-t border-b border-neutral-200" style="scroll-margin-top:64px">
+      <div style="max-width:80rem;margin:0 auto;position:relative">
+        <div id="configurator-overlay" style="position:absolute;inset:0;z-index:5;cursor:pointer;display:flex;align-items:center;justify-content:center;" onclick="activateConfigurator()">
+          <span style="background:#fff;color:#171717;font-family:Inter,sans-serif;font-size:14px;letter-spacing:0.08em;text-transform:uppercase;padding:12px 24px;border:1px solid #e5e5e5;pointer-events:none;">Click to interact</span>
+        </div>
+        <iframe id="configurator-frame" src="configurator/index.html" style="width:100%;height:80vh;min-height:600px;border:none;display:block;"></iframe>
       </div>
-      <iframe id="configurator-frame" src="configurator/index.html" style="width:100%;height:80vh;min-height:600px;border:none;display:block;"></iframe>
     </section>
 
     <!-- Supporting Info -->
