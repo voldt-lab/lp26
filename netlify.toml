@@ -1,6 +1,11 @@
 [build]
   publish = "."
   functions = "netlify"
+  edge_functions = "netlify/edge-functions"
 
 [functions]
   node_bundler = "esbuild"
+
+[[edge_functions]]
+  path = "/configurator/**"
+  function = "protect-glb"
