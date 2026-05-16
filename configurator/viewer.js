@@ -146,10 +146,10 @@ export function createViewer(container, opts = {}) {
       color: 0x22252a, metalness: 0.0, roughness: 0.72, envMapIntensity: 1.10,
     }),
     navy: new THREE.MeshStandardMaterial({
-      color: 0x152236, metalness: 0.0, roughness: 0.72, envMapIntensity: 1.10,
+      color: 0x212730, metalness: 0.0, roughness: 0.72, envMapIntensity: 1.10,
     }),
     mutedGreen: new THREE.MeshStandardMaterial({
-      color: 0x3d4a42, metalness: 0.0, roughness: 0.78, envMapIntensity: 1.10,
+      color: 0x262927, metalness: 0.0, roughness: 0.78, envMapIntensity: 1.10,
     }),
     gunMetal: new THREE.MeshStandardMaterial({
       color: 0x34373b, metalness: 0.0, roughness: 0.72, envMapIntensity: 1.10,
@@ -159,16 +159,16 @@ export function createViewer(container, opts = {}) {
       color: 0x828282, metalness: 0.05, roughness: 0.7, envMapIntensity: 1.0,
     }),
     briskOrange: new THREE.MeshStandardMaterial({
-      color: 0xc85a20, metalness: 0.0, roughness: 0.65, envMapIntensity: 0.90,
+      color: 0x944216, metalness: 0.0, roughness: 0.65, envMapIntensity: 0.90,
     }),
     blue: new THREE.MeshStandardMaterial({
       color: 0x1a3470, metalness: 0.0, roughness: 0.70, envMapIntensity: 1.10,
     }),
     fire: new THREE.MeshStandardMaterial({
-      color: 0xb81818, metalness: 0.0, roughness: 0.65, envMapIntensity: 0.95,
+      color: 0x8f1515, metalness: 0.0, roughness: 0.65, envMapIntensity: 0.95,
     }),
     sunBeam: new THREE.MeshStandardMaterial({
-      color: 0xb87814, metalness: 0.0, roughness: 0.65, envMapIntensity: 0.90,
+      color: 0x8c6019, metalness: 0.0, roughness: 0.65, envMapIntensity: 0.90,
     }),
     bordeaux: new THREE.MeshStandardMaterial({
       color: 0x5c0e20, metalness: 0.0, roughness: 0.72, envMapIntensity: 1.05,
