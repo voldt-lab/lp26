@@ -52,7 +52,7 @@ const fieldRad  = document.getElementById('field-rad');
 
 
 
-// Viewer (keep your old look)
+// Viewer
 const viewer = createViewer(root, {
   env: 'hdr',
   hdrUrl: './royal_espl_1k.hdr',
