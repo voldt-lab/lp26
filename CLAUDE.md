@@ -1,160 +1,102 @@
 # VOLDT lp26 -- Project Reference
 
 ## Stack
-- Vanilla HTML/CSS/JS -- no build step, no framework
-- Tailwind CSS via CDN (`<script src="https://cdn.tailwindcss.com">`)
-- Font: Inter (extended in tailwind.config)
-- Global styles: `css/styles.css`
+Vanilla HTML/CSS/JS, no build step. Tailwind via CDN. Font: Inter (extended in tailwind.config). Global styles: `css/styles.css`.
 
 ## File Map
 
-### Pages
-| File | Purpose |
-|------|---------|
-| `index.html` | Home -- hero slideshow (time-seeded start image, 5s interval, 600ms fade-in on load) + product grid (JS-rendered) |
-| `collections.html` | Products overview -- 3 series with images |
-| `shop-all.html` | Shop All -- full product listing |
-| `voldt-hardware.html` | VOLDT Hardware collection page + configurator link |
-| `polyframes.html` | PolyFrames collection overview |
-| `polyframes-floor-lamp.html` | Product detail |
-| `polyframes-table-lamp.html` | Product detail |
-| `polyframes-coat-rack.html` | Product detail |
-| `polyframes-coffee-table.html` | Product detail |
-| `detroit-lights.html` | Detroit Lights collection overview |
-| `detroit-pendant.html` | Detroit Pendant -- ?style=A or ?style=B |
-| `detroit-table-lamp.html` | Detroit Table Lamp -- ?style=A or ?style=B |
-| `trade.html` | Studio & Trade -- trade program / inquiry |
-| `cart.html` | Cart page -- wired to Stripe Checkout via `js/stripe.js` + Netlify Function |
-| `about.html` | About |
-| `faq.html` | FAQ |
-| `shipping-returns.html` | Shipping & Returns |
-| `contact.html` | Contact / Inquiries |
-| `review.html` | Verified purchase review form -- gated by Stripe Payment Intent ID via `verify-session.js` |
+**Pages** — filenames are self-describing; only the non-obvious noted:
+- `index.html` — hero slideshow (time-seeded start image, 5s interval, 600ms fade-in) + JS-rendered product grid
+- `detroit-pendant.html`, `detroit-table-lamp.html` — take `?style=A` or `?style=B`
+- `review.html` — verified-purchase review form, gated by Stripe Payment Intent ID via `verify-session.js`
+- `cart.html` — wired to Stripe Checkout via `js/stripe.js`
+- Collection overviews: `collections.html`, `shop-all.html`, `voldt-hardware.html`, `polyframes.html`, `detroit-lights.html`, `trade.html`
+- Product detail: `polyframes-{floor-lamp,table-lamp,coat-rack,coffee-table}.html`
+- Static: `about.html`, `faq.html`, `shipping-returns.html`, `contact.html`, `404.html`
 
-### JS
-| File | Purpose |
-|------|---------|
-| `js/cart.js` | Cart state in localStorage -- `addItem`, `removeItem`, `updateQty`, `clearCart`, `getCart`, `getTotal`, `getCount`, `updateCartBadge` |
-| `js/stripe.js` | Stripe Checkout -- `createStripeCheckout(discountCode)` POSTs cart to `/.netlify/functions/create-checkout`, redirects to Stripe hosted checkout page |
-| `js/shopify.js` | Shopify Storefront API integration (superseded -- can be deleted) |
-| `js/header.js` | Injects shared header + footer HTML into `#site-header` / `#site-footer`; wires nav dropdown + scroll shadow |
+**JS**
+- `js/cart.js` — localStorage cart: `addItem`, `removeItem`, `updateQty`, `clearCart`, `getCart`, `getTotal`, `getCount`, `updateCartBadge`
+- `js/stripe.js` — `createStripeCheckout(discountCode)` POSTs cart to `/.netlify/functions/create-checkout`, redirects to hosted checkout
+- `js/header.js` — injects header + footer into `#site-header` / `#site-footer`; wires nav dropdown + scroll shadow
+- `js/shopify.js` — superseded, safe to delete
 
-### Netlify Functions
-| File | Purpose |
-|------|---------|
-| `netlify/create-checkout.js` | Creates Stripe Checkout Session server-side. Maps cart IDs → `PRICE_CENTS` (enforced server-side), builds `price_data` line items with full variant name + options string. Passes options as session `metadata.order_notes`. Handles discount code pre-lookup via `stripe.promotionCodes.list`. Selects one of 3 flat shipping rates (Regular / Large / Combo) based on cart composition. **Shipping rate IDs at lines 27–29 — update all 3 when switching test ↔ live.** |
-| `netlify/verify-session.js` | Validates a Stripe Payment Intent ID (`pi_...`) for the review form -- checks `status === 'succeeded'` and `metadata.review_submitted` flag. Returns `{ status: 'ok' \| 'already_submitted' \| 'invalid' }`. |
-| `netlify/mark-reviewed.js` | Sets `metadata.review_submitted = 'true'` on a PaymentIntent after review submission. Re-verifies before writing; returns 409 if already submitted. Acts as the deduplication gate. |
+**Netlify Functions** (`netlify/`, per `netlify.toml`)
+- `create-checkout.js` — builds Checkout Session. Prices enforced server-side in `PRICE_CENTS` (line 5); client sends only `item.id`. Inline `price_data`, not pre-created Price IDs. Options → `metadata.order_notes`. Discount pre-lookup via `stripe.promotionCodes.list`, falls back to Stripe's own promo field. **Shipping rate IDs at lines 26–28.**
+- `verify-session.js` — validates `pi_...` for the review form; checks `status === 'succeeded'` + `metadata.review_submitted`. Returns `{ status: 'ok' | 'already_submitted' | 'invalid' }`.
+- `mark-reviewed.js` — sets `metadata.review_submitted = 'true'`; re-verifies first, 409 if already submitted. The dedup gate.
+- `edge-functions/protect-glb.js` — edge function guarding `/configurator/**`.
 
-### Configurator (iframe embed at `configurator/`)
-| File | Purpose |
-|------|---------|
-| `configurator/index.html` | 3D hardware configurator UI |
-| `configurator/main.js` | UI wiring -- product/variant selects, length + hole spacing + twist + density sliders, density segmented toggle |
-| `configurator/viewer.js` | Three.js GLB viewer -- `loadModel()` for single GLB, `loadComposite()` for handle + stems |
-| `configurator/styles.css` | Configurator-specific styles (dark theme) |
+## Configurator (iframe embed at `configurator/`)
 
-**Configurator GLB structure:**
+`index.html` (UI) · `main.js` (wiring) · `viewer.js` (Three.js GLB viewer) · `styles.css` (dark theme)
 
-Handle GLBs (grip only, no stems -- being re-exported progressively from Rhino):
-- `configurator/mechanic/{voronoi,gyroid}/len{0-5}_dens{0-2}.glb` [warning] len5 files still present (should be deleted)
-- `configurator/lake_shore/simple/len{0-5}_tw{0-2}.glb` [warning] len5 files still present (should be deleted)
-- `configurator/lake_shore/free_form/ff{0-4}.glb`
-- `configurator/heat_wave/chrystal/len{0-4}_dens{0-2}.glb` [warning] old `rad*_tw*.glb` files also present (should be deleted)
-- `configurator/heat_wave/bulb/len{0-4}_dens{0-2}.glb`
+**Path resolution** — `resolveModelUrl()` in `main.js` is the *only* place filenames are constructed. 4 products, each with an optional `knob` variant:
 
+| Product | Non-knob path | Knob path |
+|---|---|---|
+| arroyo | `arroyo/{bulb,ridges}/len{L}_dens{D}` | `arroyo/knob/rad{R}_dens{d}` |
+| basin | `basin/simple/len{L}_tw{T}` | `basin/knob/rad{R}_dens{d}` |
+| cella | `cella/len{L}_dens{D}` (no subdir) | `cella/knob/rad{R}_dens{d}` |
+| dune | `dune/len{L}_dens{D}` (no subdir) | `dune/knob/rad{R}_dens{d}` |
 
-Shared stem GLB (one mounting stem, screw hole center at world origin):
-- `configurator/stem.glb`
+Slider ranges: `len` 0–4, `rad` 0–3, `sp` 0–4, `dens` 0–2. Knob density is **remapped** — `KNOB_DENS_MAP = [1, 2, 4]` (`main.js:122`), so knob dirs legitimately contain only `dens1/2/4`; the gaps are not missing files.
 
-**Composite loading (`loadComposite` in viewer.js):**
-Loads handle GLB + `stem.glb` in parallel. Auto-detects the handle's longest bounding-box axis, then clones the stem twice and offsets each copy by +/-(spacingMeters/2) along that axis. The far clone is mirrored so both posts face outward.
+Label/spacing arrays live at `main.js:119-125` (`LENGTH_LABELS`, `TWIST_LABELS`, `DIAM_LABELS`, `DENS_LABELS`, `SPACING_LABELS`, `SPACING_METERS`).
 
-**Hole spacing values (in `main.js`):**
-```js
-SPACING_LABELS = ['3-3/4"', '5"', '6-5/16"', '7-9/16"', '10-1/16"']
-SPACING_METERS = [0.09525, 0.127, 0.160338, 0.192088, 0.255588]
-```
+**Composite loading** (`loadComposite` in `viewer.js`) — loads handle GLB + `stem.glb` (root, screw-hole center at world origin) in parallel. Auto-detects the handle's longest bounding-box axis, clones the stem twice, offsets each by ±(spacingMeters/2) along it. Far clone is mirrored so both posts face outward. `loadModel()` handles the single-GLB case.
+
+**Unreachable GLBs** (slider can't address them — safe to delete):
+- `basin/simple/len5_tw{0,1,2}.glb` and `dune/len5_dens{0,1,2}.glb` — `len` maxes at 4
+- `arroyo/knob/rad{0-3}_dens{0,3}.glb` — 8 files; `KNOB_DENS_MAP` never emits 0 or 3
 
 ## Shared Layout Pattern
-Every page:
-```html
-<header id="site-header" class="fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-md"></header>
-<div class="pt-16"> ... content ... </div>
-<footer id="site-footer" class="border-t border-stone-200 bg-white"></footer>
-<script src="js/cart.js"></script>
-<script src="js/header.js"></script>
-```
-`header.js` injects all nav/footer HTML -- never edit nav links directly in pages.
+Every page: `<header id="site-header">` (fixed, `bg-white/70 backdrop-blur-md`), content wrapped in `<div class="pt-16">`, `<footer id="site-footer">`, then `js/cart.js` → `js/header.js`. Cart page inserts `js/stripe.js` between them.
 
-Cart page also includes `<script src="js/stripe.js"></script>` between cart.js and header.js.
+`header.js` injects all nav/footer HTML — **never edit nav links directly in pages.**
 
 ## Design System
+- Max width `max-w-[1600px]` (most) or `max-w-[1800px]` (custom-work); padding `px-8 lg:px-16` / `px-12 lg:px-20`
+- **Grey on white:** stone-400–600. **Grey on stone-900:** stone-100–400
+  - Headings `text-white` · subtitle `text-stone-200` · body `text-stone-400` · list items `text-stone-300` · bold product names `text-stone-100` · eyebrow labels `text-stone-400` · decorative dashes `text-stone-600`
+- Buttons on dark cards: `border border-white text-white hover:bg-white hover:text-stone-900`
 
-### Typography / Color Rules
-- Max content width: `max-w-[1600px]` (most pages) or `max-w-[1800px]` (custom-work)
-- Horizontal padding: `px-8 lg:px-16` (most) or `px-12 lg:px-20` (custom-work)
-- **Grey on white**: use stone-400-600 range
-- **Grey on dark (stone-900) backgrounds**: use stone-100-400 range
-  - Headings: `text-white` / Subtitle: `text-stone-200` / Body: `text-stone-400`
-  - List items: `text-stone-300` / Bold product names: `text-stone-100`
-  - Section eyebrow labels: `text-stone-400` / Decorative dashes: `text-stone-600`
-- Buttons (dark bg cards): `border border-white text-white hover:bg-white hover:text-stone-900`
-
-### Cart Item Shape
-```js
-{ id, name, price, qty, image, options: { key: value } }
-```
+Cart item shape: `{ id, name, price, qty, image, options: { key: value } }`
 
 ## Stripe Checkout
-
-- **Approach**: `price_data` inline (not pre-created Stripe Price IDs). Each checkout session passes amount + product name dynamically. Price is enforced server-side in `PRICE_CENTS`; client only sends `item.id`.
-- **Variant names**: Built from `item.name` + formatted `item.options` (e.g. "Detroit Pendant Style A — Color: Black, Size: Standard"). Options also stored in `session.metadata.order_notes` for fulfillment reference.
-- **Discount codes**: Pre-entered code looked up via `stripe.promotionCodes.list`; falls back to Stripe's built-in promotion code field if lookup fails.
-- **Shipping**: 3 flat rates selected server-side in `netlify/create-checkout.js` (lines 27–29). Logic based on item quantities, respecting `item.quantity`:
-  - **Regular** — exactly 1 small item, no oversized
-  - **Large** — 2 smalls (no oversized), or exactly 1 oversized item alone
-  - **Combo** — 3+ smalls, 2+ oversized, or any oversized + any small (mixed order)
-  - Oversized items: `polyframes-coat-rack`, `polyframes-floor-lamp-a`, `polyframes-floor-lamp-b`
-  - **⚠️ Shipping rate IDs must be updated when switching test ↔ live mode** — recreate all 3 rates in Stripe live mode dashboard (Products → Shipping rates), then paste the new `shr_...` IDs into the three constants at the top of `create-checkout.js`.
-- **Tax**: `automatic_tax: { enabled: true }` — active.
-- **Analytics note**: When exporting transactions from Stripe, include the **"Checkout line item summary"** column to get per-product breakdown. Multiple items in one order are lumped into a single transaction row without it.
-- **Custom work payments**: Use Stripe Payment Links (dashboard, no code) -- create a one-off link for any amount and send directly to client.
-- **Review invitations**: After an order ships, copy the Payment Intent ID (`pi_...`) from Stripe dashboard and email `voldtlab.com/review.html?payment=pi_...` to the customer ~2–4 weeks post-delivery.
-
-### Price Map (in `netlify/create-checkout.js`)
-| Cart ID | Price |
-|---------|-------|
-| `polyframes-coat-rack` | $499 |
-| `polyframes-table-lamp-a` / `-b` | $349 |
-| `polyframes-floor-lamp-a` / `-b` | $899 |
-| `detroit-pendant-a-standard` / `-b-standard` | $99 |
-| `detroit-pendant-a-large` / `-b-large` | $229 |
-| `detroit-table-lamp-a-standard` / `-b-standard` | $99 |
-| `detroit-table-lamp-a-large` / `-b-large` | $229 |
-| VOLDT Hardware | deferred -- pricing TBD |
-
-## To-Dos
-- [ ] link spec to the download spec sheet button
-### Configurator
-- [ ] Add **screw size selector** to `configurator/main.js` + UI in `configurator/index.html`
-
-### Stripe / Checkout
-- [ ] *(Future)* Add Resend + Stripe webhook to automate invitation emails if volume grows
+- **Prices:** `PRICE_CENTS` in `netlify/create-checkout.js:5` is the single source of truth. VOLDT Hardware pricing still deferred.
+- **Variant names:** `item.name` + formatted `item.options` (e.g. "Detroit Pendant Style A — Color: Black, Size: Standard").
+- **Shipping:** 3 flat rates chosen server-side, respecting `item.quantity`:
+  - **Regular** — exactly 1 small, no oversized
+  - **Large** — 2 smalls (no oversized), or exactly 1 oversized alone
+  - **Combo** — 3+ smalls, 2+ oversized, or any mixed order
+  - Oversized: `polyframes-coat-rack`, `polyframes-floor-lamp-a`, `polyframes-floor-lamp-b`
+  - **⚠️ Rate IDs must be recreated when switching test ↔ live** — make all 3 in the live dashboard (Products → Shipping rates), paste the `shr_...` IDs into lines 26–28.
+- **Tax:** `automatic_tax` enabled.
+- **Analytics:** when exporting from Stripe, include the **"Checkout line item summary"** column — without it, multi-item orders collapse into one row with no per-product breakdown.
+- **Custom work:** use Stripe Payment Links (dashboard, no code).
+- **Review invitations:** after shipping, copy the `pi_...` from the dashboard and email `voldtlab.com/review.html?payment=pi_...` ~2–4 weeks post-delivery.
 
 ## Forms
+Both use **Netlify Forms** (Formspree removed). AJAX: POST to `'/'` with `application/x-www-form-urlencoded`, body via `URLSearchParams(new FormData(form))`; form replaced with inline success message. Email notifications set in the Netlify dashboard.
 
-Both forms use **Netlify Forms** (Formspree removed). AJAX mode: POST to `'/'` with `Content-Type: application/x-www-form-urlencoded`, body via `URLSearchParams(new FormData(form))`. Form replaced with inline success message on submit. Email notifications configured in Netlify dashboard.
-
-| Page | Netlify form name |
-|------|------------------|
-| `contact.html` | `contact` |
-| `trade.html` | `trade-inquiry` |
+`contact.html` → form name `contact` · `trade.html` → `trade-inquiry`
 
 ## Hosting
+Netlify, deploying the `netlify` branch (repo is public). No build step, publish dir `/`. `voldtlab.com` points to Netlify. Shopify cancelled.
 
-Site is hosted on **Netlify**, deploying from the `netlify` branch of the GitHub repo (repo is public). No build step — publish directory is `/`. Domain `voldtlab.com` points to Netlify. Shopify cancelled.
+**Local dev:** `netlify dev` at `localhost:8888`. netlify-cli is installed globally, deliberately *not* a project dep (`npm i -g netlify-cli` if missing; avoid `npx netlify-cli dev`). Run `npm install` once for the `stripe` dep. Needs `.env` with `STRIPE_SECRET_KEY` — only for checkout; pages preview fine without it. Netlify Forms return 200 locally but don't reach the dashboard.
 
-**Local dev:** `npx netlify-cli dev` at `localhost:8888`. Requires `.env` with `STRIPE_SECRET_KEY=sk_live_...`. Functions run fully locally; Netlify Forms simulate a 200 but data doesn't reach the cloud dashboard.
+**Credits (free tier):** 300/month. Production deploys 15 each (~20/month max) — keep builds stopped and trigger manually. Branch/preview deploys free. Form submissions 1 credit each.
 
-**Netlify credits (free tier):** 300 credits/month. Production deploys cost 15 credits each (~20 deploys/month max). Keep builds stopped in Netlify dashboard and trigger manually only when ready. Branch/preview deploys are free. Form submissions cost 1 credit each.
+## To-Dos
+- [ ] Link the download spec sheet button to the actual spec
+- [ ] Delete unreachable GLBs listed above
+- [ ] Add **screw size selector** to `configurator/main.js` + `configurator/index.html`
+- [ ] *(Future)* Resend + Stripe webhook to automate review invitation emails if volume grows
+
+### SEO / Discoverability
+Full recommendations in `SEO.md` — targeting the small-batch repair/reproduction market. Nothing implemented yet.
+- [ ] Dedicated `hardware-reproduction.html` page
+- [ ] Site-wide technical SEO baseline — meta descriptions, `sitemap.xml`, `robots.txt`, JSON-LD (**none currently exist**)
+- [ ] FAQ block + `FAQPage` schema on that page
+- [ ] `trade.html` form — add "Repair / Reproduction" inquiry type and sub-$2k budget ranges
