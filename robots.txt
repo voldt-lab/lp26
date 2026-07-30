@@ -1,0 +1,43 @@
+# voldtlab.com
+
+User-agent: *
+Allow: /
+Disallow: /configurator/
+
+# AI / LLM crawlers -- explicitly permitted.
+# These power retrieval-time answers in assistants and AI search, which is a
+# primary discoverability channel. Do not add Disallow rules here without
+# understanding that it removes VOLDT from those results.
+User-agent: GPTBot
+Allow: /
+Disallow: /configurator/
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /configurator/
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /configurator/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /configurator/
+
+User-agent: Claude-User
+Allow: /
+Disallow: /configurator/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /configurator/
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /configurator/
+
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /configurator/
+
+Sitemap: https://voldtlab.com/sitemap.xml

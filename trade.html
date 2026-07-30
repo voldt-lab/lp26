@@ -2,7 +2,43 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Studio & Trade -- VOLDT</title>
+  <title>Custom Fabrication, Repair &amp; Parts Reproduction -- VOLDT</title>
+  <meta name="description" content="Reproduction of discontinued hardware and one-off custom parts, worked from a sample or photos. Michigan studio serving contractors, building owners, and design professionals." />
+  <link rel="canonical" href="https://voldtlab.com/trade.html" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Service",
+        "@id": "https://voldtlab.com/trade.html#hardware-reproduction",
+        "name": "Custom Hardware and Architectural Part Reproduction",
+        "serviceType": "Reverse engineering and small-batch fabrication of discontinued replacement parts",
+        "description": "Reverse engineering and reproduction of discontinued, obsolete, or out-of-production hardware and architectural components, worked from an existing physical sample or dimensioned photographs. Quantities from one unit up.",
+        "url": "https://voldtlab.com/trade.html#hardware-reproduction",
+        "areaServed": "US",
+        "provider": { "@id": "https://voldtlab.com/#organization" }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          { "@type": "Question", "name": "What's the minimum quantity?",
+            "acceptedAnswer": { "@type": "Answer", "text": "One. Single replacements and prototypes are normal work, not exceptions." } },
+          { "@type": "Question", "name": "Do you need the physical part?",
+            "acceptedAnswer": { "@type": "Answer", "text": "For simple geometry, dimensioned photographs with a scale reference next to the part are often enough. Complex profiles and anything that has to fit an existing mechanism need the sample in hand." } },
+          { "@type": "Question", "name": "Do I get my sample back?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes, it ships back with the finished order. Reverse-engineering is non-destructive." } },
+          { "@type": "Question", "name": "Can you match the original finish?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Finish specification is part of the quote, matched to the surrounding hardware." } },
+          { "@type": "Question", "name": "What materials and processes are available?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Polyamide and other durable polymers via SLS/FDM printing, plus CNC milling and laser engraving, assembled and finished in-house in Michigan." } },
+          { "@type": "Question", "name": "What about load-bearing or safety-rated parts?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Describe the application up front. If a part carries structural load or needs a code rating that cannot be certified, VOLDT will decline rather than quote it." } }
+        ]
+      }
+    ]
+  }
+  </script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','sans-serif']}}}}</script>
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
@@ -171,7 +207,7 @@
             <p class="text-sm text-stone-500 mb-6">Fully custom design and fabrication, scoped and quoted.</p>
             <ul class="space-y-2 text-sm text-stone-600 mb-8">
               <li class="flex items-start gap-3"><span class="text-stone-300 shrink-0">--</span>Custom parametric systems for product families and architectural components</li>
-              <li class="flex items-start gap-3"><span class="text-stone-300 shrink-0">--</span>Reverse engineering and reproduction of discontinued hardware</li>
+              <li class="flex items-start gap-3"><span class="text-stone-300 shrink-0">--</span>Reverse engineering and reproduction of discontinued, obsolete, or out-of-production hardware -- worked from an existing sample, any quantity from one up (<a href="#hardware-reproduction" class="underline hover:text-stone-900">details</a>)</li>
               <li class="flex items-start gap-3"><span class="text-stone-300 shrink-0">--</span>SLS/FDM printing, CNC milling, laser engraving -- assembled and finished</li>
               <li class="flex items-start gap-3"><span class="text-stone-300 shrink-0">--</span>Quote includes scope, timeline, material breakdown</li>
             </ul>
@@ -182,50 +218,104 @@
       </div>
     </section>
 
-    <!-- Case Study -->
-    <section class="py-24 bg-stone-50 border-t border-stone-200">
+    <!-- Repair & Reproduction -->
+    <section id="hardware-reproduction" class="py-24 bg-stone-50 border-t border-stone-200">
       <div class="max-w-[1800px] mx-auto px-12 lg:px-20">
+
+        <div class="max-w-3xl mb-16">
+          <p class="text-[10px] tracking-[0.3em] uppercase text-stone-400 mb-6">Repair &amp; Reproduction</p>
+          <h2 class="text-3xl lg:text-4xl font-bold text-stone-900 tracking-tight mb-6">Replacement parts for hardware that is no longer manufactured.</h2>
+          <p class="text-sm text-stone-600 leading-relaxed mb-4">When the original manufacturer has gone out of business, discontinued a line, or never sold a replacement in the first place, the part still has to come from somewhere. We reverse-engineer it from an existing sample and produce as many as you need -- one, or several hundred.</p>
+          <p class="text-sm text-stone-600 leading-relaxed">Common for obsolete cabinet and door hardware, panel latches, window and railing components, and architectural elements in older buildings where matching the existing profile matters more than catalog availability.</p>
+        </div>
+
         <div class="grid lg:grid-cols-2 gap-16 items-start">
           <div>
-            <p class="text-[10px] tracking-[0.3em] uppercase text-stone-400 mb-6">Case Study</p>
-            <h2 class="text-2xl font-bold text-stone-900 mb-4">Commercial Hardware Reconstruction</h2>
-            <p class="text-stone-600 text-sm leading-relaxed mb-8">Large commercial development required reproduction of 240 custom latches on existing electrical panels after the original manufacturer ceased operations. VOLDT reverse-engineered the hardware from physical samples, developed parametric models to accommodate dimensional variation across door types, and produced all components to finish specification.</p>
-            <div class="grid grid-cols-3 gap-6 border-t border-stone-200 pt-8">
-              <div>
-                <p class="text-[9px] tracking-[0.15em] uppercase text-stone-400 mb-1">Scope</p>
-                <p class="text-sm text-stone-900">240 components</p>
-              </div>
-              <div>
-                <p class="text-[9px] tracking-[0.15em] uppercase text-stone-400 mb-1">Timeline</p>
-                <p class="text-sm text-stone-900">8 weeks, sample to delivery</p>
-              </div>
-              <div>
-                <p class="text-[9px] tracking-[0.15em] uppercase text-stone-400 mb-1">Outcome</p>
-                <p class="text-sm text-stone-900">Full match to original spec</p>
+            <p class="text-[9px] tracking-[0.15em] uppercase text-stone-400 mb-4">What We Take On</p>
+            <ul class="space-y-2 text-sm text-stone-600 mb-12">
+              <li class="flex items-start gap-3"><span class="text-stone-300 shrink-0">--</span>Discontinued or obsolete cabinet pulls, knobs, and door hardware</li>
+              <li class="flex items-start gap-3"><span class="text-stone-300 shrink-0">--</span>Panel latches, catches, and mechanical closures</li>
+              <li class="flex items-start gap-3"><span class="text-stone-300 shrink-0">--</span>Window, shutter, and railing components on older buildings</li>
+              <li class="flex items-start gap-3"><span class="text-stone-300 shrink-0">--</span>Architectural trim, escutcheons, and decorative elements</li>
+              <li class="flex items-start gap-3"><span class="text-stone-300 shrink-0">--</span>One-off custom components designed from scratch</li>
+              <li class="flex items-start gap-3"><span class="text-stone-300 shrink-0">--</span>Ad hoc printing and machining from your own model or drawing</li>
+            </ul>
+
+            <div class="border-t border-stone-200 pt-8">
+              <p class="text-[9px] tracking-[0.15em] uppercase text-stone-400 mb-4">Case Study -- Commercial Hardware Reconstruction</p>
+              <p class="text-stone-600 text-sm leading-relaxed mb-8">A large commercial development needed 240 custom latches reproduced for existing electrical panels after the original manufacturer ceased operations. We reverse-engineered the hardware from physical samples, developed parametric models to absorb dimensional variation across door types, and produced every component to finish specification.</p>
+              <div class="grid grid-cols-3 gap-6">
+                <div>
+                  <p class="text-[9px] tracking-[0.15em] uppercase text-stone-400 mb-1">Scope</p>
+                  <p class="text-sm text-stone-900">240 components</p>
+                </div>
+                <div>
+                  <p class="text-[9px] tracking-[0.15em] uppercase text-stone-400 mb-1">Timeline</p>
+                  <p class="text-sm text-stone-900">8 weeks, sample to delivery</p>
+                </div>
+                <div>
+                  <p class="text-[9px] tracking-[0.15em] uppercase text-stone-400 mb-1">Outcome</p>
+                  <p class="text-sm text-stone-900">Full match to original spec</p>
+                </div>
               </div>
             </div>
           </div>
+
           <div class="grid grid-cols-2 gap-3">
             <div>
               <p class="text-[9px] tracking-[0.2em] uppercase text-stone-400 mb-2">Existing</p>
               <div class="bg-stone-200 overflow-hidden" style="aspect-ratio:3/4">
-                <img src="assets/latch0_f.jpg" alt="Original hardware -- front" class="w-full h-full object-cover" />
+                <img src="assets/latch0_f.jpg" alt="Original discontinued electrical panel latch, front view, used as the reverse-engineering sample" class="w-full h-full object-cover" />
               </div>
             </div>
             <div>
               <p class="text-[9px] tracking-[0.2em] uppercase text-stone-400 mb-2">Reconstructed</p>
               <div class="bg-stone-200 overflow-hidden" style="aspect-ratio:3/4">
-                <img src="assets/latch1_f.jpg" alt="Reconstructed hardware -- front" class="w-full h-full object-cover" />
+                <img src="assets/latch1_f.jpg" alt="Reproduced replacement panel latch, front view, matched to the original specification" class="w-full h-full object-cover" />
               </div>
             </div>
             <div class="bg-stone-200 overflow-hidden" style="aspect-ratio:4/3">
-              <img src="assets/latch0_b.jpg" alt="Original hardware -- back" class="w-full h-full object-cover" />
+              <img src="assets/latch0_b.jpg" alt="Original discontinued panel latch, back view showing mounting detail" class="w-full h-full object-cover" />
             </div>
             <div class="bg-stone-200 overflow-hidden" style="aspect-ratio:4/3">
-              <img src="assets/latch1_b.jpg" alt="Reconstructed hardware -- back" class="w-full h-full object-cover" />
+              <img src="assets/latch1_b.jpg" alt="Reproduced replacement panel latch, back view with matching mounting detail" class="w-full h-full object-cover" />
             </div>
           </div>
         </div>
+
+        <div class="border-t border-stone-200 mt-16 pt-12">
+          <p class="text-[9px] tracking-[0.15em] uppercase text-stone-400 mb-8">Before You Inquire</p>
+          <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-8">
+            <div>
+              <h3 class="text-sm font-semibold text-stone-900 mb-2">What's the minimum quantity?</h3>
+              <p class="text-sm text-stone-600 leading-relaxed">One. Single replacements and prototypes are normal work for us, not exceptions.</p>
+            </div>
+            <div>
+              <h3 class="text-sm font-semibold text-stone-900 mb-2">Do you need the physical part?</h3>
+              <p class="text-sm text-stone-600 leading-relaxed">For simple geometry, dimensioned photographs with a scale reference next to the part are often enough. Complex profiles and anything that has to fit an existing mechanism need the sample in hand.</p>
+            </div>
+            <div>
+              <h3 class="text-sm font-semibold text-stone-900 mb-2">Do I get my sample back?</h3>
+              <p class="text-sm text-stone-600 leading-relaxed">Yes -- it ships back with the finished order. Reverse-engineering is non-destructive.</p>
+            </div>
+            <div>
+              <h3 class="text-sm font-semibold text-stone-900 mb-2">Can you match the original finish?</h3>
+              <p class="text-sm text-stone-600 leading-relaxed">Finish specification is part of the quote. Tell us what the surrounding hardware looks like and we'll match to it.</p>
+            </div>
+            <div>
+              <h3 class="text-sm font-semibold text-stone-900 mb-2">What materials and processes?</h3>
+              <p class="text-sm text-stone-600 leading-relaxed">Polyamide and other durable polymers via SLS/FDM, plus CNC milling and laser engraving -- assembled and finished in-house in Michigan.</p>
+            </div>
+            <div>
+              <h3 class="text-sm font-semibold text-stone-900 mb-2">What about load-bearing or safety-rated parts?</h3>
+              <p class="text-sm text-stone-600 leading-relaxed">Tell us the application up front. If a part carries structural load or needs a code rating we can't certify, we'll say so rather than quote it.</p>
+            </div>
+          </div>
+          <div class="mt-12">
+            <a href="#inquiry-form-section" onclick="document.getElementById('inquiry_type').value='repair'" class="inline-flex items-center justify-center whitespace-nowrap bg-stone-900 text-white text-xs tracking-[0.15em] uppercase px-8 py-4 hover:bg-[#C8922A] transition-colors">Send Us the Part Details <svg class="ml-2 flex-shrink-0" width="18" height="12" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 6H16M11 1L16 6L11 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -281,6 +371,7 @@
               <label for="inquiry_type" class="block text-xs tracking-[0.1em] uppercase text-stone-700 mb-2">Inquiry Type</label>
               <select id="inquiry_type" name="inquiry_type" required class="w-full px-4 py-3 border border-stone-300 rounded-sm focus:outline-none focus:border-stone-500 transition-colors text-sm bg-white">
                 <option value="">Select type</option>
+                <option value="repair">Repair / Reproduction of an Existing Part</option>
                 <option value="reconfigure">Reconfigure a Collection</option>
                 <option value="bespoke">Bespoke Project</option>
                 <option value="wholesale">Wholesale / Trade</option>
@@ -291,7 +382,9 @@
               <label for="budget" class="block text-xs tracking-[0.1em] uppercase text-stone-700 mb-2">Approximate Budget</label>
               <select id="budget" name="budget" class="w-full px-4 py-3 border border-stone-300 rounded-sm focus:outline-none focus:border-stone-500 transition-colors text-sm bg-white">
                 <option value="">Select range</option>
-                <option value="under-2k">Under $2,000</option>
+                <option value="under-500">Under $500</option>
+                <option value="500-1k">$500 - $1,000</option>
+                <option value="1k-2k">$1,000 - $2,000</option>
                 <option value="2k-5k">$2,000 - $5,000</option>
                 <option value="5k-15k">$5,000 - $15,000</option>
                 <option value="15k-plus">$15,000+</option>
@@ -309,7 +402,7 @@
             </div>
             <div>
               <label for="message" class="block text-xs tracking-[0.1em] uppercase text-stone-700 mb-2">Project Description</label>
-              <textarea id="message" name="message" required rows="6" placeholder="Describe your project -- the space, what you're looking for, any reference images or specifications you have..." class="w-full px-4 py-3 border border-stone-300 rounded-sm focus:outline-none focus:border-stone-500 transition-colors text-sm resize-none"></textarea>
+              <textarea id="message" name="message" required rows="6" placeholder="Describe your project -- the space, what you're looking for, any reference images or specifications you have. For a repair or reproduction: what the part is, where it's used, how many you need, and whether you still have the original..." class="w-full px-4 py-3 border border-stone-300 rounded-sm focus:outline-none focus:border-stone-500 transition-colors text-sm resize-none"></textarea>
             </div>
             <button type="submit" class="w-full py-4 bg-stone-900 text-white text-xs tracking-[0.15em] uppercase hover:bg-[#C8922A] transition-colors">Submit Inquiry</button>
             <p id="trade-error" class="hidden text-sm text-red-700 mt-3">Submission failed — please email us directly at <a href="mailto:info@voldtlab.com" class="underline">info@voldtlab.com</a>.</p>

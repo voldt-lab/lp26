@@ -63,7 +63,12 @@ Every page: `<header id="site-header">` (fixed, `bg-white/70 backdrop-blur-md`),
 Cart item shape: `{ id, name, price, qty, image, options: { key: value } }`
 
 ## Stripe Checkout
-- **Prices:** `PRICE_CENTS` in `netlify/create-checkout.js:5` is the single source of truth. VOLDT Hardware pricing still deferred.
+- **Prices:** `PRICE_CENTS` in `netlify/create-checkout.js:5` is authoritative for what the customer is actually charged. VOLDT Hardware pricing still deferred.
+- **⚠️ A price change means editing three places:**
+  1. `PRICE_CENTS` in `netlify/create-checkout.js:5` — what Stripe charges (authoritative)
+  2. The inline `price:` in the page's `addItem` call — what the cart displays
+  3. The `Product` JSON-LD `offers` block in the page `<head>` — what Google/LLMs read
+  Miss #2 and the cart shows a different number than the card. Miss #3 and search results advertise a stale price, which can also trigger Google Merchant mismatch warnings. Detroit pages use `AggregateOffer` (`lowPrice`/`highPrice`) rather than a single `price`; the coffee table has no `offers` node at all (commission only).
 - **Variant names:** `item.name` + formatted `item.options` (e.g. "Detroit Pendant Style A — Color: Black, Size: Standard").
 - **Shipping:** 3 flat rates chosen server-side, respecting `item.quantity`:
   - **Regular** — exactly 1 small, no oversized
