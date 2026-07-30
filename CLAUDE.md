@@ -104,4 +104,4 @@ Full recommendations in `SEO.md` — targeting the small-batch repair/reproducti
 - [ ] Dedicated `hardware-reproduction.html` page
 - [ ] Site-wide technical SEO baseline — meta descriptions, `sitemap.xml`, `robots.txt`, JSON-LD (**none currently exist**)
 - [ ] FAQ block + `FAQPage` schema on that page
-- [ ] `trade.html` form — add "Repair / Reproduction" inquiry type and sub-$2k budget ranges
+- [x] `trade.html` form — add "Repair / Reproduction" inquiry type and sub-$2k budget ranges

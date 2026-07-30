@@ -8,7 +8,11 @@ Integrated the repair/reproduction service into the existing trade page rather t
 
 ## Done — technical baseline (2026-07-30)
 
-`robots.txt` (AI crawlers explicitly permitted; `/configurator/` excluded), `sitemap.xml` (17 URLs, git-derived `lastmod`), `noindex, follow` on `cart.html` / `review.html` / `404.html`, `LocalBusiness` on `index.html` at `#organization`, `Product` schema on all 6 product pages, and param-less canonicals on the two `?style=` Detroit pages.
+Complete. All 17 indexable pages now carry a unique title, unique meta description (129–155 chars), self-referencing canonical, 6 Open Graph tags, and 4 Twitter card tags. `og:image` reuses each page's own hero asset; five text-only pages (contact, FAQ, shipping-returns, and two others) fall back to the studio hero.
+
+Also: `robots.txt` (AI crawlers explicitly permitted; `/configurator/` excluded), `sitemap.xml` (17 URLs, git-derived `lastmod`), `noindex, follow` on `cart.html` / `review.html` / `404.html`, `LocalBusiness` on `index.html` at `#organization`, `Product` schema on all 6 product pages, param-less canonicals on the two `?style=` Detroit pages.
+
+**Conventions to keep if adding pages:** title ≤ ~60 rendered chars, description 130–160, canonical absolute, `og:image` absolute. Utility pages get `noindex, follow` and stay out of the sitemap — and stay *crawlable*, since `Disallow` would stop crawlers from ever reading the `noindex`. **Add new pages to `sitemap.xml` manually** — there is no build step to generate it.
 
 **⚠️ Prices now live in three places** — `PRICE_CENTS`, the page's inline `addItem`, and the `Product` JSON-LD. See `CLAUDE.md` → Stripe Checkout for the full note. Stale schema prices mislead search results and can trigger Merchant mismatch warnings.
 
