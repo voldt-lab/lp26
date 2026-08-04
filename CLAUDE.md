@@ -93,15 +93,30 @@ Netlify, deploying the `netlify` branch (repo is public). No build step, publish
 
 **Credits (free tier):** 300/month. Production deploys 15 each (~20/month max) — keep builds stopped and trigger manually. Branch/preview deploys free. Form submissions 1 credit each.
 
+## SEO & Discoverability
+Baseline complete: all 17 indexable pages carry a unique title, meta description, self-referencing canonical, and Open Graph + Twitter tags. Plus `robots.txt` (AI crawlers explicitly allowed, `/configurator/` excluded), `sitemap.xml`, `LocalBusiness` on `index.html` at `#organization`, `Product` schema on the 6 product pages, and `Service` + `FAQPage` on `trade.html`.
+
+**When adding a page:**
+- Title ≤ ~60 rendered chars; description 130–160; canonical and `og:image` as absolute URLs
+- **Add it to `sitemap.xml` by hand** — no build step generates it
+- Utility pages (cart, review, 404) get `noindex, follow` and stay out of the sitemap. Keep them **crawlable** — a `robots.txt` `Disallow` prevents crawlers from ever reading the `noindex`, so the URL can linger in the index instead of dropping out
+- `?style=`-type variants canonicalize to the param-less URL
+
+**Copy principles** — audience is contractors and owners needing small-batch repair/reproduction; the discontinued-latch case study is the proof point.
+- Breadth via concrete examples in the body, specificity in the title. Nobody searches "custom object production."
+- List ad hoc 3D printing, don't lead with it — attracts price-shoppers; the moat is reverse-engineering and finish matching.
+- Write quotable facts, not adjectives — LLM retrieval is passage-level and extracts self-contained statements.
+- Repair/reproduction lives at `trade.html#hardware-reproduction` by choice; promote to its own page only if inquiries gain volume.
+- `FAQPage` gives no rich results for commercial sites (Google restricted to gov/health, 2023) — keep for machine parsing only.
+
 ## To-Dos
 - [ ] Link the download spec sheet button to the actual spec
 - [ ] Delete unreachable GLBs listed above
 - [ ] Add **screw size selector** to `configurator/main.js` + `configurator/index.html`
 - [ ] *(Future)* Resend + Stripe webhook to automate review invitation emails if volume grows
 
-### SEO / Discoverability
-Full recommendations in `SEO.md` — targeting the small-batch repair/reproduction market. Nothing implemented yet.
-- [ ] Dedicated `hardware-reproduction.html` page
-- [ ] Site-wide technical SEO baseline — meta descriptions, `sitemap.xml`, `robots.txt`, JSON-LD (**none currently exist**)
-- [ ] FAQ block + `FAQPage` schema on that page
-- [x] `trade.html` form — add "Repair / Reproduction" inquiry type and sub-$2k budget ranges
+### SEO — off-site (the only remaining lever)
+On-page work is done. Visibility now depends on third-party presence, which is where LLMs form vendor opinions — training data is not a lever, retrieval at inference is.
+- [ ] Genuine participation in r/Contractors, r/electricians, r/HomeImprovement, r/machinists — answer the technical question, mention the capability. Astroturfing gets detected and burns the signal.
+- [ ] List on Thomasnet and fabrication/sourcing directories
+- [ ] Submit `sitemap.xml` to Google Search Console for indexing feedback (free, no admin rights needed)
