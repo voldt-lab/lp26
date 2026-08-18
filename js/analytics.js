@@ -19,6 +19,19 @@ initializeAppCheck(app, {
 });
 const db = getDatabase(app);
 
+// Same-origin navigation sends the full previous URL, query string included.
+// review.html carries the Stripe payment reference as ?payment=pi_... — strip
+// the query and hash so order identifiers never reach the visit log.
+function getCleanReferrer() {
+  if (!document.referrer) return null;
+  try {
+    const u = new URL(document.referrer);
+    return u.origin + u.pathname;
+  } catch {
+    return null;
+  }
+}
+
 function getOrCreateSessionId() {
   let id = sessionStorage.getItem('voldtSessionId');
   if (!id) {
@@ -41,7 +54,7 @@ function getOrCreateSessionId() {
       sessionId,
       sessionStart: Number(sessionStorage.getItem('voldtSessionStart')) || Date.now(),
       page: window.location.pathname || '/',
-      referrer: document.referrer || null,
+      referrer: getCleanReferrer(),
       userAgent: navigator.userAgent,
       timeStamp: Date.now(),
       lang: navigator.language || null,
